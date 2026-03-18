@@ -1436,6 +1436,7 @@ function save() {
   SS('ql',       state.ql);
   SS('assets_b', state.assets_b);
   SS('assets_t', state.assets_t);
+  cloudSchedulePush();
 }
 
 function getWeekState(w) {
@@ -1576,6 +1577,7 @@ let _libCat = 'all';
 function saveLib() {
   SS('lib_cats',  state.lib_cats);
   SS('lib_links', state.lib_links);
+  cloudSchedulePush();
 }
 
 /* ── RENDER CATEGORIES ── */
@@ -2074,6 +2076,188 @@ function init() {
     save(); renderNotes(); renderStats();
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOUD SYNC — JSONBin
+// Syncs: year data (weeks, notes, weeklinks, focus), ql, assets, lib_links, lib_cats
+// ─────────────────────────────────────────────────────────────────────────────
+const _JBIN_KEY = '$2a$10$5xQDxFjQY5hu/kF2adz5MeeYLJUYW7PcEIydLSEmrae3vRippfTFW';
+const _JBIN_BIN = '69aaeb14d0ea881f40f59eb5';
+const _JBIN_URL = `https://api.jsonbin.io/v3/b/${_JBIN_BIN}`;
+
+let _cloudTimer   = null;
+let _cloudBusy    = false;
+
+/* ── Status badge ── */
+function _syncBadge(state) {
+  let el = document.getElementById('_hsh_sync_badge');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_hsh_sync_badge';
+    el.style.cssText = [
+      'position:fixed','bottom:20px','right:20px',
+      'padding:6px 14px','border-radius:20px',
+      'font-family:"DM Sans",sans-serif','font-size:12px','font-weight:700',
+      'z-index:99999','box-shadow:0 2px 10px rgba(0,0,0,.2)',
+      'transition:opacity .5s ease','pointer-events:none','opacity:0',
+    ].join(';');
+    document.body.appendChild(el);
+  }
+  const cfg = {
+    syncing: ['#1d4ed8','☁ Syncing…'],
+    saved:   ['#16a34a','✓ Cloud saved'],
+    loaded:  ['#0e7490','☁ Loaded from cloud'],
+    error:   ['#dc2626','⚠ Sync failed — check connection'],
+  }[state] || ['#475569','…'];
+  el.style.background = cfg[0];
+  el.style.color = '#fff';
+  el.textContent = cfg[1];
+  el.style.opacity = '1';
+  if (state !== 'syncing') setTimeout(() => { el.style.opacity = '0'; }, 3000);
+}
+
+/* ── Collect everything that needs to be synced ── */
+function _cloudCollect() {
+  // Collect all year keys dynamically
+  const yearKeys = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('hsh_year_')) {
+      try { yearKeys[k] = JSON.parse(localStorage.getItem(k)); } catch(e) {}
+    }
+  }
+  return {
+    yearKeys,
+    year_list: GP('year_list'),
+    active_year: localStorage.getItem('hsh_active_year'),
+    ql:        GP('ql'),
+    assets_b:  GP('assets_b'),
+    assets_t:  GP('assets_t'),
+    lib_cats:  GP('lib_cats'),
+    lib_links: GP('lib_links'),
+  };
+}
+
+/* ── Push to JSONBin ── */
+async function _cloudPush() {
+  if (_cloudBusy) return;
+  _cloudBusy = true;
+  _syncBadge('syncing');
+  try {
+    const res = await fetch(_JBIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': _JBIN_KEY,
+        'X-Bin-Versioning': 'false',
+      },
+      body: JSON.stringify(_cloudCollect()),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    _syncBadge('saved');
+  } catch(e) {
+    console.warn('[HSH Cloud]', e);
+    _syncBadge('error');
+  } finally {
+    _cloudBusy = false;
+  }
+}
+
+/* ── Pull from JSONBin and restore to localStorage ── */
+async function _cloudPull() {
+  try {
+    const res = await fetch(_JBIN_URL + '/latest', {
+      headers: { 'X-Master-Key': _JBIN_KEY },
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const { record } = await res.json();
+    if (!record) return;
+
+    let restored = false;
+
+    // Restore all year keys
+    if (record.yearKeys) {
+      Object.entries(record.yearKeys).forEach(([k, v]) => {
+        const cur = localStorage.getItem(k);
+        if (JSON.stringify(v) !== cur) {
+          localStorage.setItem(k, JSON.stringify(v));
+          restored = true;
+        }
+      });
+    }
+    // Restore scalar keys
+    const pairs = [
+      ['year_list',   record.year_list],
+      ['ql',          record.ql],
+      ['assets_b',    record.assets_b],
+      ['assets_t',    record.assets_t],
+      ['lib_cats',    record.lib_cats],
+      ['lib_links',   record.lib_links],
+    ];
+    pairs.forEach(([k, v]) => {
+      if (v == null) return;
+      const full = 'hsh_' + k;
+      const cur  = localStorage.getItem(full);
+      if (JSON.stringify(v) !== cur) {
+        localStorage.setItem(full, JSON.stringify(v));
+        restored = true;
+      }
+    });
+    if (record.active_year && localStorage.getItem('hsh_active_year') !== record.active_year) {
+      localStorage.setItem('hsh_active_year', record.active_year);
+      restored = true;
+    }
+
+    if (restored) {
+      _syncBadge('loaded');
+      // Re-load the active year and re-render everything
+      const activeId = localStorage.getItem('hsh_active_year') || DEFAULT_YEAR_ID;
+      loadYear(activeId);
+      renderYearSelector();
+      renderPacing();
+      renderStats();
+      renderNotes();
+      renderAssets();
+      renderQL();
+      renderCategories();
+      document.getElementById('weekly-focus').value = state.focus || '';
+    }
+  } catch(e) {
+    console.warn('[HSH Cloud] Pull failed:', e);
+  }
+}
+
+/* ── Debounced trigger called by save() and saveLib() ── */
+function cloudSchedulePush() {
+  clearTimeout(_cloudTimer);
+  _cloudTimer = setTimeout(_cloudPush, 1500);
+}
+
+/* ── Manual sync button in header ── */
+function _addSyncButton() {
+  const printBtn = document.querySelector('button[onclick*="print"], .btn-ghost');
+  if (!printBtn) return;
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-ghost';
+  btn.id = '_hsh_sync_btn';
+  btn.title = 'Push all data to cloud now';
+  btn.textContent = '☁ Sync';
+  btn.onclick = async () => {
+    btn.disabled = true;
+    await _cloudPush();
+    btn.disabled = false;
+  };
+  printBtn.insertAdjacentElement('afterend', btn);
+}
+
+/* ── Boot: pull first, then add button ── */
+(async function _cloudBoot() {
+  await _cloudPull();
+  _addSyncButton();
+  console.log('[HSH Cloud] Sync active ✓');
+})();
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 init();
 </script>
