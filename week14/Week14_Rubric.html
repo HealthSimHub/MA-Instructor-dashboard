@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 — Admin Assisting Skills Rubric</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --navy:   #0D1B2A;
+    --slate:  #1B2A3B;
+    --teal:   #0E8A7A;
+    --teallt: #14B8A6;
+    --gold:   #F5A623;
+    --white:  #F0F4F8;
+    --muted:  #94A3B8;
+    --green:  #22C55E;
+    --yellow: #EAB308;
+    --red:    #EF4444;
+    --steel:  #334155;
+    --indigo: #6366F1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f1f5f9;
+    color: var(--navy);
+    padding: 24px;
+  }
+
+  .page-header {
+    background: var(--navy);
+    color: white;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+  .header-left h1 { font-size: 22px; font-weight: 700; }
+  .header-left p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header-right { text-align: right; flex-shrink: 0; }
+  .score-box {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 20px;
+    text-align: center;
+  }
+  .score-box .label { font-size: 10px; letter-spacing: 1px; color: var(--muted); }
+  .score-box .pts   { font-size: 28px; font-weight: 700; color: var(--gold); }
+  .score-box .total { font-size: 13px; color: var(--muted); }
+
+  .student-info {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 16px;
+    border: 1px solid #e2e8f0;
+  }
+  .info-field label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 1px; display: block; margin-bottom: 4px; }
+  .info-field .line { border-bottom: 1.5px solid #cbd5e1; height: 26px; }
+
+  /* Section */
+  .rubric-section {
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 18px;
+    color: white;
+  }
+  .section-header .section-icon { font-size: 18px; }
+  .section-header h2 { font-size: 14px; font-weight: 700; flex: 1; }
+  .section-header .section-pts { font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.2); padding: 3px 10px; border-radius: 12px; }
+
+  /* Rubric table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  thead tr th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    color: #64748b;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;
+  }
+  th.center, td.center { text-align: center; }
+  tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafbfc; }
+  td {
+    padding: 10px 14px;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  td.skill-name { font-weight: 600; color: var(--navy); }
+  td.skill-mod  { font-size: 10px; font-weight: 700; padding: 10px 8px; }
+  td.pts-cell   { text-align: center; font-weight: 700; font-size: 14px; color: #64748b; }
+
+  .score-select {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+  }
+  .score-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .score-4 { background: #dcfce7; color: #15803d; }
+  .score-3 { background: #dbeafe; color: #1d4ed8; }
+  .score-2 { background: #fef9c3; color: #a16207; }
+  .score-1 { background: #fee2e2; color: #b91c1c; }
+
+  .level-desc {
+    font-size: 11px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  /* Score legend */
+  .legend {
+    background: white;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .legend h3 { font-size: 12px; font-weight: 700; color: var(--navy); margin-right: 8px; white-space: nowrap; }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .legend-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* Grade scale */
+  .grade-scale {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 18px 24px;
+    color: white;
+    margin-top: 8px;
+  }
+  .grade-scale h3 { font-size: 13px; font-weight: 700; color: var(--gold); margin-bottom: 12px; }
+  .grade-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .grade-chip {
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .grade-chip .grade { font-size: 18px; font-weight: 700; }
+  .grade-chip .range { font-size: 10px; color: rgba(255,255,255,0.7); }
+  .grade-chip .badge-note { font-size: 10px; margin-top: 2px; }
+
+  .notes-section {
+    background: white;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    border: 1px solid #e2e8f0;
+  }
+  .notes-section h3 { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-bottom: 10px; }
+  .notes-lines { }
+  .notes-lines hr { border: none; border-top: 1.5px solid #f1f5f9; margin: 18px 0 0; }
+
+  @media print {
+    body { background: white; padding: 10px; }
+    .rubric-section { box-shadow: none; }
+    @page { margin: 0.4in; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-left">
+    <h1>Week 14 — Administrative Assisting Skills Rubric</h1>
+    <p>HealthSim Hub · Phase 3 · NHA CCMA Modules 8, 9, 10, 12, 13</p>
+  </div>
+  <div class="header-right">
+    <div class="score-box">
+      <div class="label">TOTAL SCORE</div>
+      <div class="pts">___ / 100</div>
+      <div class="total">pts</div>
+    </div>
+  </div>
+</div>
+
+<!-- STUDENT INFO -->
+<div class="student-info">
+  <div class="info-field"><label>STUDENT NAME</label><div class="line"></div></div>
+  <div class="info-field"><label>DATE</label><div class="line"></div></div>
+  <div class="info-field"><label>ASSIGNED PATIENT(S)</label><div class="line"></div></div>
+  <div class="info-field"><label>INSTRUCTOR</label><div class="line"></div></div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <h3>SCORING GUIDE:</h3>
+  <div class="legend-item">
+    <div class="legend-dot score-4">4</div>
+    <div><strong>Exceeds</strong> — accurate, complete, professional, no prompts needed</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot score-3">3</div>
+    <div><strong>Meets</strong> — correct with minor gap, 1 prompt acceptable</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot score-2">2</div>
+    <div><strong>Approaching</strong> — partially correct, needed guidance, key step missed</div>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot score-1">1</div>
+    <div><strong>Not Yet</strong> — incorrect, incomplete, or not attempted</div>
+  </div>
+</div>
+
+
+<!-- SECTION 1: SCHEDULING & PHONE SKILLS (MOD 8) -->
+<div class="rubric-section">
+  <div class="section-header" style="background:#0E8A7A;">
+    <span class="section-icon">📅</span>
+    <h2>Section 1 — Scheduling & Phone Skills (Module 8)</h2>
+    <span class="section-pts">25 pts</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30px">MOD</th>
+        <th style="width:35%">SKILL / TASK</th>
+        <th>4 — EXCEEDS</th>
+        <th>3 — MEETS</th>
+        <th>2 — APPROACHING</th>
+        <th>1 — NOT YET</th>
+        <th class="center" style="width:60px">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="skill-mod" style="color:#5EEAD4;">M8</td>
+        <td class="skill-name">Screening Call Protocol<br><span style="font-weight:400; color:#64748b; font-size:11px;">Asks name, DOB, reason for visit, urgency</span></td>
+        <td class="level-desc">Asks all required questions in correct order; correctly triages urgency; documents immediately</td>
+        <td class="level-desc">Asks most questions; minor out-of-order; documents after prompting</td>
+        <td class="level-desc">Misses 1–2 key questions; triage decision unclear</td>
+        <td class="level-desc">Does not follow protocol; skips triage questions entirely</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#5EEAD4;">M8</td>
+        <td class="skill-name">Emergency Call Protocol<br><span style="font-weight:400; color:#64748b; font-size:11px;">Robert's chest pain scenario</span></td>
+        <td class="level-desc">Immediately identifies red flags; follows office emergency protocol; knows when to instruct patient to call 911</td>
+        <td class="level-desc">Recognizes urgency; escalates to supervisor with 1 prompt</td>
+        <td class="level-desc">Recognizes concern but unsure of protocol steps</td>
+        <td class="level-desc">Does not identify urgency; treats as routine call</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#5EEAD4;">M8</td>
+        <td class="skill-name">Appointment Scheduling<br><span style="font-weight:400; color:#64748b; font-size:11px;">Correct type, duration, method</span></td>
+        <td class="level-desc">Selects correct visit type & scheduling method for each patient; accurately enters all data in EMR</td>
+        <td class="level-desc">Correct visit type; minor error in scheduling method or duration</td>
+        <td class="level-desc">Schedules but uses wrong visit type or method for 1 patient</td>
+        <td class="level-desc">Unable to determine visit type or correctly schedule</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#5EEAD4;">M8</td>
+        <td class="skill-name">Referral & Prior Authorization<br><span style="font-weight:400; color:#64748b; font-size:11px;">Marcus → Endocrinology</span></td>
+        <td class="level-desc">Correctly identifies need for prior auth; completes all pre-auth documentation steps in EMR; explains process to patient</td>
+        <td class="level-desc">Initiates referral correctly; minor documentation gap</td>
+        <td class="level-desc">Knows a referral is needed but unsure of prior auth steps</td>
+        <td class="level-desc">Does not initiate referral or attempts without prior auth check</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#5EEAD4;">M8</td>
+        <td class="skill-name">Phone Documentation<br><span style="font-weight:400; color:#64748b; font-size:11px;">Documents calls in EMR — Robert's case</span></td>
+        <td class="level-desc">Documents call with date, time, symptoms, action taken; uses correct EMR fields; entry is clear and complete</td>
+        <td class="level-desc">Documents most required elements; 1 field missing</td>
+        <td class="level-desc">Entry present but incomplete — missing symptoms or action taken</td>
+        <td class="level-desc">Does not document call or entry is inadequate</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 2: CHECK-IN & BEGINNING THE VISIT (MOD 9) -->
+<div class="rubric-section">
+  <div class="section-header" style="background:#6366F1;">
+    <span class="section-icon">🏥</span>
+    <h2>Section 2 — Check-In & Beginning the Visit (Module 9)</h2>
+    <span class="section-pts">30 pts</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30px">MOD</th>
+        <th style="width:35%">SKILL / TASK</th>
+        <th>4 — EXCEEDS</th>
+        <th>3 — MEETS</th>
+        <th>2 — APPROACHING</th>
+        <th>1 — NOT YET</th>
+        <th class="center" style="width:60px">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">Insurance Eligibility Verification<br><span style="font-weight:400; color:#64748b; font-size:11px;">All 3 patients verified before visit</span></td>
+        <td class="level-desc">Verifies all 3 patients prior to visit; correctly identifies coverage details; documents in EMR; flags Medicaid re-verification need</td>
+        <td class="level-desc">Verifies 2–3 patients; minor documentation gap</td>
+        <td class="level-desc">Attempts verification but misses re-verify-every-visit rule for Medicaid</td>
+        <td class="level-desc">Does not verify; or verifies only 1 patient</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">Patient Check-In Process<br><span style="font-weight:400; color:#64748b; font-size:11px;">Marcus & Destiny — full workflow</span></td>
+        <td class="level-desc">Greets professionally; verifies identity (2 identifiers); confirms/updates demographics; obtains signatures; routes patient correctly</td>
+        <td class="level-desc">Completes check-in; misses 1 minor step (e.g., 2nd identifier)</td>
+        <td class="level-desc">Checks in but skips demographic update or signature step</td>
+        <td class="level-desc">Check-in incomplete; major steps missed</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">Minor Patient Handling<br><span style="font-weight:400; color:#64748b; font-size:11px;">Destiny — age 17, guardian signature</span></td>
+        <td class="level-desc">Identifies minor status; ensures guardian present; obtains all required signatures; explains process to patient and guardian calmly</td>
+        <td class="level-desc">Identifies minor; obtains signature with 1 prompt</td>
+        <td class="level-desc">Recognizes guardian needed but doesn't know which forms require it</td>
+        <td class="level-desc">Does not identify minor status or proceed without guardian signature</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">Copay Collection<br><span style="font-weight:400; color:#64748b; font-size:11px;">Marcus — $20 Medicare copay</span></td>
+        <td class="level-desc">Collects correct amount; posts payment in EMR; provides receipt; explains patient responsibility clearly</td>
+        <td class="level-desc">Collects and posts; minor explanation gap</td>
+        <td class="level-desc">Collects payment but doesn't post in EMR correctly</td>
+        <td class="level-desc">Does not collect copay or posts to wrong account</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">Patient Flow Sheet<br><span style="font-weight:400; color:#64748b; font-size:11px;">Destiny — new patient, generated pre-rooming</span></td>
+        <td class="level-desc">Generates complete flow sheet before patient is roomed; all fields accurate; attached to encounter in EMR</td>
+        <td class="level-desc">Flow sheet generated with 1 incomplete field</td>
+        <td class="level-desc">Generated after patient is roomed; or missing key fields</td>
+        <td class="level-desc">Flow sheet not generated</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#A5B4FC;">M9</td>
+        <td class="skill-name">EMR Documentation Accuracy<br><span style="font-weight:400; color:#64748b; font-size:11px;">Overall documentation quality</span></td>
+        <td class="level-desc">All entries complete, correctly placed, no blank required fields; timestamps accurate</td>
+        <td class="level-desc">Mostly accurate; 1 minor error corrected independently</td>
+        <td class="level-desc">2–3 documentation errors; needed prompting to correct</td>
+        <td class="level-desc">Significant documentation gaps or errors throughout</td>
+        <td class="pts-cell">___/6</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 3: CHECKOUT & CODING (MOD 10 / 12) -->
+<div class="rubric-section">
+  <div class="section-header" style="background:#7C3AED;">
+    <span class="section-icon">📄</span>
+    <h2>Section 3 — Checkout, Coding & Billing (Modules 10, 12, 13)</h2>
+    <span class="section-pts">30 pts</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30px">MOD</th>
+        <th style="width:35%">SKILL / TASK</th>
+        <th>4 — EXCEEDS</th>
+        <th>3 — MEETS</th>
+        <th>2 — APPROACHING</th>
+        <th>1 — NOT YET</th>
+        <th class="center" style="width:60px">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="skill-mod" style="color:#C4B5FD;">M10</td>
+        <td class="skill-name">Patient Checkout<br><span style="font-weight:400; color:#64748b; font-size:11px;">All 3 patients checked out with AVS</span></td>
+        <td class="level-desc">Checks out all patients; generates and reviews AVS with each patient; schedules follow-up if ordered; collects any remaining balance</td>
+        <td class="level-desc">Checks out all patients; AVS generated; minor patient communication gap</td>
+        <td class="level-desc">Checks out 2 of 3; or AVS not reviewed with patient</td>
+        <td class="level-desc">Checkout incomplete for 2+ patients; AVS not generated</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#C4B5FD;">M12</td>
+        <td class="skill-name">ICD-10-CM Code Selection<br><span style="font-weight:400; color:#64748b; font-size:11px;">Correct diagnosis codes for all 3 cases</span></td>
+        <td class="level-desc">Selects correct, specific ICD-10-CM codes for all 3 encounters; supports medical necessity; explains code logic</td>
+        <td class="level-desc">Correct codes for 2–3 patients; 1 less specific but acceptable</td>
+        <td class="level-desc">1 correct code; others too broad or using wrong category</td>
+        <td class="level-desc">Unable to identify correct codes; or codes selected don't match diagnoses</td>
+        <td class="pts-cell">___/6</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#C4B5FD;">M12</td>
+        <td class="skill-name">Code Type Identification<br><span style="font-weight:400; color:#64748b; font-size:11px;">ICD-10 vs CPT vs HCPCS — when to use each</span></td>
+        <td class="level-desc">Correctly identifies which code type applies to each situation; can explain the difference with a real example for each</td>
+        <td class="level-desc">Correctly identifies 2 of 3 code types with explanation</td>
+        <td class="level-desc">Knows codes exist but confuses when to apply them</td>
+        <td class="level-desc">Cannot distinguish between code types</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#FCD34D;">M13</td>
+        <td class="skill-name">Claim Submission Process<br><span style="font-weight:400; color:#64748b; font-size:11px;">EMR billing section walkthrough</span></td>
+        <td class="level-desc">Navigates claim submission correctly; identifies required fields; understands clean claim requirements and timely filing</td>
+        <td class="level-desc">Navigates with 1 prompt; understands most requirements</td>
+        <td class="level-desc">Locates billing section but unsure of next steps</td>
+        <td class="level-desc">Cannot navigate billing section or does not attempt</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#FCD34D;">M13</td>
+        <td class="skill-name">ABN Knowledge<br><span style="font-weight:400; color:#64748b; font-size:11px;">Robert's TRICARE / echocardiogram scenario</span></td>
+        <td class="level-desc">Correctly explains ABN purpose; identifies when it's required; can explain patient responsibility before service</td>
+        <td class="level-desc">Knows ABN is needed; explains purpose with minor gap</td>
+        <td class="level-desc">Has heard of ABN but cannot explain when/why it's used</td>
+        <td class="level-desc">No knowledge of ABN</td>
+        <td class="pts-cell">___/4</td>
+      </tr>
+      <tr>
+        <td class="skill-mod" style="color:#FCD34D;">M13</td>
+        <td class="skill-name">Insurance Plan Knowledge<br><span style="font-weight:400; color:#64748b; font-size:11px;">Medicare, Medicaid, TRICARE — key differences</span></td>
+        <td class="level-desc">Correctly explains all 3 plans; distinguishes eligibility and billing differences; applies knowledge to patient scenarios</td>
+        <td class="level-desc">Describes 2 of 3 plans accurately</td>
+        <td class="level-desc">Knows names of plans but confuses coverage details</td>
+        <td class="level-desc">Cannot describe any insurance plan correctly</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 4: PROFESSIONALISM -->
+<div class="rubric-section">
+  <div class="section-header" style="background:#334155;">
+    <span class="section-icon">⭐</span>
+    <h2>Section 4 — Professionalism & Soft Skills</h2>
+    <span class="section-pts">15 pts</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30px"></th>
+        <th style="width:35%">SKILL / TASK</th>
+        <th>4 — EXCEEDS</th>
+        <th>3 — MEETS</th>
+        <th>2 — APPROACHING</th>
+        <th>1 — NOT YET</th>
+        <th class="center" style="width:60px">SCORE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td class="skill-name">Patient Communication & Tone<br><span style="font-weight:400; color:#64748b; font-size:11px;">Front desk demeanor, phone tone</span></td>
+        <td class="level-desc">Professional, warm, clear language throughout; uses patient's name; calm under pressure (Robert's scenario)</td>
+        <td class="level-desc">Professional with minor lapse; recovers independently</td>
+        <td class="level-desc">Communication adequate but clinical/cold; or flustered during urgent scenario</td>
+        <td class="level-desc">Unprofessional, dismissive, or panics during urgent call</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="skill-name">Workflow Efficiency & Organization<br><span style="font-weight:400; color:#64748b; font-size:11px;">Task order, time management</span></td>
+        <td class="level-desc">Completes tasks in logical order; manages 3 patients without confusion; prioritizes correctly</td>
+        <td class="level-desc">Mostly organized; minor out-of-order step</td>
+        <td class="level-desc">Completes tasks but in inefficient order; needed redirection</td>
+        <td class="level-desc">Disorganized; significant confusion managing multiple patients</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="skill-name">Revenue Cycle Knowledge (Verbal)<br><span style="font-weight:400; color:#64748b; font-size:11px;">Debrief recitation — no notes</span></td>
+        <td class="level-desc">Recites all 8 revenue cycle steps in correct order with "who is responsible" for each</td>
+        <td class="level-desc">Recites all steps; 1 out of order or missing "who"</td>
+        <td class="level-desc">Recites 5–6 steps; needs prompting for others</td>
+        <td class="level-desc">Cannot recite cycle without notes; fewer than 4 steps recalled</td>
+        <td class="pts-cell">___/5</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- GRADE SCALE -->
+<div class="grade-scale">
+  <h3>📊 GRADE SCALE — Admin Pro Badge Criteria</h3>
+  <div class="grade-row">
+    <div class="grade-chip" style="background:rgba(34,197,94,0.2);">
+      <div class="grade" style="color:#4ade80;">A</div>
+      <div class="range">90–100 pts</div>
+      <div class="badge-note" style="color:#86efac;">🏅 Badge Earned</div>
+    </div>
+    <div class="grade-chip" style="background:rgba(59,130,246,0.2);">
+      <div class="grade" style="color:#60a5fa;">B</div>
+      <div class="range">80–89 pts</div>
+      <div class="badge-note" style="color:#93c5fd;">Badge Earned</div>
+    </div>
+    <div class="grade-chip" style="background:rgba(234,179,8,0.2);">
+      <div class="grade" style="color:#facc15;">C</div>
+      <div class="range">70–79 pts</div>
+      <div class="badge-note" style="color:#fde047;">Retake 1 section</div>
+    </div>
+    <div class="grade-chip" style="background:rgba(239,68,68,0.15);">
+      <div class="grade" style="color:#f87171;">D/F</div>
+      <div class="range">&lt;70 pts</div>
+      <div class="badge-note" style="color:#fca5a5;">No badge — resimulate</div>
+    </div>
+    <div class="grade-chip" style="background:rgba(245,166,35,0.2); margin-left:auto;">
+      <div class="grade" style="color:var(--gold);">🏅</div>
+      <div class="range" style="color:var(--goldlt);">Badge = 80+ pts</div>
+      <div class="badge-note" style="color:var(--goldlt);">+ revenue cycle recite</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="notes-section">
+  <h3>INSTRUCTOR NOTES / FEEDBACK</h3>
+  <div class="notes-lines">
+    <hr><hr><hr><hr><hr>
+  </div>
+</div>
+
+<div style="text-align:center; margin-top:20px; font-size:11px; color:#94A3B8;">
+  HealthSim Hub · Week 14 · Phase 3 — Administrative Assisting Skills Rubric
+</div>
+
+</body>
+</html>

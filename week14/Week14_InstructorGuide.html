@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 — Instructor Facilitator Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy:    #0D1B2A;
+    --slate:   #1B2A3B;
+    --slate2:  #243447;
+    --teal:    #0E8A7A;
+    --teallt:  #14B8A6;
+    --tealpal: #e6f7f5;
+    --gold:    #F5A623;
+    --goldpal: #fef8ee;
+    --white:   #F0F4F8;
+    --muted:   #94A3B8;
+    --green:   #22C55E;
+    --greenpal:#f0fdf4;
+    --red:     #EF4444;
+    --redpal:  #fef2f2;
+    --indigo:  #6366F1;
+    --indigopal:#eef2ff;
+    --purple:  #7C3AED;
+    --steel:   #334155;
+    --border:  #e2e8f0;
+    --body:    #374151;
+    --bg:      #f1f5f9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--body);
+    padding: 28px 24px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  /* ── PRINT BAR ── */
+  .print-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .print-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--teal); color: white;
+    border: none; border-radius: 8px;
+    padding: 9px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .print-btn:hover { background: #0a7266; }
+
+  /* ── COVER BLOCK ── */
+  .cover {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 30px 34px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 6px; height: 100%;
+    background: var(--teal);
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .cover h1 { font-size: 26px; font-weight: 700; color: white; line-height: 1.2; }
+  .cover .sub { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+  .cover-meta {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--white);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .meta-chip span { color: var(--teallt); font-weight: 700; }
+  .cover-badge {
+    background: var(--gold);
+    color: var(--navy);
+    border-radius: 10px;
+    padding: 10px 18px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .cover-badge .badge-label { font-size: 10px; font-weight: 600; letter-spacing: 1px; display: block; margin-bottom: 2px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── OVERVIEW GRID ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .day-overview {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .day-overview-header {
+    padding: 10px 12px;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .day-overview-body { padding: 10px 12px; }
+  .day-overview-title { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .day-overview-items { font-size: 11px; color: #64748b; line-height: 1.7; }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 24px;
+    overflow: hidden;
+    page-break-inside: avoid;
+  }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    color: white;
+  }
+  .day-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.85;
+    min-width: 50px;
+  }
+  .day-title-block { flex: 1; }
+  .day-title { font-size: 18px; font-weight: 700; }
+  .day-focus { font-size: 12px; opacity: 0.82; margin-top: 2px; }
+  .day-time-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .time-chip {
+    background: rgba(255,255,255,0.18);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .day-body { padding: 20px 24px; }
+
+  /* ── PHASE BLOCKS ── */
+  .phase-block {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .phase-icon { font-size: 15px; }
+  .phase-title { flex: 1; }
+  .phase-dur {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.8;
+    background: rgba(0,0,0,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .phase-body { padding: 14px 18px; }
+
+  /* Huddle phase */
+  .phase-huddle .phase-header { background: var(--teal); color: white; }
+  .phase-huddle .phase-body   { background: var(--tealpal); }
+
+  /* Shift phase */
+  .phase-shift .phase-header { background: var(--navy); color: white; }
+  .phase-shift .phase-body   { background: #f8fafc; }
+
+  /* Debrief phase */
+  .phase-debrief .phase-header { background: var(--gold); color: var(--navy); }
+  .phase-debrief .phase-body   { background: var(--goldpal); }
+
+  /* ── CONTENT ELEMENTS ── */
+  .step-list { list-style: none; }
+  .step-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { flex: 1; }
+  .step-text strong { color: var(--navy); }
+  .step-text .slide-ref {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--teallt);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-family: 'DM Mono', monospace;
+  }
+  .step-text .act-ref {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-family: 'DM Mono', monospace;
+  }
+  .step-text .emr-ref {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-family: 'DM Mono', monospace;
+  }
+  .step-text .mod-ref {
+    display: inline-block;
+    background: var(--indigopal);
+    color: var(--indigo);
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-left: 4px;
+    vertical-align: middle;
+    font-family: 'DM Mono', monospace;
+    border: 1px solid #c7d2fe;
+  }
+
+  /* Callout boxes */
+  .callout {
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-body strong { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+  .callout-tip    { background: var(--tealpal);   border-left: 3px solid var(--teal);   }
+  .callout-warn   { background: var(--goldpal);   border-left: 3px solid var(--gold);   }
+  .callout-diff   { background: var(--indigopal); border-left: 3px solid var(--indigo); }
+  .callout-check  { background: var(--greenpal);  border-left: 3px solid var(--green);  }
+  .callout-exam   { background: #fff7ed;          border-left: 3px solid #f97316;       }
+
+  .callout-tip   .callout-body strong { color: var(--teal);   }
+  .callout-warn  .callout-body strong { color: #92400e;       }
+  .callout-diff  .callout-body strong { color: var(--indigo); }
+  .callout-check .callout-body strong { color: #15803d;       }
+  .callout-exam  .callout-body strong { color: #c2410c;       }
+
+  /* Two-column layout for some phase bodies */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .two-col-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+  /* Mini module table */
+  .mod-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+  .mod-table th {
+    background: var(--navy); color: white;
+    padding: 7px 10px; text-align: left;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .mod-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .mod-table tr:last-child td { border-bottom: none; }
+  .mod-table tr:nth-child(even) td { background: #f8fafc; }
+  .mod-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    background: var(--indigopal);
+    color: var(--indigo);
+    border: 1px solid #c7d2fe;
+  }
+
+  /* Skill check table */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .check-box {
+    width: 16px; height: 16px;
+    border: 2px solid var(--steel);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* At-a-glance week table */
+  .week-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 24px; }
+  .week-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: white;
+    background: var(--navy);
+  }
+  .week-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .week-table tr:last-child td { border-bottom: none; }
+  .week-table tr:nth-child(even) td { background: #f8fafc; }
+  .week-day-label {
+    font-weight: 700;
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  /* Supplies / materials list */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .material-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .material-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .material-card ul { list-style: none; }
+  .material-card ul li {
+    font-size: 12px;
+    color: var(--body);
+    padding: 3px 0;
+    display: flex; gap: 6px; align-items: flex-start;
+  }
+  .material-card ul li::before { content: "→"; color: var(--teal); font-size: 11px; margin-top: 2px; flex-shrink: 0; }
+
+  /* Footer */
+  .page-footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; max-width: 100%; padding: 12px; }
+    .print-bar { display: none; }
+    .day-card, .phase-block { box-shadow: none; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .phase-huddle .phase-header,
+    .phase-shift .phase-header,
+    .phase-debrief .phase-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { margin: 0.45in; }
+  }
+
+  /* Day color themes */
+  .day-1 .day-header { background: linear-gradient(135deg, #0D1B2A, #1B3A4B); }
+  .day-2 .day-header { background: linear-gradient(135deg, #0E8A7A, #065f52); }
+  .day-3 .day-header { background: linear-gradient(135deg, #6366F1, #4338CA); }
+  .day-4 .day-header { background: linear-gradient(135deg, #7C3AED, #5b21b6); }
+  .day-5 .day-header { background: linear-gradient(135deg, #B45309, #92400e); }
+  .day-1 .day-overview-header { background: #0D1B2A; }
+  .day-2 .day-overview-header { background: #0E8A7A; }
+  .day-3 .day-overview-header { background: #6366F1; }
+  .day-4 .day-overview-header { background: #7C3AED; }
+  .day-5 .day-overview-header { background: #B45309; }
+</style>
+</head>
+<body>
+
+<!-- PRINT BAR -->
+<div class="print-bar">
+  <button class="print-btn" onclick="window.print()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print / Save as PDF
+  </button>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <h1>Week 14 — Administrative Assisting<br>Instructor Facilitator Guide</h1>
+      <p class="sub">HealthSim Hub · Phase 3 · NHA CCMA Modules 8, 9, 10, 12, 13</p>
+    </div>
+    <div class="cover-badge">
+      <span class="badge-label">BADGE TARGET</span>
+      🏅 Admin Pro
+      <div style="font-size:11px; font-weight:400; margin-top:2px;">Skills Passport Phase 3</div>
+    </div>
+  </div>
+  <div class="cover-meta">
+    <div class="meta-chip">📅 Duration: <span>5 Class Days</span></div>
+    <div class="meta-chip">⏱ Format: <span>3-Hour Clinic Shift</span></div>
+    <div class="meta-chip">📋 Slides: <span>9 (spread across Days 1–3)</span></div>
+    <div class="meta-chip">📝 Activities: <span>7 (distributed Days 1–4)</span></div>
+    <div class="meta-chip">💻 EMR Tasks: <span>Days 2–4</span></div>
+    <div class="meta-chip">✅ Check-Off: <span>Day 5</span></div>
+  </div>
+</div>
+
+<!-- HOW TO READ THIS GUIDE -->
+<div style="background:white; border-radius:10px; border:1px solid var(--border); padding:16px 20px; margin-bottom:24px; font-size:13px; line-height:1.7; color:var(--body);">
+  <strong style="color:var(--navy); font-size:13.5px;">How to use this guide:</strong>
+  Each day is broken into three phases — <strong style="color:var(--teal)">Morning Huddle</strong>, <strong style="color:var(--navy)">Clinic Shift</strong>, and <strong style="color:var(--gold)">End of Shift</strong> — matching the structure on the slides.
+  Inline tags tell you exactly what to pull up: <span style="background:var(--navy);color:var(--teallt);font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;font-family:monospace;">SLIDE 3</span> = a specific deck slide,
+  <span style="background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;font-family:monospace;">ACT 2</span> = an exercise from the Activities packet,
+  <span style="background:var(--teal);color:white;font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;font-family:monospace;">EMR</span> = task in HealthSim Hub,
+  <span style="background:#eef2ff;color:#6366F1;font-size:10px;font-weight:700;padding:1px 7px;border-radius:3px;border:1px solid #c7d2fe;font-family:monospace;">MOD 8</span> = NHA module quiz.
+</div>
+
+<!-- WEEK AT A GLANCE -->
+<div class="section-label">WEEK AT A GLANCE</div>
+<table class="week-table">
+  <thead>
+    <tr>
+      <th style="width:100px;">DAY</th>
+      <th>FOCUS</th>
+      <th>SLIDES</th>
+      <th>ACTIVITIES</th>
+      <th>EMR / MODULES</th>
+      <th>STUDENT OUTCOME</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="week-day-label">Day 1<br>Monday</span></td>
+      <td>Orientation + Admin Overview<br><em style="color:#64748b;font-size:11px;">What does admin actually mean?</em></td>
+      <td>Slides 1, 2, 3</td>
+      <td>Act 1 (Revenue Cycle Sort)<br>Act 2 (Insurance Matching)</td>
+      <td>Mod 8 intro — preview only</td>
+      <td>Can define EHR vs EMR, explain the revenue cycle in order, name all insurance types</td>
+    </tr>
+    <tr>
+      <td><span class="week-day-label">Day 2<br>Tuesday</span></td>
+      <td>Scheduling + Beginning the Visit<br><em style="color:#64748b;font-size:11px;">From first call to check-in</em></td>
+      <td>Slides 4, 5</td>
+      <td>Act 4 (Phone Screening Role Play)<br>Act 5 (Check-In Checklist)</td>
+      <td>EMR: Schedule all 3 patients<br>Mod 8 quiz</td>
+      <td>Can screen a call, schedule correctly, check in a patient using EMR, collect copay</td>
+    </tr>
+    <tr>
+      <td><span class="week-day-label">Day 3<br>Wednesday</span></td>
+      <td>Coding + Revenue Cycle Deep Dive<br><em style="color:#64748b;font-size:11px;">ICD / CPT / HCPCS + medical necessity</em></td>
+      <td>Slides 6, 7</td>
+      <td>Act 3 (Coding 101)<br>Act 7 (Forms Knowledge Check)</td>
+      <td>EMR: Eligibility checks, referral + prior auth<br>Mod 9 quiz</td>
+      <td>Can distinguish ICD/CPT/HCPCS, explain medical necessity, complete referral steps in EMR</td>
+    </tr>
+    <tr>
+      <td><span class="week-day-label">Day 4<br>Thursday</span></td>
+      <td>Billing + Checkout + Full Sim Run<br><em style="color:#64748b;font-size:11px;">Claims, denials, patient responsibility</em></td>
+      <td>Slides 6 (task list revisit)</td>
+      <td>Act 6 (Denied Claim Decision Tree)</td>
+      <td>EMR: Check out all 3 patients, generate AVS, initiate claim<br>Mod 10, 12, 13 quizzes</td>
+      <td>Can check out a patient, generate AVS, identify a denial reason and next step</td>
+    </tr>
+    <tr>
+      <td><span class="week-day-label">Day 5<br>Friday</span></td>
+      <td>Check-Off + Badge Day<br><em style="color:#64748b;font-size:11px;">Demonstrate, debrief, earn the stamp</em></td>
+      <td>Slides 8, 9</td>
+      <td>Guided notes turn-in</td>
+      <td>Revenue cycle recitation (no notes)<br>Skills Passport stamp</td>
+      <td>Earns Admin Pro badge, can recite revenue cycle, completes all rubric check-offs</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- MATERIALS NEEDED -->
+<div class="section-label">MATERIALS CHECKLIST — PREP BEFORE MONDAY</div>
+<div class="materials-grid">
+  <div class="material-card">
+    <h4>📊 Digital / Projected</h4>
+    <ul>
+      <li>Week 14 slide deck (9 slides) — loaded and ready</li>
+      <li>HealthSim Hub EMR — 3 patient charts pulled up</li>
+      <li>Scenario cards on screen or printed (1 set per group)</li>
+      <li>Module quiz links bookmarked (Mods 8–10, 12, 13)</li>
+    </ul>
+  </div>
+  <div class="material-card">
+    <h4>📄 Student Handouts</h4>
+    <ul>
+      <li>Exercises &amp; Activities packet — 1 per student</li>
+      <li>Guided notes (NHA Chapter 11 style) — 1 per student</li>
+      <li>Scenario cards (optional print) — 1 per group/pair</li>
+      <li>Rubric — 1 per student (distribute Day 1)</li>
+    </ul>
+  </div>
+  <div class="material-card">
+    <h4>🏅 Instructor Tools</h4>
+    <ul>
+      <li>Skills Passport stamp ready for Day 5</li>
+      <li>Rubric (instructor copy) — 1 per student</li>
+      <li>Revenue cycle recitation answer key (in this guide)</li>
+      <li>Know Mod 8–13 quiz deadlines for your class</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- DAY 1 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="section-label">DAY-BY-DAY FACILITATION</div>
+
+<div class="day-card day-1">
+  <div class="day-header">
+    <div class="day-num">DAY 1 · MON</div>
+    <div class="day-title-block">
+      <div class="day-title">Admin Orientation — What Does This Job Actually Look Like?</div>
+      <div class="day-focus">Revenue Cycle · EHR vs EMR · Insurance Overview · Setting the Week's Context</div>
+    </div>
+    <div class="day-time-chips">
+      <span class="time-chip">☀️ Huddle: 30 min</span>
+      <span class="time-chip">🏥 Shift: 80 min</span>
+      <span class="time-chip">🌙 Debrief: 30 min</span>
+    </div>
+  </div>
+
+  <div class="day-body">
+
+    <!-- HUDDLE -->
+    <div class="phase-block phase-huddle">
+      <div class="phase-header">
+        <span class="phase-icon">☀️</span>
+        <span class="phase-title">MORNING HUDDLE</span>
+        <span class="phase-dur">~30 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Open with the cover slide and agenda card.</strong> <span class="slide-ref">SLIDE 1</span> <span class="slide-ref">SLIDE 2</span> — Walk through what the full week looks like. Let students know this week has 5 days, 9 module quizzes, and ends with a badge. Lay out the roadmap so nothing feels like a surprise.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Core concepts — EHR vs EMR and the revenue cycle.</strong> <span class="slide-ref">SLIDE 3</span> — Don't rush this. The EHR/EMR distinction trips people up on the exam. Use the vocab box as a read-along. Connect to what students already know: "You've been using our EMR all semester — which type is it?"</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Real world anchor.</strong> Read the green callout box on Slide 3 aloud or ask a student to. The goal is for them to feel the stakes: every scheduling or coding error is money the clinic doesn't get paid. Their accuracy starts at the front desk.</div></li>
+          <li><div class="step-num">4</div><div class="step-text"><strong>Distribute the rubric and activities packet.</strong> Give students 2 minutes to scan both. Tell them this packet is their work for the week — they'll turn it in on Friday.</div></li>
+        </ul>
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div class="callout-body">
+            <strong>FACILITATION TIP</strong>
+            The revenue cycle is the connective tissue of the entire week. Every activity, every EMR task, and every exam question ties back to it. Spend a few extra minutes here — students who understand the cycle holistically perform better on all 9 module quizzes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIFT -->
+    <div class="phase-block phase-shift">
+      <div class="phase-header">
+        <span class="phase-icon">🏥</span>
+        <span class="phase-title">CLINIC SHIFT — Foundational Activities</span>
+        <span class="phase-dur">~80 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Activity 1 — Revenue Cycle Sort.</strong> <span class="act-ref">ACT 1</span> — Individual, 10 minutes. Students put the 8 scrambled steps in order and write who is responsible. Don't help — let them struggle productively. This surfaces gaps you'll address in the debrief.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Pair-share and self-correct.</strong> After individual work, have students compare with a partner. Then reveal the answer key together as a class. The goal isn't grading — it's building the mental model. Students should write corrections in their own words.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Activity 2 — Insurance Matching.</strong> <span class="act-ref">ACT 2</span> — Individual, 8 minutes. Then review together. Use this as a launch point for a quick discussion: Which insurance do most of your patients in this area have? What does that mean for how you check them in?</div></li>
+          <li><div class="step-num">4</div><div class="step-text"><strong>Introduce the week's patients.</strong> <span class="slide-ref">SLIDE 5</span> — Pull up the patient preview and go through all three cards. This is not a deep dive — it's a preview so students have context before they open the EMR on Day 2. Have them write the three names and chief complaints somewhere in their notes.</div></li>
+          <li><div class="step-num">5</div><div class="step-text"><strong>Free reading / guided notes.</strong> Remaining time — students work through their guided notes using their source material and notes from today's huddle. Circulate and check for misconceptions, especially around EHR vs EMR and the revenue cycle order.</div></li>
+        </ul>
+        <div class="callout callout-warn">
+          <span class="callout-icon">⚠️</span>
+          <div class="callout-body">
+            <strong>COMMON STUDENT CONFUSION — Day 1</strong>
+            Students frequently mix up EHR and EMR. The simplest fix: "EMR = one office, one visit. EHR = whole life, across systems." They also often put Coding before Check-In in the revenue cycle. Correct this firmly on Day 1 so it doesn't carry through the week.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEBRIEF -->
+    <div class="phase-block phase-debrief">
+      <div class="phase-header">
+        <span class="phase-icon">🌙</span>
+        <span class="phase-title">END OF SHIFT — Debrief</span>
+        <span class="phase-dur">~30 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Cold call revenue cycle order — no notes.</strong> Go around the room and have each student name one step in order. If they get it wrong, the class helps. The goal is for every student to leave today knowing the 8 steps.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Exit ticket:</strong> "Name one thing that surprised you today about the administrative side of being an MA." Quick shares — this tells you where their mental model was before today and sets up Day 2 nicely.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Preview Day 2.</strong> "Tomorrow we open the EMR and schedule our first patients. Make sure your guided notes are started and your Activities packet is with you." Remind them the module quizzes begin Day 2.</div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- end day-body -->
+</div><!-- end day-1 -->
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- DAY 2 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="day-card day-2">
+  <div class="day-header">
+    <div class="day-num">DAY 2 · TUE</div>
+    <div class="day-title-block">
+      <div class="day-title">Scheduling + Beginning the Visit</div>
+      <div class="day-focus">Phone Screening · Appointment Types · Patient Check-In · EMR Live Work · Module 8 Quiz</div>
+    </div>
+    <div class="day-time-chips">
+      <span class="time-chip">☀️ Huddle: 25 min</span>
+      <span class="time-chip">🏥 Shift: 95 min</span>
+      <span class="time-chip">🌙 Debrief: 25 min</span>
+    </div>
+  </div>
+
+  <div class="day-body">
+
+    <div class="phase-block phase-huddle">
+      <div class="phase-header">
+        <span class="phase-icon">☀️</span>
+        <span class="phase-title">MORNING HUDDLE</span>
+        <span class="phase-dur">~25 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Quick revenue cycle check — popcorn style.</strong> No notes, no slide. One student starts, next picks up. Goal: every student can contribute at least one step. This is a 3-minute warmup, not a quiz.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Module roadmap slide.</strong> <span class="slide-ref">SLIDE 4</span> — Briefly orient students to all 9 modules. Tell them Module 8 (Scheduling) quiz is due at the end of class today. Walk through the 6 skills in Mod 8 quickly so they know what to expect.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Model a screening call.</strong> Before students do Activity 4, model one yourself. Use Robert Nguyen's scenario. Show what professional language sounds like, how to triage urgency, and what happens when a caller says symptoms are getting worse. Keep it to 3–4 minutes — just enough to anchor the activity.</div></li>
+        </ul>
+        <div class="callout callout-exam">
+          <span class="callout-icon">🎯</span>
+          <div class="callout-body">
+            <strong>CCMA EXAM CONNECTION — Module 8</strong>
+            The exam tests screening call protocol heavily — especially emergency call handling. Students need to know: recognize red flags, do NOT put patient on hold during a possible emergency, follow clinic protocol, and know when to direct patient to call 911. Make this explicit before they do the role play.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block phase-shift">
+      <div class="phase-header">
+        <span class="phase-icon">🏥</span>
+        <span class="phase-title">CLINIC SHIFT — Scheduling + Check-In Simulation</span>
+        <span class="phase-dur">~95 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Activity 4 — Phone Screening Role Play.</strong> <span class="act-ref">ACT 4</span> — Partners, 15 minutes. One student plays the MA, one plays the caller. Then switch. Circulate and listen for: professional greeting, all 5 screening questions, correct triage decision, and the "plot twist" moment (worsening symptoms). Give specific verbal feedback in the moment.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>EMR — Schedule all 3 patients.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 8</span> — Marcus: established patient follow-up. Destiny: new patient sports physical. Robert: urgent same-day. Students must select the correct scheduling method and visit type for each. This is where the theory from Day 1 becomes real — spot-check that they're not just clicking through.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Activity 5 — Check-In Simulation Checklist.</strong> <span class="act-ref">ACT 5</span> <span class="emr-ref">EMR</span> — Students work through the 8-step check-in for Marcus Webb simultaneously in the EMR and on their paper checklist. This is the most important skill activity of the week. Walk the room constantly.</div></li>
+          <li><div class="step-num">4</div><div class="step-text"><strong>Copay collection.</strong> Make sure every student posts Marcus's $20 copay in the EMR correctly before moving on. This is a check-off item on the rubric. Students who skip this step will fail that row — flag it in real time.</div></li>
+          <li><div class="step-num">5</div><div class="step-text"><strong>Module 8 Quiz.</strong> <span class="mod-ref">MOD 8</span> — If class time allows, open the quiz in the last 20 minutes of the shift. Otherwise assign for homework tonight. Students who did the scheduling tasks in the EMR will find this quiz much easier — reinforce that connection.</div></li>
+        </ul>
+        <div class="callout callout-diff">
+          <span class="callout-icon">🔵</span>
+          <div class="callout-body">
+            <strong>DIFFERENTIATION NOTE</strong>
+            Destiny's check-in is more complex than Marcus's because of the minor patient requirement. If students finish Marcus early, have them attempt Destiny's check-in as a challenge. If students are struggling with Marcus, stay focused there — don't rush to Destiny. The minor patient rules will be covered again on Day 3.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block phase-debrief">
+      <div class="phase-header">
+        <span class="phase-icon">🌙</span>
+        <span class="phase-title">END OF SHIFT — Debrief</span>
+        <span class="phase-dur">~25 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Class discussion — what did the role play teach you?</strong> "What was the hardest part of the screening call?" Students almost always say the plot twist (worsening symptoms). Use this to reinforce protocol: calm, don't hold, escalate.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Verify EMR check-ins are complete.</strong> Walk the room and spot-check that all 3 patients are scheduled and Marcus is checked in with copay posted. This is a soft accountability moment before Day 3's deeper work.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Preview Day 3.</strong> "Tomorrow we code the visit — ICD, CPT, HCPCS — and we dig into the referral for Marcus. If you haven't finished Activity 2 or 5, complete those tonight."</div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- DAY 3 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="day-card day-3">
+  <div class="day-header">
+    <div class="day-num">DAY 3 · WED</div>
+    <div class="day-title-block">
+      <div class="day-title">Coding + Revenue Cycle Deep Dive</div>
+      <div class="day-focus">ICD-10-CM · CPT · HCPCS · Medical Necessity · Referrals · Prior Auth · Module 9 Quiz</div>
+    </div>
+    <div class="day-time-chips">
+      <span class="time-chip">☀️ Huddle: 25 min</span>
+      <span class="time-chip">🏥 Shift: 95 min</span>
+      <span class="time-chip">🌙 Debrief: 25 min</span>
+    </div>
+  </div>
+
+  <div class="day-body">
+
+    <div class="phase-block phase-huddle">
+      <div class="phase-header">
+        <span class="phase-icon">☀️</span>
+        <span class="phase-title">MORNING HUDDLE</span>
+        <span class="phase-dur">~25 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Revenue cycle slide — follow the money.</strong> <span class="slide-ref">SLIDE 7</span> — Walk through all 8 steps with the visual. Today focuses on steps 3–5: eligibility, documentation, coding. Point out that the MA touches almost every step — this is why admin knowledge is on the CCMA exam.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Code types — quick distinction.</strong> Write on the board: ICD-10-CM = WHY (diagnosis). CPT = WHAT WAS DONE (procedure). HCPCS = STUFF (equipment, meds, supplies not in CPT). Give one real example of each from Marcus's visit. Students should write this down — it's almost certainly on their quiz.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Medical necessity check-in.</strong> Ask: "Why does it matter that the diagnosis code matches the procedure code?" Let 2–3 students respond before you explain. Build toward: if medical necessity isn't supported, the claim gets denied. That starts with the MA selecting the right code.</div></li>
+        </ul>
+        <div class="callout callout-exam">
+          <span class="callout-icon">🎯</span>
+          <div class="callout-body">
+            <strong>CCMA EXAM CONNECTION — High Frequency Topics Today</strong>
+            ICD-10-CM vs CPT vs HCPCS is a guaranteed multi-question topic. Medical necessity, precertification vs prior authorization, and the ABN are all tested. Students who can explain these in their own words — not just define them — score significantly better.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block phase-shift">
+      <div class="phase-header">
+        <span class="phase-icon">🏥</span>
+        <span class="phase-title">CLINIC SHIFT — Coding Practice + Referral Simulation</span>
+        <span class="phase-dur">~95 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Activity 3 — Coding 101.</strong> <span class="act-ref">ACT 3</span> — Individual, 10 minutes. Students categorize 6 scenarios by code type and write a rationale. Walk the room. The flu shot (HCPCS) and portable oxygen concentrator (HCPCS) scenarios trip students up most. Let them sit with the confusion before discussing — productive struggle is the goal here.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Activity 7 — Forms Knowledge Check.</strong> <span class="act-ref">ACT 7</span> — No notes, 10 minutes. Six short answer questions: ABN, superbill, EOB vs RA, A/R aging report, precertification, and two-identifier rule. Collect or self-score. These 6 questions are specifically chosen because they reflect CCMA exam language.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>EMR — Perform eligibility checks for all 3 patients.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 9</span> — Walk students through the difference between verifying at scheduling vs. verifying day-of. Destiny's Medicaid must be verified today even though it was checked when scheduled. This is a common real-world failure point — make it memorable.</div></li>
+          <li><div class="step-num">4</div><div class="step-text"><strong>EMR — Facilitate Marcus's referral + prior auth.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 8</span> — Walk students through the steps: identify specialist needed → check if prior auth is required → complete the pre-auth request in EMR → document. This is the most complex admin task of the week. Do a live demo first, then let students replicate.</div></li>
+          <li><div class="step-num">5</div><div class="step-text"><strong>ABN scenario — Robert Nguyen.</strong> Using the scenario card, have students explain to a "patient" (partner) what an ABN is and why they need to sign it. The script doesn't need to be perfect — the goal is that they can explain it without using jargon. This is a real-world skill that examiners and employers both notice.</div></li>
+          <li><div class="step-num">6</div><div class="step-text"><strong>Module 9 Quiz.</strong> <span class="mod-ref">MOD 9</span> — Open last 20 minutes or assign as homework. Note: Mod 9 is the longest quiz (9 skills). Students who have been working in the EMR all week tend to do well — connect that explicitly.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block phase-debrief">
+      <div class="phase-header">
+        <span class="phase-icon">🌙</span>
+        <span class="phase-title">END OF SHIFT — Debrief</span>
+        <span class="phase-dur">~25 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Debrief the coding activity.</strong> Go through each of the 6 scenarios in Activity 3 as a class. Ask students to explain their reasoning, not just the answer. The flu shot HCPCS question always generates good discussion — lean into it.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Check EMR referral status.</strong> Every student should have Marcus's referral initiated. If anyone is missing this, have them complete it before they leave. This is a rubric check-off item.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Preview Day 4.</strong> "Tomorrow is our full billing simulation — checkout, claim submission, denied claims. We're running the entire back half of the revenue cycle. Make sure your Activities packet is up to date and your EMR tasks from today are done."</div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- DAY 4 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="day-card day-4">
+  <div class="day-header">
+    <div class="day-num">DAY 4 · THU</div>
+    <div class="day-title-block">
+      <div class="day-title">Billing + Full Clinic Simulation Run</div>
+      <div class="day-focus">Checkout · AVS · Claim Submission · Denial Management · Patient Responsibility · Mods 10, 12, 13</div>
+    </div>
+    <div class="day-time-chips">
+      <span class="time-chip">☀️ Huddle: 20 min</span>
+      <span class="time-chip">🏥 Shift: 100 min</span>
+      <span class="time-chip">🌙 Debrief: 25 min</span>
+    </div>
+  </div>
+
+  <div class="day-body">
+
+    <div class="phase-block phase-huddle">
+      <div class="phase-header">
+        <span class="phase-icon">☀️</span>
+        <span class="phase-title">MORNING HUDDLE</span>
+        <span class="phase-dur">~20 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Task list — where are we?</strong> <span class="slide-ref">SLIDE 6</span> — Pull up the Clinic Shift task list. Do a quick show of hands for each required task — who completed it, who hasn't. This isn't punitive — it's a real-time gap check so you know where to focus energy today.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Billing overview — 5 minutes, key points only.</strong> Hit three things: (1) claim must be clean before it goes out, (2) the clearinghouse is the middleman, (3) remittance advice tells you what happened. Everything else is in the activities.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Set the simulation frame.</strong> "Today you are running the back half of the revenue cycle for all three patients. Checkout, AVS, claim, denial response. You have everything you need in the EMR and your packet. Let's go."</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block phase-shift">
+      <div class="phase-header">
+        <span class="phase-icon">🏥</span>
+        <span class="phase-title">CLINIC SHIFT — Full Billing Simulation</span>
+        <span class="phase-dur">~100 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>EMR — Check out all 3 patients.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 10</span> — Each checkout must include: status change, AVS generated, provider instructions documented. Marcus also needs his referral reflected in the checkout. Have students generate and "review" the AVS with their partner as if they're the patient.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>EMR — Identify ICD-10-CM codes for each encounter.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 12</span> — Students reference the superbill to select the correct diagnosis code. Marcus: T2DM uncontrolled + essential hypertension. Destiny: preventive exam, new patient. Robert: chest pain with dyspnea. Post codes in the EMR billing section.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>EMR — Initiate claim submission.</strong> <span class="emr-ref">EMR</span> <span class="mod-ref">MOD 13</span> — Walk through the billing section together as a class first, then let students navigate independently. They don't need to transmit a real claim — they need to demonstrate they can navigate the process and identify required fields.</div></li>
+          <li><div class="step-num">4</div><div class="step-text"><strong>Activity 6 — Denied Claim Decision Tree.</strong> <span class="act-ref">ACT 6</span> — 12 minutes. Five denial scenarios, each requiring a specific next step and a rationale. This is high-yield CCMA content — denial management is a guaranteed exam topic. After individual work, review as a class with specific emphasis on the "lack of medical necessity" denial (most common and most tested).</div></li>
+          <li><div class="step-num">5</div><div class="step-text"><strong>Module Quizzes 10, 12, 13.</strong> <span class="mod-ref">MOD 10</span> <span class="mod-ref">MOD 12</span> <span class="mod-ref">MOD 13</span> — Assign whichever haven't been completed yet. These three are shorter than Mod 9 — students who have done the EMR work today should be able to move through them in 15–20 minutes total.</div></li>
+        </ul>
+        <div class="callout callout-check">
+          <span class="callout-icon">✅</span>
+          <div class="callout-body">
+            <strong>RUBRIC CHECK — End of Day 4</strong>
+            Before students leave today, every item in the required EMR task list should be complete. Walk the room and verify: all 3 patients scheduled, checked in, checked out with AVS, at least one ICD-10-CM code posted, claim initiated. Students who are missing tasks should use any remaining time to catch up — tomorrow is badge day.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block phase-debrief">
+      <div class="phase-header">
+        <span class="phase-icon">🌙</span>
+        <span class="phase-title">END OF SHIFT — Debrief</span>
+        <span class="phase-dur">~25 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Denial decision tree review.</strong> Go through the 5 denial scenarios together. For each one, ask students to first state their answer, then explain why. The "resubmit the claim" trap (answer for duplicate denial scenario) always catches students — make sure they understand why resubmitting a denied claim creates a duplicate denial.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Final check: all module quizzes.</strong> Mods 8, 9, 10, 12, and 13 should all be submitted. If any are incomplete, they become tonight's homework — badge day is tomorrow and quizzes must be done first.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Preview Friday.</strong> "Tomorrow you demonstrate what you know. Revenue cycle recitation is first — no notes. Then check-off. Then badge. Come in ready." Consider giving students the 6 debrief questions from Slide 8 to review tonight as prep.</div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- DAY 5 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="day-card day-5">
+  <div class="day-header">
+    <div class="day-num">DAY 5 · FRI</div>
+    <div class="day-title-block">
+      <div class="day-title">Check-Off Day + Admin Pro Badge</div>
+      <div class="day-focus">Revenue Cycle Recitation · Skill Demonstrations · Debrief Questions · Skills Passport Stamp</div>
+    </div>
+    <div class="day-time-chips">
+      <span class="time-chip">☀️ Huddle: 15 min</span>
+      <span class="time-chip">🏥 Check-Off: 110 min</span>
+      <span class="time-chip">🌙 Closing: 20 min</span>
+    </div>
+  </div>
+
+  <div class="day-body">
+
+    <div class="phase-block phase-huddle">
+      <div class="phase-header">
+        <span class="phase-icon">☀️</span>
+        <span class="phase-title">MORNING HUDDLE</span>
+        <span class="phase-dur">~15 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Debrief slide — orient to the day.</strong> <span class="slide-ref">SLIDE 8</span> — Review what today looks like: recitation first, then check-offs, then badge. Students who complete all check-off items earn the stamp. No pressure — just demonstration.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Last 5 minutes — silent review.</strong> Give students 5 minutes to silently review their notes, the revenue cycle order, and the debrief questions. No new content. Just space to prepare.</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="phase-block phase-shift">
+      <div class="phase-header">
+        <span class="phase-icon">🏥</span>
+        <span class="phase-title">CHECK-OFF ROTATION</span>
+        <span class="phase-dur">~110 min</span>
+      </div>
+      <div class="phase-body">
+
+        <p style="font-size:13px; color:var(--body); margin-bottom:14px; line-height:1.6;">Run stations simultaneously while you rotate. Students who finish their check-off early work on peer review of each other's Activities packets or complete any remaining guided notes.</p>
+
+        <table class="mod-table">
+          <thead>
+            <tr>
+              <th>STATION</th>
+              <th>WHAT STUDENTS DO</th>
+              <th>WHAT YOU LOOK FOR</th>
+              <th>RUBRIC SECTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Station A</strong><br><span style="font-size:11px;color:#64748b;">Revenue Cycle Recitation<br>~3 min/student</span></td>
+              <td>Recite all 8 revenue cycle steps in order, including who is responsible for each — no notes</td>
+              <td>Correct order, can name "who" for at least 6 steps, confident delivery without long pauses</td>
+              <td>Section 4 — Professionalism (Revenue Cycle, 5 pts)</td>
+            </tr>
+            <tr>
+              <td><strong>Station B</strong><br><span style="font-size:11px;color:#64748b;">EMR Check-In Demo<br>~5 min/student</span></td>
+              <td>Open EMR, pull up a designated patient, walk through the 8-step check-in checklist verbally while clicking through</td>
+              <td>Correct 2-identifier verification, eligibility check, copay posted, status changed, professional communication throughout</td>
+              <td>Section 2 — Check-In (rows 1–4)</td>
+            </tr>
+            <tr>
+              <td><strong>Station C</strong><br><span style="font-size:11px;color:#64748b;">Verbal Debrief Questions<br>~4 min/student</span></td>
+              <td>Answer 2 of the 6 debrief questions from Slide 8 — you choose which two</td>
+              <td>Clear explanation, uses correct terminology, doesn't just recite — connects the concept to patient impact</td>
+              <td>Multiple sections depending on question selected</td>
+            </tr>
+            <tr>
+              <td><strong>Station D</strong><br><span style="font-size:11px;color:#64748b;">Activities Packet Turn-In<br>Ongoing</span></td>
+              <td>Turn in completed Activities packet with name, date, period filled in — all 7 activities attempted</td>
+              <td>Activities 1–7 all have written responses; Guided notes included</td>
+              <td>Completion grade — supports all rubric sections</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <div class="callout-body">
+            <strong>BADGE CRITERIA REMINDER</strong>
+            Admin Pro badge requires: 80+ rubric points AND revenue cycle recitation completed AND at least 4 check-off items from Slide 8 + debrief participation. Students who fall below 80 but complete recitation can retake one rubric section next week.
+          </div>
+        </div>
+
+        <p style="font-size:12.5px; color:var(--body); margin-top:14px; font-weight:600;">Revenue Cycle Answer Key (for your reference during recitation):</p>
+        <div class="check-grid" style="margin-top:8px;">
+          <div class="check-item"><div class="check-box"></div>1. Registration &amp; Scheduling — MA</div>
+          <div class="check-item"><div class="check-box"></div>2. Patient Check-In — MA</div>
+          <div class="check-item"><div class="check-box"></div>3. Eligibility &amp; Verification — MA</div>
+          <div class="check-item"><div class="check-box"></div>4. Encounter &amp; Documentation — Provider + MA</div>
+          <div class="check-item"><div class="check-box"></div>5. Charge Capture &amp; Coding — MA / Coder</div>
+          <div class="check-item"><div class="check-box"></div>6. Claim Submission — Billing</div>
+          <div class="check-item"><div class="check-box"></div>7. Payer Adjudication — Insurance</div>
+          <div class="check-item"><div class="check-box"></div>8. Payment &amp; AR Follow-Up — Billing + MA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block phase-debrief">
+      <div class="phase-header">
+        <span class="phase-icon">🌙</span>
+        <span class="phase-title">END OF SHIFT — Closing + Badge Ceremony</span>
+        <span class="phase-dur">~20 min</span>
+      </div>
+      <div class="phase-body">
+        <ul class="step-list">
+          <li><div class="step-num">1</div><div class="step-text"><strong>Closing slide.</strong> <span class="slide-ref">SLIDE 9</span> — Read the tagline together: "You just ran an entire clinic visit from first phone call to claim submission." Let that land. Students often underestimate how much admin work they can now do.</div></li>
+          <li><div class="step-num">2</div><div class="step-text"><strong>Badge stamp ceremony.</strong> Call students individually or in groups to receive their Skills Passport stamp. Keep it brief but intentional — this is a Phase 3 milestone. For students who didn't quite earn the badge, privately let them know what they need to complete next week and that the path is still open.</div></li>
+          <li><div class="step-num">3</div><div class="step-text"><strong>Preview Week 15 — Coding Deep-Dive.</strong> <span class="slide-ref">SLIDE 9</span> — "Next week we go deeper on coding. You need your guided notes from this week — they're the foundation." Tell students to hold onto their Activities packet (or the graded version) as a study reference.</div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- QUICK REFERENCE ANSWER KEY -->
+<div style="background:white; border-radius:14px; border:1px solid var(--border); padding:22px 26px; margin-bottom:24px;">
+  <div class="section-label" style="margin-bottom:14px;">QUICK REFERENCE — COMMON STUDENT ERRORS BY DAY</div>
+  <table class="mod-table">
+    <thead>
+      <tr>
+        <th>DAY</th>
+        <th>MOST COMMON ERROR</th>
+        <th>HOW TO ADDRESS IT</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Day 1</strong></td>
+        <td>Putting Coding before Documentation in the revenue cycle; confusing EHR and EMR</td>
+        <td>Use the "EMR is one visit, EHR is a whole life" anchor phrase. Revisit cycle order with a quick timeline visual on the board.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 2</strong></td>
+        <td>Not verifying insurance before scheduling; skipping 2-identifier check at check-in</td>
+        <td>Role-play a scenario where the insurance is lapsed — what happens to the clinic? Make the consequence concrete.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 3</strong></td>
+        <td>Confusing ICD-10-CM and CPT; thinking HCPCS is only for hospitals</td>
+        <td>Use the flu shot example — it's outpatient, it's an MA task, and it's HCPCS. That breaks the mental model quickly.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 4</strong></td>
+        <td>Resubmitting a denied claim (creates duplicate); not knowing what to do after a "medical necessity" denial</td>
+        <td>Write on the board: "Denied ≠ Resubmit. Denied = Appeal." Then walk through the appeal process step by step.</td>
+      </tr>
+      <tr>
+        <td><strong>Day 5</strong></td>
+        <td>Stalling on revenue cycle recitation; skipping "who is responsible" part</td>
+        <td>Allow one "phone a friend" lifeline per student during recitation — it reduces anxiety without compromising the learning.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="page-footer">
+  HealthSim Hub · Week 14 Instructor Facilitator Guide · Phase 3 — Administrative Assisting
+  <br>For internal instructor use only · Not for student distribution
+</div>
+
+</body>
+</html>

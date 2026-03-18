@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 — Admin Assisting Exercises & Activities</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy:   #0D1B2A;
+    --slate:  #1B2A3B;
+    --teal:   #0E8A7A;
+    --teallt: #14B8A6;
+    --gold:   #F5A623;
+    --white:  #F0F4F8;
+    --muted:  #94A3B8;
+    --green:  #22C55E;
+    --red:    #EF4444;
+    --indigo: #6366F1;
+    --steel:  #334155;
+    --purple: #7C3AED;
+    --orange: #B45309;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f1f5f9;
+    color: var(--navy);
+    padding: 24px;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; color: white; }
+  .page-header p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header-badge {
+    background: var(--teal);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* ── ACTIVITY CARDS ── */
+  .activity {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+  .activity-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    color: white;
+  }
+  .act-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    flex-shrink: 0;
+  }
+  .act-info { flex: 1; }
+  .act-title { font-size: 15px; font-weight: 700; }
+  .act-sub   { font-size: 11.5px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .act-tags  { display: flex; gap: 6px; flex-wrap: wrap; }
+  .act-tag {
+    background: rgba(255,255,255,0.18);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+  }
+
+  .activity-body { padding: 20px 22px; }
+
+  /* ── SHARED COMPONENTS ── */
+  .instructions {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 18px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 3px solid var(--teal);
+  }
+
+  .answer-line {
+    border-bottom: 1.5px solid #cbd5e1;
+    min-height: 30px;
+    margin-bottom: 10px;
+  }
+  .answer-box {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    min-height: 70px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    background: #fafbfc;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.6;
+  }
+  .answer-box.tall { min-height: 100px; }
+
+  .q-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+
+  /* Tables */
+  .act-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .act-table th {
+    background: var(--navy);
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .act-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .act-table tr:last-child td { border-bottom: none; }
+  .act-table tr:nth-child(even) td { background: #f8fafc; }
+  .fill-td {
+    border-bottom: 1px solid #cbd5e1 !important;
+    background: white !important;
+    color: #94A3B8;
+    font-size: 12px;
+  }
+
+  /* Scenario for role play */
+  .role-play-box {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    color: white;
+  }
+  .rp-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--teallt);
+    margin-bottom: 8px;
+  }
+  .rp-text { font-size: 13px; line-height: 1.6; font-style: italic; }
+  .rp-speaker {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 700;
+    color: var(--gold);
+    margin-right: 6px;
+  }
+
+  /* Matching */
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .match-col-header {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .match-item {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 13px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .match-letter {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .match-blank {
+    width: 28px;
+    border-bottom: 1.5px solid var(--navy);
+    flex-shrink: 0;
+    height: 20px;
+  }
+
+  /* Revenue Cycle Sort */
+  .sort-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .sort-chip {
+    background: var(--slate);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .sort-answer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .sort-slot {
+    border: 2px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    min-height: 50px;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .slot-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Scenario card for case study */
+  .mini-case {
+    background: #f8fafc;
+    border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .mini-case strong { color: var(--navy); }
+
+  .tip-box {
+    background: rgba(14,138,122,0.08);
+    border: 1px solid rgba(14,138,122,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #0f5f55;
+    margin-top: 12px;
+  }
+  .tip-box strong { color: var(--teal); }
+
+  /* ── COLOR THEMES ── */
+  .theme-teal   { background: var(--teal);   }
+  .theme-indigo { background: var(--indigo); }
+  .theme-purple { background: var(--purple); }
+  .theme-gold   { background: var(--orange); }
+  .theme-steel  { background: var(--steel);  }
+  .theme-green  { background: #15803d;       }
+
+  /* ── PRINT BUTTON ── */
+  .print-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+  }
+  .print-bar-left { display: flex; align-items: center; gap: 16px; flex: 1; flex-wrap: wrap; }
+  .student-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #374151;
+  }
+  .student-field label { font-weight: 600; white-space: nowrap; font-size: 12px; color: #64748b; }
+  .student-field input {
+    border: none;
+    border-bottom: 2px solid #cbd5e1;
+    padding: 3px 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--navy);
+    background: transparent;
+    outline: none;
+    min-width: 160px;
+  }
+  .student-field input:focus { border-bottom-color: var(--teal); }
+
+  .print-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--teal);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+  .print-btn:hover { background: #0a7266; }
+  .print-btn svg { flex-shrink: 0; }
+
+  @media print {
+    body { background: white; max-width: 100%; padding: 10px; }
+    .activity { box-shadow: none; border: 1px solid #ccc; }
+    .print-bar { border: none; padding: 0 0 12px 0; margin-bottom: 16px; }
+    .print-btn { display: none !important; }
+    .student-field input { border-bottom: 1.5px solid #999; min-width: 180px; }
+    @page { margin: 0.45in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>Week 14 — Administrative Assisting</h1>
+    <p>HealthSim Hub · Phase 3 · Exercises, Activities &amp; Guided Practice</p>
+  </div>
+  <div class="header-badge">MODULES 8 · 9 · 10 · 12 · 13</div>
+</div>
+
+<div class="print-bar">
+  <div class="print-bar-left">
+    <div class="student-field">
+      <label>STUDENT NAME</label>
+      <input type="text" placeholder="First Last" />
+    </div>
+    <div class="student-field">
+      <label>DATE</label>
+      <input type="text" placeholder="__ / __ / ____" style="min-width:110px;" />
+    </div>
+    <div class="student-field">
+      <label>PERIOD</label>
+      <input type="text" placeholder="____" style="min-width:60px;" />
+    </div>
+  </div>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </svg>
+    Print / Save as PDF
+  </button>
+</div>
+
+
+<!-- ══ ACTIVITY 1: Revenue Cycle Sort ══ -->
+<div class="activity">
+  <div class="activity-header theme-teal">
+    <div class="act-num">1</div>
+    <div class="act-info">
+      <div class="act-title">Revenue Cycle Sort</div>
+      <div class="act-sub">Put the steps in the correct order — then add who is responsible</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 9</span>
+      <span class="act-tag">MOD 10</span>
+      <span class="act-tag">MOD 13</span>
+      <span class="act-tag">⏱ 10 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+    <p class="instructions">These 8 revenue cycle steps are scrambled. Write the correct number (1–8) in the box below each step to put them in the right order. Then write who is primarily responsible in the "Who?" line.</p>
+
+    <div class="sort-items">
+      <div class="sort-chip">Payer Adjudication</div>
+      <div class="sort-chip">Patient Check-In</div>
+      <div class="sort-chip">Charge Capture &amp; Coding</div>
+      <div class="sort-chip">Payment &amp; AR Follow-Up</div>
+      <div class="sort-chip">Registration &amp; Scheduling</div>
+      <div class="sort-chip">Claim Submission</div>
+      <div class="sort-chip">Eligibility Verification</div>
+      <div class="sort-chip">Encounter &amp; Documentation</div>
+    </div>
+
+    <p class="q-label">WRITE THE CORRECT ORDER (1–8) AND WHO IS RESPONSIBLE:</p>
+    <div class="sort-answer-grid">
+      <div class="sort-slot"><span class="slot-num">1</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">2</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">3</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">4</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">5</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">6</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">7</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+      <div class="sort-slot"><span class="slot-num">8</span><div class="answer-line" style="margin:0"></div><div style="font-size:10px;color:#94a3b8;margin-top:4px">Who?</div><div class="answer-line" style="margin:0"></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 2: Insurance Plan Matching ══ -->
+<div class="activity">
+  <div class="activity-header theme-indigo">
+    <div class="act-num">2</div>
+    <div class="act-info">
+      <div class="act-title">Insurance Plan Matching</div>
+      <div class="act-sub">Match each patient situation to the correct insurance plan</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 9</span>
+      <span class="act-tag">MOD 13</span>
+      <span class="act-tag">⏱ 8 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+    <p class="instructions">Draw a line or write the matching letter from Column B next to each patient description in Column A.</p>
+
+    <div class="match-grid">
+      <div>
+        <div class="match-col-header">COLUMN A — PATIENT SITUATION</div>
+        <div class="match-item"><div class="match-blank"></div>Mr. Webb, 52 years old, T2 Diabetes follow-up</div>
+        <div class="match-item"><div class="match-blank"></div>Destiny Flores, 17, covered under her mom's state health plan</div>
+        <div class="match-item"><div class="match-blank"></div>Robert Nguyen, 68, retired Navy veteran</div>
+        <div class="match-item"><div class="match-blank"></div>Sandra Hill, 72, covered under a federal program for elderly and disabled</div>
+        <div class="match-item"><div class="match-blank"></div>James Park, 40, hurt his back lifting at work</div>
+        <div class="match-item"><div class="match-blank"></div>Maria Lopez, 34, has her own employer health plan with a $30 copay</div>
+      </div>
+      <div>
+        <div class="match-col-header">COLUMN B — INSURANCE PLAN</div>
+        <div class="match-item"><div class="match-letter">A</div>Medicare Part B</div>
+        <div class="match-item"><div class="match-letter">B</div>Medicaid / CHIP</div>
+        <div class="match-item"><div class="match-letter">C</div>TRICARE</div>
+        <div class="match-item"><div class="match-letter">D</div>Workers' Compensation</div>
+        <div class="match-item"><div class="match-letter">E</div>Private / Commercial Insurance</div>
+        <div class="match-item"><div class="match-letter">F</div>Medicare (general)</div>
+      </div>
+    </div>
+
+    <p class="q-label">BONUS: What is the key difference between Medicare Part A and Medicare Part B?</p>
+    <div class="answer-box"></div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 3: Code Match — ICD / CPT / HCPCS ══ -->
+<div class="activity">
+  <div class="activity-header theme-purple">
+    <div class="act-num">3</div>
+    <div class="act-info">
+      <div class="act-title">Coding 101 — Which Code Fits?</div>
+      <div class="act-sub">ICD-10-CM · CPT · HCPCS — sort each scenario into the correct category</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 12</span>
+      <span class="act-tag">⏱ 10 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+    <p class="instructions">For each scenario below, write which code type you would use: <strong>ICD-10-CM</strong> (diagnosis), <strong>CPT</strong> (procedure/service), or <strong>HCPCS</strong> (equipment/supplies/meds not in CPT). Then write one sentence explaining why.</p>
+
+    <table class="act-table">
+      <thead>
+        <tr>
+          <th style="width:5%">#</th>
+          <th style="width:45%">SITUATION</th>
+          <th style="width:18%">CODE TYPE</th>
+          <th>WHY?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>The provider diagnoses Marcus with Type 2 Diabetes, uncontrolled.</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>The provider performs a comprehensive office visit for a new patient (Destiny's sports physical).</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Robert is ordered a portable oxygen concentrator for home use after his visit.</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Marcus is also diagnosed with essential hypertension.</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>The provider orders a 12-lead EKG (electrocardiogram) for Robert during his visit.</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>The clinic administers a flu shot to Destiny at checkout.</td>
+          <td class="fill-td">___________</td>
+          <td class="fill-td"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">What is "medical necessity" and why does it matter for coding and billing?</p>
+    <div class="answer-box"></div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 4: Phone Screening Role Play Script ══ -->
+<div class="activity">
+  <div class="activity-header theme-green">
+    <div class="act-num">4</div>
+    <div class="act-info">
+      <div class="act-title">Screening Call Role Play</div>
+      <div class="act-sub">Write your MA script — then practice with a partner</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 8</span>
+      <span class="act-tag">PARTNER ACTIVITY</span>
+      <span class="act-tag">⏱ 15 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+
+    <div class="role-play-box">
+      <div class="rp-label">📞 THE SCENARIO — You are the MA. Your partner is the caller.</div>
+      <p class="rp-text"><span class="rp-speaker">CALLER:</span> "Hi, I'm calling to make an appointment for my dad. He's been having some chest tightness and he's a little short of breath when he walks to the mailbox. It's been happening for about two days. He's 68, he's a veteran, and I want to get him in as soon as possible."</p>
+    </div>
+
+    <p class="instructions">Write your MA responses below. Use professional language, ask all required screening questions, and follow correct protocol. After writing your script, practice it out loud with a partner — then switch roles.</p>
+
+    <p class="q-label">YOUR OPENING (Greet the caller, identify the clinic and yourself):</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">SCREENING QUESTIONS you will ask (list all 5+ required questions):</p>
+    <div class="answer-box tall"></div>
+
+    <p class="q-label">Based on what the caller said, what is your triage decision? Explain your reasoning:</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">THE PLOT TWIST — Mid-call the caller says "He just told me the pain is getting worse and he feels dizzy now." What do you do? Write your exact response:</p>
+    <div class="answer-box tall"></div>
+
+    <div class="tip-box">
+      <strong>💡 CCMA Tip:</strong> The CCMA exam may ask you about emergency call protocol. The key points are: recognize red flag symptoms, do NOT put the patient on hold, follow clinic protocol, and know when to advise the patient to call 911 or activate EMS.
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 5: Check-In Simulation Checklist ══ -->
+<div class="activity">
+  <div class="activity-header theme-teal">
+    <div class="act-num">5</div>
+    <div class="act-info">
+      <div class="act-title">Check-In Simulation Checklist</div>
+      <div class="act-sub">Step-by-step check-in for Marcus Webb — track every action in the EMR</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 9</span>
+      <span class="act-tag">EMR TASK</span>
+      <span class="act-tag">⏱ 20 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+
+    <div class="mini-case"><strong>Patient:</strong> Marcus Webb · Age 52 · Medicare Part B · Follow-up for T2DM & Hypertension · Arriving for his 10:00 AM appointment</div>
+
+    <p class="instructions">Complete each step in the EMR, then check the box and note anything important or unusual. This is your real clinical workflow — not just a practice list.</p>
+
+    <table class="act-table">
+      <thead>
+        <tr>
+          <th style="width:5%">✓</th>
+          <th style="width:5%">Step</th>
+          <th style="width:40%">WHAT TO DO IN EMR</th>
+          <th>NOTES / WHAT DID YOU FIND?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>1</td>
+          <td>Locate Marcus's appointment in the schedule</td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>2</td>
+          <td>Verify patient identity — ask 2 identifiers (name + DOB)</td>
+          <td class="fill-td">DOB confirmed: ________________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>3</td>
+          <td>Perform insurance eligibility check for Medicare Part B</td>
+          <td class="fill-td">Eligible? Y / N &nbsp; Notes: ________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>4</td>
+          <td>Review and update demographic information</td>
+          <td class="fill-td">Any changes? ________________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>5</td>
+          <td>Obtain signature on required forms (HIPAA notice, consent)</td>
+          <td class="fill-td">Forms signed: ________________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>6</td>
+          <td>Collect $20 Medicare copay — post in EMR</td>
+          <td class="fill-td">Payment method: _____________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>7</td>
+          <td>Change patient status to "Checked In" in EMR</td>
+          <td class="fill-td">Time checked in: _____________</td>
+        </tr>
+        <tr>
+          <td><div style="width:18px;height:18px;border:2px solid #cbd5e1;border-radius:3px;"></div></td>
+          <td>8</td>
+          <td>Notify clinical staff patient is ready — route to correct room</td>
+          <td class="fill-td">Room assigned: ______________</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">Why is it important to verify insurance eligibility at every single visit — even if the patient has been coming for years?</p>
+    <div class="answer-box"></div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 6: Denied Claim Decision Tree ══ -->
+<div class="activity">
+  <div class="activity-header theme-gold">
+    <div class="act-num">6</div>
+    <div class="act-info">
+      <div class="act-title">What Do You Do With a Denied Claim?</div>
+      <div class="act-sub">Walk through the denial management decision tree</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 13</span>
+      <span class="act-tag">CRITICAL THINKING</span>
+      <span class="act-tag">⏱ 12 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+
+    <p class="instructions">A claim for Marcus Webb comes back denied. For each denial reason below, write what action the MA should take and explain why. Use your notes and the EMR if needed.</p>
+
+    <table class="act-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>DENIAL REASON</th>
+          <th>YOUR NEXT STEP</th>
+          <th>WHY THIS STEP?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Claim denied: <strong>"Lack of medical necessity"</strong></td>
+          <td class="fill-td"></td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Claim denied: <strong>"Patient not eligible on date of service"</strong></td>
+          <td class="fill-td"></td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Claim denied: <strong>"Service requires prior authorization"</strong></td>
+          <td class="fill-td"></td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Claim denied: <strong>"Duplicate claim submission"</strong></td>
+          <td class="fill-td"></td>
+          <td class="fill-td"></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Claim denied: <strong>"Invalid diagnosis code"</strong></td>
+          <td class="fill-td"></td>
+          <td class="fill-td"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">What is a clearinghouse and what role does it play in the claims process?</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">What is remittance advice (RA) and when do you receive it?</p>
+    <div class="answer-box"></div>
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 7: ABN / Forms Knowledge ══ -->
+<div class="activity">
+  <div class="activity-header theme-steel">
+    <div class="act-num">7</div>
+    <div class="act-info">
+      <div class="act-title">Forms & Documents Knowledge Check</div>
+      <div class="act-sub">Short answer — no notes allowed during this one</div>
+    </div>
+    <div class="act-tags">
+      <span class="act-tag">MOD 9</span>
+      <span class="act-tag">MOD 12</span>
+      <span class="act-tag">MOD 13</span>
+      <span class="act-tag">⏱ 10 min</span>
+    </div>
+  </div>
+  <div class="activity-body">
+
+    <p class="instructions">Answer each question in 1–3 sentences. These are the kinds of questions that show up on the CCMA exam — and in real practice.</p>
+
+    <p class="q-label">1. What is an ABN (Advance Beneficiary Notice of Noncoverage) and when is it used?</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">2. What is a superbill (encounter form) and what information does it contain?</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">3. What is the difference between an Explanation of Benefits (EOB) and Remittance Advice (RA)?</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">4. What is an A/R Aging Report and why would a clinic run one weekly?</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">5. What is precertification? Give an example of a service that would require it.</p>
+    <div class="answer-box"></div>
+
+    <p class="q-label">6. What two identifiers are always required when checking a patient in? Why does this rule exist?</p>
+    <div class="answer-box"></div>
+
+    <div class="tip-box">
+      <strong>💡 CCMA Prep Note:</strong> Administrative assisting questions make up a significant portion of the CCMA exam. Pay close attention to the revenue cycle, coding types (ICD/CPT/HCPCS), and insurance terminology. These are high-frequency test topics.
+    </div>
+  </div>
+</div>
+
+
+<div style="text-align:center; margin-top:24px; font-size:11px; color:#94A3B8;">
+  HealthSim Hub · Week 14 · Phase 3 — Administrative Assisting · Exercises &amp; Activities
+</div>
+
+</body>
+</html>

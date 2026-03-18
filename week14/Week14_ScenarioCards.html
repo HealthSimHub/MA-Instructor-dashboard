@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 — Admin Assisting Scenario Cards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy:   #0D1B2A;
+    --slate:  #1B2A3B;
+    --slate2: #243447;
+    --teal:   #0E8A7A;
+    --teallt: #14B8A6;
+    --gold:   #F5A623;
+    --goldlt: #FCD34D;
+    --white:  #F0F4F8;
+    --muted:  #94A3B8;
+    --green:  #22C55E;
+    --red:    #EF4444;
+    --indigo: #6366F1;
+    --steel:  #334155;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f1f5f9;
+    color: var(--navy);
+    padding: 24px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .page-header .badge {
+    display: inline-block;
+    background: var(--teal);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .page-header p {
+    color: #64748b;
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .scenario-card {
+    background: var(--navy);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    page-break-inside: avoid;
+  }
+
+  .card-header {
+    padding: 18px 20px 14px;
+    position: relative;
+  }
+  .card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent-color);
+  }
+
+  .patient-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .patient-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .patient-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+  }
+  .patient-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .mod-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .mod-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--teallt);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .card-body {
+    padding: 16px 20px 20px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+  .field-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .field-value {
+    font-size: 13.5px;
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--steel);
+    margin: 14px 0;
+  }
+
+  .task-list {
+    list-style: none;
+  }
+  .task-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 13px;
+    color: var(--white);
+  }
+  .task-list li:last-child { border-bottom: none; }
+  .task-checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid var(--steel);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .task-mod {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+  }
+
+  .warning-box {
+    background: rgba(245,166,35,0.12);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 12px;
+    margin: 12px 0;
+  }
+  .warning-box .warn-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .warning-box p {
+    font-size: 12.5px;
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  .scenario-box {
+    background: var(--slate2);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .scenario-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--teallt);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scenario-text {
+    font-size: 13px;
+    color: var(--white);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .insurance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Card-specific accent colors */
+  .card-marcus { --accent-color: #0E8A7A; }
+  .card-destiny { --accent-color: #6366F1; }
+  .card-robert  { --accent-color: #F5A623; }
+
+  .avatar-marcus  { background: rgba(14,138,122,0.2); }
+  .avatar-destiny { background: rgba(99,102,241,0.2); }
+  .avatar-robert  { background: rgba(245,166,35,0.2); }
+
+  .task-mod-m8  { background: rgba(14,138,122,0.25); color: #5EEAD4; }
+  .task-mod-m9  { background: rgba(99,102,241,0.25); color: #A5B4FC; }
+  .task-mod-m10 { background: rgba(99,102,241,0.2);  color: #A5B4FC; }
+  .task-mod-m12 { background: rgba(124,58,237,0.25); color: #C4B5FD; }
+  .task-mod-m13 { background: rgba(180,83,9,0.3);    color: #FCD34D; }
+
+  /* Print */
+  @media print {
+    body { background: white; padding: 10px; }
+    .cards-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .scenario-card { box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+    @page { margin: 0.5in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="badge">WEEK 14 · PHASE 3 · HEALTHSIM HUB</div>
+  <h1>Administrative Assisting — Clinic Shift Scenario Cards</h1>
+  <p>Open the EMR → pull each chart → complete all tasks for your assigned patient</p>
+</div>
+
+<div class="cards-grid">
+
+  <!-- ── PATIENT 1: MARCUS WEBB ── -->
+  <div class="scenario-card card-marcus">
+    <div class="card-header">
+      <div class="patient-meta">
+        <div class="patient-avatar avatar-marcus">👨🏾</div>
+        <div>
+          <div class="patient-name">Marcus Webb</div>
+          <div class="patient-sub">Age 52 · DOB: 03/14/1973 · MRN: HSH-0041</div>
+        </div>
+      </div>
+      <div class="mod-pills">
+        <span class="mod-pill">MOD 8</span>
+        <span class="mod-pill">MOD 9</span>
+        <span class="mod-pill">MOD 10</span>
+        <span class="mod-pill">MOD 12</span>
+        <span class="mod-pill">MOD 13</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="scenario-box">
+        <div class="scenario-label">📋 The Scenario</div>
+        <div class="scenario-text">"Mr. Webb is a returning patient calling to schedule a follow-up for his Type 2 Diabetes and hypertension. His provider also wants to refer him to an endocrinologist — his A1C came back at 9.2. He hasn't been in since last year."</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Chief Complaint</div>
+        <div class="field-value">Follow-up: Type 2 Diabetes mellitus & essential hypertension. A1C elevated at 9.2.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Insurance</div>
+        <div class="field-value">
+          <span class="insurance-badge" style="background:rgba(14,138,122,0.15); color:#5EEAD4;">🛡 Medicare Part B</span>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <div class="warn-label">⚠ Watch For</div>
+        <p>Specialist referral to endocrinology requires <strong>prior authorization</strong> from Medicare. Complete pre-auth steps before scheduling the specialist appointment. Verify Part B covers the follow-up visit type.</p>
+      </div>
+
+      <hr class="divider">
+      <div class="field-label" style="color:var(--teallt); margin-bottom:8px;">YOUR TASK LIST</div>
+      <ul class="task-list">
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m8">MOD 8</span>Screen the scheduling call — ask correct intake questions</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Perform eligibility check for Medicare Part B</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Check Marcus in — collect $20 copay, verify demographics</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m8">MOD 8</span>Facilitate referral to endocrinology — complete prior auth</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m10">MOD 10</span>Check out — generate After-Visit Summary (AVS)</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m12">MOD 12</span>Identify ICD-10-CM code for T2DM + hypertension</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m13">MOD 13</span>Initiate claim submission in the EMR billing section</li>
+      </ul>
+
+      <hr class="divider">
+      <div class="field">
+        <div class="field-label">Discussion Question</div>
+        <div class="field-value" style="color:var(--muted)">If Marcus's prior auth is denied, what are your next steps? Who do you contact and what form might you need?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PATIENT 2: DESTINY FLORES ── -->
+  <div class="scenario-card card-destiny">
+    <div class="card-header">
+      <div class="patient-meta">
+        <div class="patient-avatar avatar-destiny">👩🏽</div>
+        <div>
+          <div class="patient-name">Destiny Flores</div>
+          <div class="patient-sub">Age 17 · DOB: 09/22/2007 · MRN: HSH-0017</div>
+        </div>
+      </div>
+      <div class="mod-pills">
+        <span class="mod-pill">MOD 8</span>
+        <span class="mod-pill">MOD 9</span>
+        <span class="mod-pill">MOD 10</span>
+        <span class="mod-pill">MOD 12</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="scenario-box">
+        <div class="scenario-label">📋 The Scenario</div>
+        <div class="scenario-text">"Destiny's mom calls to schedule a sports physical — Destiny needs it before volleyball tryouts next week. Destiny is a new patient. Mom says she's covered under Medicaid but isn't sure if Destiny has her own card yet."</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Chief Complaint</div>
+        <div class="field-value">New patient — sports physical / preventive wellness exam. Required for school athletic participation.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Insurance</div>
+        <div class="field-value">
+          <span class="insurance-badge" style="background:rgba(99,102,241,0.15); color:#A5B4FC;">🛡 Medicaid (CHIP/State Plan)</span>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <div class="warn-label">⚠ Watch For</div>
+        <p>Destiny is a <strong>minor (age 17)</strong> — a parent or legal guardian must sign all intake paperwork and consent forms. Also confirm Medicaid eligibility: coverage must be verified at <em>every visit</em> — even if verified at scheduling.</p>
+      </div>
+
+      <hr class="divider">
+      <div class="field-label" style="color:#A5B4FC; margin-bottom:8px;">YOUR TASK LIST</div>
+      <ul class="task-list">
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m8">MOD 8</span>Schedule new patient appointment — set correct visit type & duration</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Perform Medicaid eligibility check day-of visit</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Complete new patient intake — collect all demographic info</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Verify parent/guardian signature on consent forms</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Generate patient flow sheet before she's roomed</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m10">MOD 10</span>Check out — provide patient education materials</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m12">MOD 12</span>Identify correct ICD-10-CM code for preventive exam, new patient</li>
+      </ul>
+
+      <hr class="divider">
+      <div class="field">
+        <div class="field-label">Discussion Question</div>
+        <div class="field-value" style="color:var(--muted)">Why does Medicaid require verification at every single visit? What happens to the clinic if they forget and coverage has lapsed?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PATIENT 3: ROBERT NGUYEN ── -->
+  <div class="scenario-card card-robert">
+    <div class="card-header">
+      <div class="patient-meta">
+        <div class="patient-avatar avatar-robert">👨🏻</div>
+        <div>
+          <div class="patient-name">Robert Nguyen</div>
+          <div class="patient-sub">Age 68 · DOB: 11/05/1956 · MRN: HSH-0008</div>
+        </div>
+      </div>
+      <div class="mod-pills">
+        <span class="mod-pill">MOD 8</span>
+        <span class="mod-pill">MOD 9</span>
+        <span class="mod-pill">MOD 10</span>
+        <span class="mod-pill">MOD 12</span>
+        <span class="mod-pill">MOD 13</span>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="scenario-box">
+        <div class="scenario-label">📋 The Scenario</div>
+        <div class="scenario-text">"Mr. Nguyen calls the front desk at 9:15 AM. He says he's been having chest discomfort on and off since this morning and feels short of breath when walking. He wants to know if he can come in today."</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Chief Complaint</div>
+        <div class="field-value">Chest discomfort with exertional dyspnea — urgent same-day appointment. History of hypertension.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-label">Insurance</div>
+        <div class="field-value">
+          <span class="insurance-badge" style="background:rgba(245,166,35,0.15); color:#FCD34D;">🛡 TRICARE (Military/Veteran)</span>
+        </div>
+      </div>
+
+      <div class="warning-box">
+        <div class="warn-label">⚠ Watch For</div>
+        <p><strong>Chest symptoms + dyspnea = high urgency.</strong> Know your office's emergency phone call protocol. If symptoms worsen during the call, what do you do? Also: if the provider orders an echocardiogram, TRICARE may require an <strong>ABN (Advance Beneficiary Notice)</strong> if coverage is uncertain.</p>
+      </div>
+
+      <hr class="divider">
+      <div class="field-label" style="color:var(--goldlt); margin-bottom:8px;">YOUR TASK LIST</div>
+      <ul class="task-list">
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m8">MOD 8</span>Screen the call — follow emergency phone call protocol</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m8">MOD 8</span>Schedule urgent same-day appointment — correct visit type</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Document the phone call in the EMR</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Perform TRICARE eligibility verification on arrival</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m9">MOD 9</span>Check in Robert — flag urgency for clinical staff</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m10">MOD 10</span>Check out — ensure provider instructions are communicated</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m12">MOD 12</span>Identify ICD-10-CM code for chest pain with dyspnea</li>
+        <li><div class="task-checkbox"></div><span class="task-mod task-mod-m13">MOD 13</span>If echocardiogram ordered — explain ABN purpose to patient</li>
+      </ul>
+
+      <hr class="divider">
+      <div class="field">
+        <div class="field-label">Discussion Question</div>
+        <div class="field-value" style="color:var(--muted)">During your screening call, Mr. Nguyen says the pain is getting worse and he feels dizzy. What do you do immediately? What is your clinic's protocol?</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end cards-grid -->
+
+<div style="text-align:center; margin-top:28px; font-size:12px; color:#94A3B8;">
+  HealthSim Hub · Week 14 · Phase 3 — Administrative Assisting · Scenario Cards
+  <br>All patient names are fictional and created for educational simulation purposes.
+</div>
+
+</body>
+</html>
