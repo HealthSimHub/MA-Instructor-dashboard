@@ -1,0 +1,2220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSH Instructor Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --navy:    #0c1f3f;
+  --navy2:   #162d52;
+  --navy3:   #1e3d6e;
+  --teal:    #0a7e74;
+  --teal2:   #0fb8a8;
+  --teal3:   #ccfbf1;
+  --gold:    #c47e1a;
+  --gold2:   #f0be5a;
+  --gold3:   #fef3c7;
+  --p1c:     #1d4ed8;
+  --p1l:     #dbeafe;
+  --p2c:     #15803d;
+  --p2l:     #dcfce7;
+  --p3c:     #b45309;
+  --p3l:     #fef9c3;
+  --done:    #0f766e;
+  --donel:   #ccfbf1;
+  --wip:     #b45309;
+  --wipl:    #fef3c7;
+  --todo:    #475569;
+  --todol:   #f1f5f9;
+  --white:   #ffffff;
+  --bg:      #f0f4f8;
+  --surface: #ffffff;
+  --border:  #dde3ec;
+  --ink:     #1e293b;
+  --ink2:    #475569;
+  --ink3:    #94a3b8;
+  --rad:     12px;
+  --sh:      0 1px 8px rgba(12,31,63,.08), 0 4px 20px rgba(12,31,63,.06);
+  --sh2:     0 4px 24px rgba(12,31,63,.13);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c0cbd8; border-radius: 99px; }
+
+/* ─────────────────────────────────────────
+   HEADER
+───────────────────────────────────────── */
+.hdr {
+  background: var(--navy);
+  padding: .7rem 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 300;
+  box-shadow: 0 2px 20px rgba(0,0,0,.35);
+}
+.hdr-left { display: flex; align-items: center; gap: 1rem; }
+.hdr-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #fff; letter-spacing: .05em; }
+.hdr-tag {
+  font-size: .65rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--teal2);
+  border: 1px solid var(--teal); border-radius: 5px;
+  padding: .2rem .55rem;
+}
+.hdr-right { display: flex; align-items: center; gap: .65rem; }
+.hdr-cohort {
+  font-size: .72rem; font-weight: 600; color: var(--ink3);
+  background: var(--navy2); border-radius: 6px; padding: .28rem .65rem;
+  border: 1px solid var(--navy3);
+}
+.btn { 
+  padding: .38rem .9rem; border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: .76rem; font-weight: 700;
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.btn-teal { background: var(--teal); color: #fff; }
+.btn-teal:hover { background: var(--teal2); }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-gold:hover { background: var(--gold2); color: var(--navy); }
+.btn-ghost { background: transparent; color: var(--ink3); border: 1px solid var(--navy3); }
+.btn-ghost:hover { background: var(--navy2); color: #fff; }
+
+/* cohort toggle */
+.cohort-toggle { display: flex; background: var(--navy2); border-radius: 8px; padding: 3px; gap: 2px; }
+.ctab { 
+  padding: .28rem .75rem; border-radius: 6px; font-size: .72rem; font-weight: 700;
+  cursor: pointer; border: none; background: transparent; color: var(--ink3);
+  transition: all .15s;
+}
+.ctab.active { background: var(--teal); color: #fff; }
+
+/* ─────────────────────────────────────────
+   NAV TABS
+───────────────────────────────────────── */
+.nav-tabs {
+  background: var(--navy2);
+  padding: 0 1.75rem;
+  display: flex; gap: 0;
+  border-bottom: 2px solid var(--navy3);
+}
+.ntab {
+  padding: .65rem 1.15rem; font-size: .78rem; font-weight: 600;
+  color: var(--ink3); cursor: pointer; border: none; background: transparent;
+  border-bottom: 3px solid transparent; margin-bottom: -2px;
+  transition: all .15s; letter-spacing: .02em;
+}
+.ntab:hover { color: #fff; }
+.ntab.active { color: var(--teal2); border-bottom-color: var(--teal2); }
+
+/* ─────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────── */
+.wrap { max-width: 1380px; margin: 0 auto; padding: 1.4rem 1.75rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─────────────────────────────────────────
+   STAT ROW
+───────────────────────────────────────── */
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .9rem; margin-bottom: 1.25rem; }
+.stat {
+  background: var(--surface); border-radius: var(--rad);
+  padding: 1rem 1.2rem; box-shadow: var(--sh);
+  display: flex; align-items: center; gap: .85rem;
+}
+.stat-ico { font-size: 1.7rem; flex-shrink: 0; }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; }
+.stat-lbl { font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink2); margin-top: .1rem; }
+.stat-bar { height: 5px; background: var(--border); border-radius: 99px; margin-top: .4rem; overflow: hidden; }
+.stat-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--teal), var(--teal2)); transition: width .6s; }
+.stat.s-teal .stat-num { color: var(--teal); }
+.stat.s-gold .stat-num { color: var(--gold); }
+.stat.s-blue .stat-num { color: var(--p1c); }
+
+/* ─────────────────────────────────────────
+   GRID: PACING + SIDEBAR
+───────────────────────────────────────── */
+.pace-layout { display: grid; grid-template-columns: 1fr 310px; gap: 1.1rem; align-items: start; }
+
+/* ─────────────────────────────────────────
+   CARDS
+───────────────────────────────────────── */
+.card { background: var(--surface); border-radius: var(--rad); box-shadow: var(--sh); overflow: hidden; }
+.card + .card { margin-top: 1rem; }
+.ch { 
+  padding: .65rem 1.1rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+}
+.ct { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .06em; color: var(--navy); }
+.cb { padding: 1rem 1.1rem; }
+
+/* ─────────────────────────────────────────
+   WEEKLY ACCORDION
+───────────────────────────────────────── */
+.week-block { border-bottom: 1px solid var(--border); }
+.week-block:last-child { border-bottom: none; }
+
+.week-hdr {
+  display: grid;
+  grid-template-columns: 46px 90px 1fr 80px 90px 130px;
+  gap: .5rem;
+  padding: .6rem 1rem;
+  cursor: pointer;
+  align-items: center;
+  transition: background .12s;
+  user-select: none;
+}
+.week-hdr:hover { background: #f7fafd; }
+.week-hdr.expanded { background: #f0f8f7; }
+
+.wnum { 
+  font-family: 'DM Mono', monospace; font-size: .72rem; font-weight: 500;
+  color: var(--ink3); text-align: center;
+}
+.wphase { display: flex; align-items: center; }
+.phase-pill {
+  font-size: .62rem; font-weight: 700; letter-spacing: .06em;
+  padding: .18rem .55rem; border-radius: 4px; text-transform: uppercase; white-space: nowrap;
+}
+.ph1 { background: var(--p1l); color: var(--p1c); }
+.ph2 { background: var(--p2l); color: var(--p2c); }
+.ph3 { background: var(--p3l); color: var(--p3c); }
+
+.wunit { }
+.wunit-name { font-weight: 600; font-size: .85rem; color: var(--ink); }
+.wunit-sub { font-size: .7rem; color: var(--ink2); font-family: 'DM Mono', monospace; margin-top: .08rem; }
+
+.wbadge { font-size: .72rem; color: var(--teal); font-weight: 600; line-height: 1.3; }
+
+.wstatus { display: flex; align-items: center; }
+.sbadge {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .64rem; font-weight: 700; letter-spacing: .05em;
+  padding: .22rem .65rem; border-radius: 99px; text-transform: uppercase;
+  cursor: pointer; transition: all .15s; white-space: nowrap; border: none;
+}
+.sbadge:hover { opacity: .8; transform: scale(.97); }
+.sb-done { background: var(--donel); color: var(--done); }
+.sb-wip  { background: var(--wipl);  color: var(--wip); }
+.sb-todo { background: var(--todol); color: var(--todo); }
+
+.wexpand { 
+  display: flex; align-items: center; justify-content: flex-end; gap: .4rem;
+  font-size: .68rem; color: var(--ink3);
+}
+.expand-arrow { font-size: .7rem; transition: transform .2s; }
+.expanded .expand-arrow { transform: rotate(180deg); }
+
+/* Week detail panel */
+.week-detail {
+  display: none; padding: .75rem 1rem 1rem;
+  background: #f7fafd; border-top: 1px solid var(--border);
+  animation: slideDown .18s ease;
+}
+.week-detail.open { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .85rem; }
+
+.detail-section { }
+.ds-title { 
+  font-size: .62rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink2); margin-bottom: .45rem;
+  display: flex; align-items: center; gap: .35rem;
+}
+.topic-list { list-style: none; }
+.topic-list li {
+  font-size: .78rem; color: var(--ink); padding: .22rem 0;
+  border-bottom: 1px dashed var(--border); line-height: 1.4;
+}
+.topic-list li:last-child { border-bottom: none; }
+
+.link-grid { display: flex; flex-direction: column; gap: .35rem; }
+.dlink {
+  display: flex; align-items: center; gap: .45rem;
+  padding: .35rem .6rem; border-radius: 8px;
+  font-size: .76rem; font-weight: 500; text-decoration: none;
+  border: 1px solid var(--border); color: var(--ink);
+  transition: all .15s; background: var(--surface);
+}
+.dlink:hover { border-color: var(--teal); color: var(--teal); background: var(--teal3); }
+.dlink.empty { 
+  color: var(--ink3); cursor: pointer; border-style: dashed;
+  background: transparent;
+}
+.dlink.empty:hover { border-color: var(--teal); color: var(--teal); }
+.dlink-icon { font-size: .95rem; flex-shrink: 0; width: 1.1rem; text-align: center; }
+.dlink-edit { margin-left: auto; font-size: .6rem; opacity: 0; transition: opacity .1s; }
+.dlink:hover .dlink-edit { opacity: 1; }
+
+/* ── week notes mini ── */
+.week-note-area {
+  margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border);
+}
+.week-note-inp {
+  width: 100%; font-family: 'DM Sans', sans-serif; font-size: .8rem;
+  padding: .5rem .75rem; border: 1.5px solid var(--border); border-radius: 8px;
+  outline: none; resize: none; color: var(--ink); background: var(--surface);
+  transition: border-color .15s;
+}
+.week-note-inp:focus { border-color: var(--teal); }
+
+/* column headers */
+.pace-col-heads {
+  display: grid;
+  grid-template-columns: 46px 90px 1fr 80px 90px 130px;
+  gap: .5rem; padding: .4rem 1rem;
+  background: var(--bg); border-bottom: 2px solid var(--border);
+}
+.pace-col-heads span {
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3);
+}
+
+/* ─────────────────────────────────────────
+   NOTES TAB
+───────────────────────────────────────── */
+.notes-layout { display: grid; grid-template-columns: 1fr 320px; gap: 1rem; }
+.notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem; align-content: start; }
+
+.note-card {
+  background: var(--surface); border-radius: 10px;
+  border: 1.5px solid var(--border); padding: .8rem .95rem;
+  box-shadow: var(--sh); position: relative;
+  transition: box-shadow .15s;
+}
+.note-card:hover { box-shadow: var(--sh2); }
+.note-card.n-idea  { border-top: 3px solid var(--p1c); }
+.note-card.n-refine { border-top: 3px solid var(--teal); }
+.note-card.n-todo  { border-top: 3px solid var(--gold); }
+.note-card.n-done-note { border-top: 3px solid var(--ink3); opacity: .65; }
+
+.ntag {
+  font-size: .59rem; font-weight: 700; letter-spacing: .09em;
+  text-transform: uppercase; margin-bottom: .3rem;
+}
+.ntag.n-idea   { color: var(--p1c); }
+.ntag.n-refine { color: var(--teal); }
+.ntag.n-todo   { color: var(--gold); }
+.ntag.n-done-note { color: var(--ink3); }
+
+.note-txt { font-size: .82rem; color: var(--ink); white-space: pre-wrap; line-height: 1.55; }
+.note-meta { font-size: .62rem; color: var(--ink3); margin-top: .45rem; font-family: 'DM Mono', monospace; }
+.note-del {
+  position: absolute; top: .45rem; right: .6rem;
+  background: none; border: none; font-size: .8rem; cursor: pointer;
+  color: var(--ink3); opacity: 0; transition: opacity .1s;
+}
+.note-card:hover .note-del { opacity: 1; }
+.note-del:hover { color: #dc2626; }
+.note-done-btn {
+  position: absolute; bottom: .5rem; right: .6rem;
+  background: none; border: none; font-size: .7rem; cursor: pointer;
+  color: var(--ink3); opacity: 0; transition: opacity .1s;
+}
+.note-card:hover .note-done-btn { opacity: 1; }
+
+/* add note form */
+.add-note-form { display: flex; flex-direction: column; gap: .55rem; }
+.anf-row { display: flex; gap: .5rem; }
+.anf-select {
+  font-family: 'DM Sans', sans-serif; font-size: .8rem;
+  padding: .48rem .65rem; border: 1.5px solid var(--border); border-radius: 8px;
+  outline: none; color: var(--ink); background: var(--surface);
+  transition: border-color .15s;
+}
+.anf-select:focus { border-color: var(--teal); }
+.anf-week { width: 120px; flex-shrink: 0; }
+.anf-tag  { width: 130px; flex-shrink: 0; }
+.anf-ta {
+  font-family: 'DM Sans', sans-serif; font-size: .82rem;
+  padding: .55rem .75rem; border: 1.5px solid var(--border); border-radius: 8px;
+  resize: none; min-height: 80px; outline: none; color: var(--ink); background: var(--surface);
+  transition: border-color .15s; width: 100%;
+}
+.anf-ta:focus { border-color: var(--teal); }
+.anf-actions { display: flex; justify-content: flex-end; }
+
+/* filter bar */
+.filter-row { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .9rem; }
+.filter-chip {
+  padding: .28rem .75rem; border-radius: 99px; font-size: .72rem; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--border); background: var(--surface);
+  color: var(--ink2); transition: all .15s;
+}
+.filter-chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* ─────────────────────────────────────────
+   ASSETS TAB
+───────────────────────────────────────── */
+.assets-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.asset-section-title {
+  font-size: .65rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink2); margin-bottom: .6rem;
+}
+.asset-list { display: flex; flex-direction: column; gap: .4rem; }
+.asset-row {
+  display: flex; align-items: center; gap: .7rem;
+  padding: .55rem .8rem; border-radius: 9px;
+  background: var(--bg); border: 1px solid var(--border); transition: all .15s;
+}
+.asset-row:hover { border-color: #c0cbd8; }
+.asset-row.a-done { background: var(--donel); border-color: #99f6e4; }
+.asset-check {
+  width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0;
+  border: 2px solid var(--border); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; background: var(--surface);
+}
+.asset-check.checked { background: var(--teal); border-color: var(--teal); }
+.asset-check.checked::after { content: '✓'; font-size: .65rem; color: #fff; font-weight: 700; }
+.asset-lbl { font-size: .83rem; flex: 1; }
+.asset-row.a-done .asset-lbl { color: var(--ink2); text-decoration: line-through; }
+.asset-link-btn {
+  font-size: .65rem; color: var(--ink3); background: none; border: none;
+  cursor: pointer; padding: .2rem .4rem; border-radius: 4px;
+}
+.asset-link-btn:hover { background: var(--border); color: var(--teal); }
+
+/* ─────────────────────────────────────────
+   QUICK LINKS SIDEBAR
+───────────────────────────────────────── */
+.ql-list { display: flex; flex-direction: column; gap: .4rem; }
+.ql-item {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .75rem; border-radius: 9px; text-decoration: none;
+  background: var(--bg); border: 1px solid var(--border); color: var(--ink);
+  font-size: .82rem; font-weight: 500; transition: all .15s; cursor: pointer;
+  position: relative;
+}
+.ql-item:hover { background: #f0f8f7; border-color: var(--teal); }
+.ql-item .ql-icon { font-size: 1rem; width: 1.3rem; text-align: center; flex-shrink: 0; }
+.ql-item .ql-arrow { margin-left: auto; font-size: .65rem; opacity: .5; flex-shrink: 0; }
+.ql-item .ql-actions {
+  display: none; margin-left: auto; gap: .25rem; align-items: center; flex-shrink: 0;
+}
+.ql-item:hover .ql-actions { display: flex; }
+.ql-item:hover .ql-arrow   { display: none; }
+.ql-act-btn {
+  font-size: .65rem; font-weight: 700; padding: .18rem .45rem;
+  border-radius: 5px; border: 1px solid var(--border);
+  cursor: pointer; background: var(--surface); transition: all .12s;
+  line-height: 1; color: var(--ink2);
+}
+.ql-act-btn.edit:hover { background: var(--teal3); border-color: var(--teal); color: var(--teal); }
+.ql-act-btn.del:hover  { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+.ql-edit-form {
+  background: var(--teal3); border: 1.5px solid var(--teal);
+  border-radius: 9px; padding: .6rem .75rem;
+  display: flex; flex-direction: column; gap: .4rem;
+}
+.ql-edit-row { display: flex; gap: .35rem; }
+.ql-edit-actions { display: flex; gap: .35rem; justify-content: flex-end; margin-top: .1rem; }
+.ql-edit-save {
+  background: var(--teal); color: #fff; border: none; border-radius: 6px;
+  padding: .3rem .75rem; font-size: .75rem; font-weight: 700; cursor: pointer;
+}
+.ql-edit-save:hover { background: var(--teal2); }
+.ql-edit-cancel {
+  background: transparent; color: var(--ink3); border: 1px solid var(--border);
+  border-radius: 6px; padding: .3rem .65rem; font-size: .75rem; font-weight: 600; cursor: pointer;
+}
+.ql-edit-cancel:hover { background: var(--border); }
+.ql-add { display: flex; flex-direction: column; gap: .4rem; margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--border); }
+.inp {
+  font-family: 'DM Sans', sans-serif; font-size: .8rem;
+  padding: .45rem .7rem; border: 1.5px solid var(--border); border-radius: 8px;
+  outline: none; color: var(--ink); background: var(--surface); width: 100%;
+  transition: border-color .15s;
+}
+.inp:focus { border-color: var(--teal); }
+.ql-add-row { display: flex; gap: .4rem; }
+.inp-ico { width: 58px; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────
+   PROGRESS OVERVIEW (sidebar widget)
+───────────────────────────────────────── */
+.phase-prog { display: flex; flex-direction: column; gap: .65rem; }
+.pp-row { }
+.pp-label { display: flex; justify-content: space-between; font-size: .78rem; margin-bottom: .3rem; }
+.pp-label span:first-child { font-weight: 600; }
+.pp-label span:last-child { color: var(--ink3); font-family: 'DM Mono', monospace; font-size: .7rem; }
+.pp-bar { height: 7px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.pp-fill { height: 100%; border-radius: 99px; transition: width .5s; }
+.pp-p1 { background: linear-gradient(90deg, var(--p1c), #60a5fa); }
+.pp-p2 { background: linear-gradient(90deg, var(--p2c), #4ade80); }
+.pp-p3 { background: linear-gradient(90deg, var(--p3c), var(--gold2)); }
+
+/* ─────────────────────────────────────────
+   MODAL
+───────────────────────────────────────── */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 600;
+  display: none; align-items: center; justify-content: center;
+  backdrop-filter: blur(3px);
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: var(--surface); border-radius: 16px; padding: 1.6rem;
+  max-width: 440px; width: 92%; box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  animation: popIn .18s ease;
+}
+@keyframes popIn { from { opacity: 0; transform: scale(.93); } to { opacity: 1; transform: scale(1); } }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--navy); margin-bottom: .25rem; }
+.modal-sub { font-size: .78rem; color: var(--ink2); margin-bottom: 1rem; }
+.modal-btns { display: flex; gap: .5rem; justify-content: flex-end; margin-top: .9rem; }
+
+/* ─────────────────────────────────────────
+   LINKS LIBRARY TAB
+───────────────────────────────────────── */
+.lib-layout { display: grid; grid-template-columns: 220px 1fr; gap: 1.1rem; align-items: start; }
+
+/* category sidebar */
+.lib-cats { display: flex; flex-direction: column; gap: .3rem; }
+.lib-cat-btn {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .5rem .8rem; border-radius: 9px; border: none;
+  background: transparent; color: var(--ink2); font-family: 'DM Sans',sans-serif;
+  font-size: .82rem; font-weight: 500; cursor: pointer; text-align: left;
+  transition: all .15s; width: 100%;
+}
+.lib-cat-btn:hover { background: var(--bg); }
+.lib-cat-btn.active { background: var(--navy); color: #fff; font-weight: 600; }
+.lib-cat-btn .cat-count {
+  margin-left: auto; font-family: 'DM Mono',monospace;
+  font-size: .68rem; opacity: .65;
+}
+.lib-cat-add {
+  margin-top: .5rem; padding-top: .5rem; border-top: 1px solid var(--border);
+  display: flex; gap: .35rem;
+}
+.lib-cat-add input { flex:1; }
+
+/* link cards grid */
+.lib-search-bar {
+  display: flex; gap: .6rem; margin-bottom: .9rem; align-items: center;
+}
+.lib-search {
+  flex: 1; font-family: 'DM Sans',sans-serif; font-size: .83rem;
+  padding: .48rem .85rem; border: 1.5px solid var(--border); border-radius: 9px;
+  outline: none; color: var(--ink); background: var(--surface);
+  transition: border-color .15s;
+}
+.lib-search:focus { border-color: var(--teal); }
+
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px,1fr));
+  gap: .75rem; align-content: start;
+}
+
+.lib-card {
+  background: var(--surface); border-radius: 11px;
+  border: 1.5px solid var(--border); padding: 0;
+  box-shadow: var(--sh); overflow: hidden;
+  transition: box-shadow .15s, border-color .15s;
+  display: flex; flex-direction: column;
+}
+.lib-card:hover { box-shadow: var(--sh2); border-color: #c0cbd8; }
+
+.lib-card-accent { height: 4px; }
+.lib-card-body { padding: .8rem .95rem; flex: 1; }
+.lib-card-cat {
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: .28rem;
+}
+.lib-card-title { font-weight: 600; font-size: .88rem; color: var(--ink); line-height: 1.35; margin-bottom: .25rem; }
+.lib-card-desc { font-size: .76rem; color: var(--ink2); line-height: 1.45; }
+.lib-card-foot {
+  padding: .5rem .95rem; border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fafbfc;
+}
+.lib-card-url {
+  font-size: .68rem; color: var(--ink3); font-family: 'DM Mono',monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+}
+.lib-card-actions { display: flex; gap: .35rem; flex-shrink: 0; }
+.lib-card-open {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .28rem .65rem; background: var(--teal); color: #fff;
+  border-radius: 6px; font-size: .7rem; font-weight: 700;
+  text-decoration: none; transition: background .15s;
+}
+.lib-card-open:hover { background: var(--teal2); }
+.lib-card-del {
+  padding: .28rem .5rem; background: none; border: 1px solid var(--border);
+  border-radius: 6px; font-size: .7rem; cursor: pointer; color: var(--ink3);
+  transition: all .15s;
+}
+.lib-card-del:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
+
+/* add link form */
+.lib-add-form { display: flex; flex-direction: column; gap: .5rem; }
+.lib-add-row { display: flex; gap: .5rem; }
+
+/* cat color dots */
+.cat-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+/* ─────────────────────────────────────────
+   PRINT
+───────────────────────────────────────── */
+@media print {
+  .hdr, .nav-tabs, .no-print { display: none !important; }
+  body { background: white; font-size: 11px; }
+  .wrap { padding: .5rem; max-width: none; }
+  .stat-row { grid-template-columns: repeat(4,1fr); }
+  .pace-layout { grid-template-columns: 1fr; }
+  .sidebar-col { display: none; }
+  .week-detail { display: block !important; }
+  .week-hdr { cursor: default; }
+  .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+  .phase-pill, .sbadge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════════════════════════════════ -->
+<header class="hdr">
+  <div class="hdr-left">
+    <span class="hdr-logo">Health Sim Hub</span>
+    <span class="hdr-tag">Instructor Command Center</span>
+  </div>
+  <div class="hdr-right">
+    <div style="display:flex;align-items:center;gap:.5rem">
+      <select id="year-select" onchange="switchYear(this.value)" style="
+        font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:600;
+        background:var(--navy2); color:#fff; border:1px solid var(--navy3);
+        border-radius:8px; padding:.32rem .7rem; outline:none; cursor:pointer;
+      "></select>
+      <button class="btn btn-ghost no-print" onclick="openNewYear()" style="font-size:.72rem;padding:.32rem .75rem">+ New Year</button>
+    </div>
+    <span class="hdr-cohort" id="cohort-label">Aug – Dec 2025</span>
+    <button class="btn btn-gold no-print" onclick="window.print()">🖨 Print</button>
+  </div>
+</header>
+
+<!-- ═══ NAV TABS ══════════════════════════════════════════════════════════════ -->
+<nav class="nav-tabs no-print">
+  <button class="ntab active" onclick="switchTab('pacing')">📋 Pacing Guide</button>
+  <button class="ntab" onclick="switchTab('notes')">💡 Notes & Ideas</button>
+  <button class="ntab" onclick="switchTab('assets')">🗂 Asset Tracker</button>
+  <button class="ntab" onclick="switchTab('links')">🔗 Links Library</button>
+</nav>
+
+<!-- ═══ MAIN ══════════════════════════════════════════════════════════════════ -->
+<div class="wrap">
+
+  <!-- ── STAT ROW (always visible) ── -->
+  <div class="stat-row">
+    <div class="stat">
+      <span class="stat-ico">📅</span>
+      <div>
+        <div class="stat-num" id="s-week">—</div>
+        <div class="stat-lbl">Current Week</div>
+        <div class="stat-bar"><div class="stat-fill" id="s-prog" style="width:0"></div></div>
+      </div>
+    </div>
+    <div class="stat s-teal">
+      <span class="stat-ico">✅</span>
+      <div>
+        <div class="stat-num" id="s-done">0</div>
+        <div class="stat-lbl">Weeks Complete</div>
+        <div style="font-size:.68rem;color:var(--ink3);margin-top:.1rem" id="s-done-of">of 18 weeks</div>
+      </div>
+    </div>
+    <div class="stat s-gold">
+      <span class="stat-ico">🔧</span>
+      <div>
+        <div class="stat-num" id="s-wip">0</div>
+        <div class="stat-lbl">In Progress</div>
+        <div style="font-size:.68rem;color:var(--ink3);margin-top:.1rem">units being built</div>
+      </div>
+    </div>
+    <div class="stat s-blue">
+      <span class="stat-ico">📝</span>
+      <div>
+        <div class="stat-num" id="s-notes">0</div>
+        <div class="stat-lbl">Notes Saved</div>
+        <div style="font-size:.68rem;color:var(--ink3);margin-top:.1rem">ideas & refinements</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TAB: PACING ═══════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab-pacing">
+    <div class="pace-layout">
+
+      <!-- LEFT: weekly accordion -->
+      <div>
+        <div class="card">
+          <div class="ch">
+            <span class="ct">18-Week CCMA Pacing Guide</span>
+            <div style="display:flex;gap:.5rem;align-items:center" class="no-print">
+              <span style="font-size:.7rem;color:var(--ink3)">Click week to expand · Click status to cycle</span>
+            </div>
+          </div>
+          <div class="pace-col-heads">
+            <span>Week</span><span>Phase</span><span>Unit / NHA Topics</span>
+            <span>Badge</span><span>Status</span><span>Resources</span>
+          </div>
+          <div id="weeks-accordion"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: sidebar -->
+      <div class="sidebar-col" style="display:flex;flex-direction:column;gap:1rem">
+
+        <!-- Phase progress -->
+        <div class="card">
+          <div class="ch"><span class="ct">Phase Progress</span></div>
+          <div class="cb">
+            <div class="phase-prog">
+              <div class="pp-row">
+                <div class="pp-label"><span>Phase 1 · Foundation</span><span id="pp1-lbl">0 / 5</span></div>
+                <div class="pp-bar"><div class="pp-fill pp-p1" id="pp1-fill" style="width:0%"></div></div>
+              </div>
+              <div class="pp-row">
+                <div class="pp-label"><span>Phase 2 · Clinical</span><span id="pp2-lbl">0 / 8</span></div>
+                <div class="pp-bar"><div class="pp-fill pp-p2" id="pp2-fill" style="width:0%"></div></div>
+              </div>
+              <div class="pp-row">
+                <div class="pp-label"><span>Phase 3 · Admin & Sim</span><span id="pp3-lbl">0 / 5</span></div>
+                <div class="pp-bar"><div class="pp-fill pp-p3" id="pp3-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card">
+          <div class="ch"><span class="ct">🔗 Quick Links</span></div>
+          <div class="cb">
+            <div class="ql-list" id="ql-list"></div>
+            <div class="ql-add no-print" style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+              <div class="ql-add-row">
+                <input class="inp inp-ico" id="ql-icon" placeholder="🔗">
+                <input class="inp" id="ql-label" placeholder="Link label">
+              </div>
+              <input class="inp" id="ql-url" placeholder="https://...">
+              <button class="btn btn-teal" style="width:100%" onclick="addQL()">+ Add Link</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weekly focus -->
+        <div class="card">
+          <div class="ch"><span class="ct">📌 This Week's Focus</span></div>
+          <div class="cb">
+            <textarea id="weekly-focus" class="week-note-inp" rows="4"
+              placeholder="What are you focusing on building or refining this week?"
+              oninput="saveFocus()"
+              style="width:100%;resize:none"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TAB: NOTES ════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-notes">
+    <div class="notes-layout">
+      <div>
+        <div class="filter-row no-print">
+          <button class="filter-chip active" onclick="filterNotes('all')">All</button>
+          <button class="filter-chip" onclick="filterNotes('idea')">💡 Ideas</button>
+          <button class="filter-chip" onclick="filterNotes('refine')">🔧 Refinements</button>
+          <button class="filter-chip" onclick="filterNotes('todo')">☐ To-Do</button>
+          <button class="filter-chip" onclick="filterNotes('done-note')">✓ Done</button>
+        </div>
+        <div class="notes-grid" id="notes-grid"></div>
+      </div>
+      <div class="sidebar-col" style="display:flex;flex-direction:column;gap:1rem">
+        <div class="card">
+          <div class="ch"><span class="ct">+ New Note</span></div>
+          <div class="cb">
+            <div class="add-note-form">
+              <div class="anf-row">
+                <select class="anf-select anf-tag" id="anf-tag">
+                  <option value="idea">💡 Idea</option>
+                  <option value="refine">🔧 Refinement</option>
+                  <option value="todo">☐ To-Do</option>
+                </select>
+                <select class="anf-select anf-week" id="anf-week">
+                  <option value="">General</option>
+                  <option value="w1">Week 1</option><option value="w2">Week 2</option>
+                  <option value="w3">Week 3</option><option value="w4">Week 4</option>
+                  <option value="w5">Week 5</option><option value="w6">Week 6</option>
+                  <option value="w7">Week 7</option><option value="w8">Week 8</option>
+                  <option value="w9">Week 9</option><option value="w10">Week 10</option>
+                  <option value="w11">Week 11</option><option value="w12">Week 12</option>
+                  <option value="w13">Week 13</option><option value="w14">Week 14</option>
+                  <option value="w15">Week 15</option><option value="w16">Week 16</option>
+                  <option value="w17">Week 17</option><option value="w18">Week 18</option>
+                </select>
+              </div>
+              <textarea class="anf-ta" id="anf-text" placeholder="Type your idea, refinement, or to-do…"></textarea>
+              <div class="anf-actions">
+                <button class="btn btn-teal" onclick="addNote()">Save Note</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- note stats -->
+        <div class="card">
+          <div class="ch"><span class="ct">Note Summary</span></div>
+          <div class="cb" id="note-summary"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TAB: ASSETS ═══════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-assets">
+    <div class="assets-layout">
+      <div>
+        <div class="card">
+          <div class="ch"><span class="ct">✅ Built</span></div>
+          <div class="cb">
+            <div class="asset-list" id="assets-built"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><span class="ct">🔧 To Build</span></div>
+          <div class="cb">
+            <div class="asset-list" id="assets-todo"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <!-- add asset -->
+        <div class="card">
+          <div class="ch"><span class="ct">+ Add Asset</span></div>
+          <div class="cb" style="display:flex;flex-direction:column;gap:.5rem">
+            <input class="inp" id="na-label" placeholder="Asset name / description">
+            <input class="inp" id="na-url" placeholder="URL (optional)">
+            <select class="anf-select" id="na-section" style="width:100%">
+              <option value="todo">To Build</option>
+              <option value="built">Built</option>
+            </select>
+            <button class="btn btn-teal" onclick="addAsset()">+ Add</button>
+          </div>
+        </div>
+        <!-- build progress -->
+        <div class="card">
+          <div class="ch"><span class="ct">Build Progress</span></div>
+          <div class="cb">
+            <div id="build-prog-wrap"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TAB: LINKS LIBRARY ══════════════════════════════════ -->
+  <div class="tab-panel" id="tab-links">
+    <div class="lib-layout">
+
+      <!-- LEFT: categories -->
+      <div>
+        <div class="card">
+          <div class="ch"><span class="ct">Categories</span></div>
+          <div class="cb">
+            <div class="lib-cats" id="lib-cats"></div>
+            <div class="lib-cat-add no-print">
+              <input class="inp" id="new-cat-name" placeholder="New category…" style="font-size:.78rem">
+              <button class="btn btn-teal" style="padding:.38rem .7rem;font-size:.75rem" onclick="addCategory()">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: link cards -->
+      <div>
+        <div class="lib-search-bar no-print">
+          <input class="lib-search" id="lib-search" placeholder="🔍  Search links…" oninput="renderLibrary()">
+          <button class="btn btn-teal no-print" onclick="openAddLink()">+ Add Link</button>
+        </div>
+        <div class="lib-grid" id="lib-grid"></div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- ═══ NEW SCHOOL YEAR MODAL ════════════════════════════════════════════════ -->
+<div class="modal-bg" id="modal-newyear">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title">🎓 New School Year</div>
+    <div class="modal-sub" id="ny-sub">Start fresh for a new cohort. Your links library, resources, and assets carry over — only progress resets.</div>
+    <div style="display:flex;flex-direction:column;gap:.55rem;margin-top:.9rem">
+      <label style="font-size:.78rem;font-weight:600;color:var(--ink2)">School Year Name</label>
+      <input class="inp" id="ny-name" placeholder="e.g. 2026–2027">
+      <label style="font-size:.78rem;font-weight:600;color:var(--ink2);margin-top:.25rem">Semester</label>
+      <div style="display:flex;gap:.5rem">
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:.82rem" id="ny-fall-lbl">
+          <input type="radio" name="ny-sem" id="ny-fall" value="fall" checked onchange="nyToggleSem()" style="accent-color:var(--teal)">
+          🍂 Fall &nbsp;<span style="color:var(--ink3);font-size:.72rem">Aug – Dec</span>
+        </label>
+        <label style="flex:1;display:flex;align-items:center;gap:.5rem;padding:.55rem .75rem;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:.82rem" id="ny-spring-lbl">
+          <input type="radio" name="ny-sem" id="ny-spring" value="spring" onchange="nyToggleSem()" style="accent-color:var(--teal)">
+          🌸 Spring &nbsp;<span style="color:var(--ink3);font-size:.72rem">Jan – May</span>
+        </label>
+      </div>
+      <div style="background:var(--gold3);border:1px solid #fbbf24;border-radius:8px;padding:.65rem .85rem;font-size:.78rem;color:#92400e;margin-top:.25rem">
+        <strong>What resets:</strong> Week statuses, week notes, "This Week's Focus"<br>
+        <strong>What carries over:</strong> All your links, Canva games, asset tracker, notes & ideas
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeNewYear()">Cancel</button>
+      <button class="btn btn-teal" onclick="createNewYear()">Create New Year →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADD LINK MODAL ════════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="modal-addlink">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-title">Add to Links Library</div>
+    <div class="modal-sub">Save a Canva game, resource, video, or any URL you want to keep handy.</div>
+    <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.75rem">
+      <input class="inp" id="al-title" placeholder="Title (e.g. Order of Draw Game)">
+      <input class="inp" id="al-url"   placeholder="https://...">
+      <input class="inp" id="al-desc"  placeholder="Description or notes (optional)">
+      <div style="display:flex;gap:.5rem">
+        <select class="anf-select" id="al-cat" style="flex:1"></select>
+        <input class="inp" id="al-icon" placeholder="🔗 icon" style="width:64px;flex-shrink:0">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeAddLink()">Cancel</button>
+      <button class="btn btn-teal" onclick="saveAddLink()">Save Link</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL (week links) ════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Add Link</div>
+    <div class="modal-sub" id="modal-sub">Paste the URL for this resource</div>
+    <input class="inp" id="modal-url" placeholder="https://" style="margin-top:.25rem">
+    <input class="inp" id="modal-label-inp" placeholder="Display label (optional)" style="margin-top:.45rem">
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-teal" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     DATA + LOGIC
+═══════════════════════════════════════════════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// CURRICULUM DATA  (from your pacing guide PDF)
+// ─────────────────────────────────────────────────────────────────────────────
+const CURRICULUM = [
+  {
+    w:1, ph:1,
+    unit:'Provider Roles, Scope of Practice & Healthcare Delivery',
+    nha:'MOD 1 · Foundational Knowledge',
+    badge:'Welcome to the Clinic 🏥',
+    topics:[
+      'Provider & Allied Health Roles, Titles, Credentials',
+      'Licensing vs. Certification & Maintenance',
+      'Types of Healthcare Organizations & Delivery Models',
+      'Technology-Based Methods (Telehealth)',
+      'Healthcare Payment Models',
+      'General vs. Specialty Healthcare',
+      'Ancillary Services & Complementary Therapies',
+      'Professionalism (Hartman Ch. 1)',
+    ],
+    resources:[
+      {label:"What's the Role? Canva Game", url:'https://www.canva.com/design/DAG913hoeek/R75PtwEwCdwmzz1eBZYvw/view?utm_content=DAG913hoeek&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfb367f9d02', icon:'🎮'},
+      {label:'Beyond the Medical Assistant (Drive)', url:'https://docs.google.com/document/d/1XHbjpD7fvqzsZa40ybGti31pb0YtyjTwndfO_P93kzo/edit?usp=sharing', icon:'📄'},
+      {label:'Professionalism Resource (Drive)', url:'https://docs.google.com/document/d/1-99Aii1vTFtbpfmeDk7DZas-XuA-rrozUf7k_Y0S4cM/edit?usp=sharing', icon:'📄'},
+      {label:'Mod 1 Study Guide', url:'', icon:'📚'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Chart Review — introduce EMR navigation'],
+    status:'done',
+  },
+  {
+    w:2, ph:1,
+    unit:'Medical Law, Ethics & Patient Privacy',
+    nha:'MOD 13 · Medical Law and Ethics',
+    badge:'Ethics Champion ⚖️',
+    topics:[
+      'Laws, Regulations & Legal Requirements',
+      'Informed & Implied Consent',
+      'Ethics, Values & Professional Codes',
+      'Obtain, Review & Comply with Medical Directives',
+      'Protect Patient Privacy & Confidentiality (HIPAA)',
+      'Reportable Violations & Incidents',
+      'Personal/Religious Beliefs — Unbiased Care',
+    ],
+    resources:[
+      {label:'HIPAA Training Resource', url:'https://hipaatraining.us/', icon:'🔒'},
+      {label:'MOD 13 Study Guide', url:'', icon:'📚'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Document a HIPAA scenario in chart'],
+    status:'wip',
+  },
+  {
+    w:3, ph:1,
+    unit:'Communication, Customer Service & Diversity',
+    nha:'MOD 12 · Communication & Customer Service',
+    badge:'Clear Communicator 🗣️',
+    topics:[
+      'Customer Service — Patient Cultures & Backgrounds',
+      'Stereotypes & Biases',
+      'Communication for Diverse Audiences',
+      'Communication Between Patients & Providers',
+      'Nonverbal Cues in Telehealth; Telephone Communication',
+      'Written & Electronic Communication',
+      'Conflict Management & Complaint Resolution',
+      'Teamwork & Team Engagement; Professionalism',
+    ],
+    resources:[
+      {label:'Communication Interactive Hub (Canva)', url:'https://nchssimhub.my.canva.site/medassistphone', icon:'📱'},
+      {label:'MOD 12 Study Guide', url:'', icon:'📚'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Document Phone Calls', 'EHR Simulations — type of visit scenarios'],
+    status:'todo',
+  },
+  {
+    w:4, ph:1,
+    unit:'Anatomy & Physiology + Medical Terminology',
+    nha:'MOD 2 · A&P; Body Structure & Organ Systems',
+    badge:'Anatomy Ace 🧠',
+    topics:[
+      'Structure & Function of Major Body Systems',
+      'Interactions Between Organ Systems & Homeostasis',
+      'Common Diseases, Conditions & Injuries',
+      'Pathophysiology & Diagnostic Measures',
+      'Epidemics & Pandemics',
+      'Medical Terminology — Word Building, Common Terms',
+      'Positional & Directional Terminology',
+      'Common Abbreviations, Acronyms & Symbols (ongoing)',
+    ],
+    resources:[
+      {label:'MOD 2 Study Guide (Condensed)', url:'', icon:'📚'},
+      {label:'Hartman Ch. 4', url:'', icon:'📖'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['EHR — Body Systems cross-reference exercise'],
+    status:'todo',
+  },
+  {
+    w:5, ph:1,
+    unit:'Psychology, Mental Health & Pharmacology Basics',
+    nha:'MOD 2 Psychology · MOD 1 Basic Pharmacology',
+    badge:'Infection Fighter 🧤',
+    topics:[
+      'Developmental Stages (Hartman Ch. 4)',
+      'Common Mental Health Conditions',
+      'Environmental & Socioeconomic Stressors',
+      'Defense Mechanisms',
+      'End of Life & Stages of Grief',
+      'Drug Classifications & Controlled Substances',
+      'Side Effects, Adverse Effects, Indications & Contraindications',
+      'Dosage Calculations & Metric Conversions',
+      'Rights of Medication Administration',
+      'Pharmacokinetics (ADME)',
+    ],
+    resources:[
+      {label:'Back to MOD 1 Study Guide', url:'', icon:'📚'},
+      {label:'Create resources — Google LM', url:'', icon:'🤖'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Storage of Injectables — MOD 4 crossover'],
+    status:'todo',
+  },
+  {
+    w:6, ph:2,
+    unit:'Infection Control & Safety',
+    nha:'MOD 6 · Infection Control',
+    badge:'Vitals Pro 💓',
+    topics:[
+      'Standard & Universal Precautions',
+      'Communicable Diseases & Transmission',
+      'Personal Protective Equipment (PPE)',
+      'Hand Hygiene Guidelines',
+      'Disinfection / Sanitization',
+      'Sterilization of Medical Equipment',
+      'Biohazard Materials',
+      'Post-Exposure Guidelines (Needle Safety, Eyewash)',
+    ],
+    resources:[
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 6 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Infection control documentation scenario'],
+    status:'todo',
+  },
+  {
+    w:7, ph:2,
+    unit:'Patient Intake & Vital Signs',
+    nha:'MOD 3 · Patient Intake & Vitals',
+    badge:'Intake Specialist 📋',
+    topics:[
+      'Patient Safety within the Clinical Setting',
+      'Identifying the Patient',
+      'Comprehensive Clinical Intake Process',
+      'Measure & Obtain Vital Signs (Temp conversions)',
+      'Obtain Anthropometric Measurements',
+      'Identify, Document & Report Abnormal Signs',
+      'Ambulatory Cardiac Monitoring',
+      'Transmit Results / Reports',
+    ],
+    resources:[
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 3 Study Guide', url:'', icon:'📚'},
+      {label:'Hartman Ch. 36/37', url:'', icon:'📖'},
+    ],
+    ehr:['Record Patient History', 'Medication Reconciliation', 'Document Phone Calls'],
+    status:'todo',
+  },
+  {
+    w:8, ph:2,
+    unit:'General Patient Care Pt. 1 — Exam Room & Medications',
+    nha:'MOD 4 · General Patient Care I',
+    badge:'Medication Ready 💊',
+    topics:[
+      'Prepare Examination / Procedure Room',
+      'Prepare Patient for Procedures',
+      'Specialty Examinations or Procedures',
+      'Assist Provider with Examinations',
+      'Prepare & Administer Nonparenteral Medications',
+      'Prepare & Administer Medications — Parenteral Routes',
+      'Manage Injection Logs',
+      'Ear & Eye Irrigation',
+      'Send Orders for Prescriptions & Refills',
+      'Operate an EMR/EHR System',
+    ],
+    resources:[
+      {label:'Medications & Injectables (Canva)', url:'https://www.canva.com/design/DAG3pc35xmg/3A-IS8-9oZexwvoUcBT6g/view?utm_content=DAG3pc35xmg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h010472cd7d', icon:'💉'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 4 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Add New Medication', 'Enter Prescription per PCP Order', 'Document Care in Patient Record'],
+    status:'todo',
+  },
+  {
+    w:9, ph:2,
+    unit:'General Patient Care Pt. 2 — Sterile Technique & Emergencies',
+    nha:'MOD 5 · General Patient Care II',
+    badge:'Sterile Technique 🩺',
+    topics:[
+      'Prepare & Maintain a Sterile Field',
+      'Techniques & Instruments for Suture & Staple Removal',
+      'Identify & Respond to Emergency/Priority Situations',
+      'Assist with Minor & Traumatic Injury',
+      'Assist with Surgical Interventions',
+      'Order & Obtain Durable Medical Equipment (DME)',
+      'Review Provider\'s Discharge Instructions with Patients',
+      'Wound Care',
+    ],
+    resources:[
+      {label:'MOD 5 Wound Care (Canva)', url:'https://www.canva.com/design/DAHAjrU6vTQ/BDmVfCQb5jLGB7h3Qg9rjA/view?utm_content=DAHAjrU6vTQ&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h24e4806a15', icon:'🩹'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 5 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Emergency scenario documentation', 'DME order entry'],
+    status:'todo',
+  },
+  {
+    w:10, ph:2,
+    unit:'Phlebotomy',
+    nha:'MOD 8 · Phlebotomy',
+    badge:'Phlebotomy Certified 🩸',
+    topics:[
+      'Patient Preparation',
+      'Verify Order Details',
+      'Select Appropriate Supplies for Test(s)',
+      'Determine Venipuncture Site Accessibility',
+      'Prepare Site for Venipuncture',
+      'Determine Order of Draw',
+      'Perform Venipuncture',
+      'Perform Capillary Puncture',
+      'Perform Postprocedural Care',
+      'Handle & Process Blood Specimens',
+      'Match & Label Specimen to Patient',
+      'Prepare Samples for Transport to Reference Lab',
+    ],
+    resources:[
+      {label:'Order of Draw (Canva)', url:'https://www.canva.com/design/DAHAjL7x794/2JzQ5bnFuYLeqvmjV0vWdw/view?utm_content=DAHAjL7x794&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h0f65eeed63', icon:'🩸'},
+      {label:'Google LM Phlebotomy Notebook', url:'', icon:'🤖'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Access Progress Note / Review', 'Create Lab Order (CBC)', 'Record & Document Results'],
+    status:'todo',
+  },
+  {
+    w:11, ph:2,
+    unit:'Point of Care Testing & Lab Procedures',
+    nha:'MOD 7 · Point of Care Testing & Lab',
+    badge:'Lab Ready 🔬',
+    topics:[
+      'Collect Nonblood Specimens (POCT)',
+      'CLIA-Waived Testing',
+      'Recognize, Document & Report Lab Values',
+      'Lab Requisitions & Documenting Specimen Collection',
+      'Specimen Processing, Transport & Disposal Requirements',
+      'Vision & Hearing Tests',
+      'Allergy Testing',
+      'Spirometry & Pulmonary Function Tests',
+    ],
+    resources:[
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 7 Study Guide · Ch. 9/46/47', url:'', icon:'📚'},
+    ],
+    ehr:['Access Progress Note / Review Update', 'Create Lab Order (UA) per PCP', 'Record UA Results'],
+    status:'todo',
+  },
+  {
+    w:12, ph:2,
+    unit:'EKG & Cardiovascular Testing',
+    nha:'MOD 9 · EKG & Cardiovascular',
+    badge:'EKG Technician 💗',
+    topics:[
+      'Functioning & Storage of EKG Equipment',
+      'Ambulatory Cardiac Monitoring',
+      'Transmit Results or Report',
+      'Identify Abnormal EKG Findings',
+      'Patient Preparation for Cardiac Testing',
+    ],
+    resources:[
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 9 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['EKG documentation in patient chart', 'Transmit results scenario'],
+    status:'todo',
+  },
+  {
+    w:13, ph:2,
+    unit:'Nutrition & Dietary Guidelines',
+    nha:'MOD 1 · Nutrition (Foundational)',
+    badge:'Medication Admin 💉',
+    topics:[
+      'Dietary Nutrients, Suggested Guidelines & Food Labels',
+      'Dietary Needs Related to Diseases & Conditions',
+      'Vitamins & Supplements',
+      'Eating Disorders',
+    ],
+    resources:[
+      {label:'Clinical Nutrition Simulation 2', url:'', icon:'🥗'},
+      {label:'Clinical Nutrition Shift 3', url:'', icon:'🥗'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Document nutritional counseling in chart'],
+    status:'todo',
+  },
+  {
+    w:14, ph:3,
+    unit:'Administrative Assisting & Front Office',
+    nha:'MOD 11 · Administrative Assisting',
+    badge:'Front Desk Ready 🖥️',
+    topics:[
+      'Schedule & Monitor Patient Appointments (Electronic & Paper)',
+      'Prioritize Appointment Needs Based on Urgency',
+      'Identify & Check Patients In/Out',
+      'Manage Electronic & Paper-Based Medical Records',
+      'Process Office Mail & Faxes',
+      'Facilitate/Generate Referrals',
+      'Follow-Up Patient Calls & Appointment Confirmations',
+      'Enter Information into Databases/Spreadsheets',
+      'Activate & Facilitate Patient Portals',
+    ],
+    resources:[
+      {label:'Patient Check-In/Out (Canva)', url:'https://www.canva.com/design/DAG388PlT7A/FS3kqGU_Fw6q8SQh7vuOPA/view?utm_content=DAG388PlT7A&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53103e269c', icon:'🏥'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 11 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Monitor Patient Flow Sheets, Superbill, Encounter Forms', 'Check-in/out simulation'],
+    status:'todo',
+  },
+  {
+    w:15, ph:3,
+    unit:'Billing, Coding & Insurance',
+    nha:'MOD 11 · Billing & Coding',
+    badge:'Billing Specialist 💰',
+    topics:[
+      'Verify Insurance Coverage / Financial Eligibility',
+      'Confirm Appropriate Diagnostic & Procedural Codes',
+      'Obtain & Verify Prior Authorizations',
+      'Prepare Documentation & Billing Requests (Current Coding Guidelines)',
+      'Ensure Documentation Complies with Government & Insurance Requirements',
+      'Perform Charge Reconciliation',
+      'Bill Patients, Insurers & Third-Party Payers',
+      'Resolve Billing Issues — Appeals & Denials',
+    ],
+    resources:[
+      {label:'ICD/CPT Coding (Canva)', url:'https://www.canva.com/design/DAG495PMTuA/4c7N8NU_SXhjG7GmOIwRFQ/view?utm_content=DAG495PMTuA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd85c1b669c', icon:'💳'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 11 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Insurance verification simulation', 'Enter codes, submit claim, resolve denial'],
+    status:'todo',
+  },
+  {
+    w:16, ph:3,
+    unit:'Patient Care Coordination & Education',
+    nha:'MOD 10 · Patient Care Coordination',
+    badge:'Care Coordinator 🤝',
+    topics:[
+      'Review Patient Records Prior to Visit',
+      'Document Preventive Maintenance & Screenings',
+      'Preventive Care Timelines & Recommendations',
+      'Research & Supply Community Resources',
+      'Coordinate with Providers for Continuity of Care',
+      'Facilitate Patient Adherence',
+      'Participate in Transition of Care',
+      'Telehealth Technologies',
+      'Provide Education on Communicable Disease Prevention',
+    ],
+    resources:[
+      {label:'Mod 10 Virtual Clinic Simulation', url:'', icon:'🖥️'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'MOD 10 Study Guide', url:'', icon:'📚'},
+    ],
+    ehr:['Care coordination scenario (Ethan Morales, Angela Brooks, Margaret Hill)', 'Print EMR to PDF & submit'],
+    status:'todo',
+  },
+  {
+    w:17, ph:3,
+    unit:'Full Clinic Simulation',
+    nha:'All Modules — Integrated',
+    badge:'Clinic Shift Complete 🏆',
+    topics:[
+      'Integrated Clinical & Administrative Patient Workflow',
+      'Full patient encounters across all skill areas',
+      'Documentation, billing, coordination combined',
+      'Professional standards & time management under pressure',
+    ],
+    resources:[
+      {label:'ClinicalEMR Pro (Tool)', url:'', icon:'💻'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+      {label:'Patient Scenario Cards (all)', url:'', icon:'🗂'},
+    ],
+    ehr:['Full EMR workflow — intake to discharge to billing'],
+    status:'todo',
+  },
+  {
+    w:18, ph:3,
+    unit:'CCMA Exam Prep & Certification Readiness',
+    nha:'All Modules — Review',
+    badge:'CCMA Ready 🎓',
+    topics:[
+      'NHA CCMA Exam format & strategy',
+      'High-yield module review (weakest areas first)',
+      'Timed practice questions',
+      'Certification application process',
+      'Professional portfolio review',
+    ],
+    resources:[
+      {label:'NHA Learning Portal', url:'https://www.nhanow.com', icon:'🎓'},
+      {label:'Skills Passport — final stamp', url:'', icon:'🏅'},
+      {label:'Shift Deck Slides', url:'', icon:'🖥️'},
+    ],
+    ehr:['Final EMR audit — all documentation complete'],
+    status:'todo',
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFAULT QUICK LINKS
+// ─────────────────────────────────────────────────────────────────────────────
+const DEFAULT_LINKS = [
+  {icon:'💻', label:'ClinicalEMR Pro', url:''},
+  {icon:'📊', label:'CDC Growth Chart Tool', url:''},
+  {icon:'🏅', label:'Skills Passport', url:''},
+  {icon:'📁', label:'Google Drive', url:'https://drive.google.com'},
+  {icon:'📚', label:'NHA Learning Portal', url:'https://www.nhanow.com'},
+  {icon:'🎨', label:'Canva Classroom Hub', url:'https://www.canva.com'},
+  {icon:'🤖', label:'Google NotebookLM', url:'https://notebooklm.google.com'},
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DEFAULT ASSETS
+// ─────────────────────────────────────────────────────────────────────────────
+const DEFAULT_ASSETS_BUILT = [
+  {id:'emr',      label:'ClinicalEMR Pro (HTML tool)',          done:true, url:''},
+  {id:'growth',   label:'CDC Growth Chart Tool (HTML tool)',     done:true, url:''},
+  {id:'map',      label:'Master Curriculum Map (DOCX)',          done:true, url:''},
+  {id:'passport', label:'Skills Passport Digital Tracker (HTML)',done:true, url:''},
+  {id:'deck',     label:'Shift Deck Template (PPTX)',            done:true, url:''},
+  {id:'dash',     label:'Instructor Dashboard (this file)',      done:true, url:''},
+];
+
+const DEFAULT_ASSETS_TODO = [
+  {id:'s-deck-all', label:'Unit Slide Decks — all 18 weeks',  done:false, url:''},
+  {id:'scenarios',  label:'Patient Scenario Cards (12–15)',    done:false, url:''},
+  {id:'rubrics',    label:'Skills Check-off Rubrics (1/unit)', done:false, url:''},
+  {id:'huddle',     label:'Morning Huddle Slides (per unit)',  done:false, url:''},
+  {id:'gdrive',     label:'Google Drive folder structure',     done:false, url:''},
+  {id:'tpt',        label:'TPT bundle packaging (future)',     done:false, url:''},
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+const LS = k => localStorage.getItem('hsh_'+k);
+const SS = (k,v) => localStorage.setItem('hsh_'+k, JSON.stringify(v));
+const GP = k => { try { return JSON.parse(LS(k)); } catch(e){ return null; } };
+
+// ── SCHOOL YEAR SYSTEM ────────────────────────────────────────────────────────
+// Each year stored as hsh_year_{id} = { id, name, sem, weeks, notes, focus, weeklinks }
+// Shared across years:  ql, assets_b, assets_t, lib_cats, lib_links
+
+const DEFAULT_YEAR_ID = 'y2025fall';
+
+function getYearList() {
+  return GP('year_list') || [{id:DEFAULT_YEAR_ID, name:'2025–2026', sem:'fall', label:'Fall 2025 · Aug–Dec'}];
+}
+
+function getYearData(id) {
+  const d = GP('year_'+id);
+  if(d) return d;
+  return {
+    id, weeks: CURRICULUM.map(w=>({w:w.w, status:w.status, note:'', links:{}})),
+    notes:[], focus:'', weeklinks:{},
+  };
+}
+
+function saveYearData(id, data) {
+  SS('year_'+id, data);
+}
+
+// active year id
+let _yearId = LS('hsh_active_year') || DEFAULT_YEAR_ID;
+
+// Load year into state
+function loadYear(id) {
+  _yearId = id;
+  localStorage.setItem('hsh_active_year', id);
+  const d = getYearData(id);
+  state.weeks     = d.weeks     || CURRICULUM.map(w=>({w:w.w, status:w.status, note:'', links:{}}));
+  state.notes     = d.notes     || [];
+  state.focus     = d.focus     || '';
+  state.weeklinks = d.weeklinks || {};
+}
+
+let state = {
+  weeks:      [],
+  notes:      [],
+  ql:         GP('ql')       || DEFAULT_LINKS,
+  assets_b:   GP('assets_b') || DEFAULT_ASSETS_BUILT,
+  assets_t:   GP('assets_t') || DEFAULT_ASSETS_TODO,
+  focus:      '',
+  weeklinks:  {},
+};
+
+// Bootstrap: migrate old flat data into year structure if needed
+(function migrate() {
+  const oldWeeks = GP('weeks');
+  if(oldWeeks) {
+    const existing = GP('year_'+DEFAULT_YEAR_ID);
+    if(!existing) {
+      saveYearData(DEFAULT_YEAR_ID, {
+        id: DEFAULT_YEAR_ID,
+        weeks:     oldWeeks,
+        notes:     GP('notes') || [],
+        focus:     LS('hsh_focus') || '',
+        weeklinks: GP('weeklinks') || {},
+      });
+    }
+    // clean up old keys
+    ['weeks','notes','weeklinks'].forEach(k => localStorage.removeItem('hsh_'+k));
+    localStorage.removeItem('hsh_focus');
+  }
+})();
+
+loadYear(_yearId);
+
+function save() {
+  saveYearData(_yearId, {
+    id: _yearId,
+    weeks:     state.weeks,
+    notes:     state.notes,
+    focus:     state.focus,
+    weeklinks: state.weeklinks,
+  });
+  SS('ql',       state.ql);
+  SS('assets_b', state.assets_b);
+  SS('assets_t', state.assets_t);
+}
+
+function getWeekState(w) {
+  return state.weeks.find(x=>x.w===w) || {w, status:'todo', note:'', links:{}};
+}
+
+// ── YEAR SELECTOR UI ─────────────────────────────────────────────────────────
+function renderYearSelector() {
+  const years = getYearList();
+  const sel = document.getElementById('year-select');
+  sel.innerHTML = years.map(y =>
+    `<option value="${y.id}" ${y.id===_yearId?'selected':''}>${y.name} · ${y.sem==='fall'?'Fall':'Spring'}</option>`
+  ).join('');
+  const active = years.find(y=>y.id===_yearId) || years[0];
+  document.getElementById('cohort-label').textContent = active ? active.label : '';
+}
+
+function switchYear(id) {
+  loadYear(id);
+  _yearId = id;
+  renderYearSelector();
+  renderPacing();
+  renderStats();
+  renderNotes();
+  document.getElementById('weekly-focus').value = state.focus || '';
+}
+
+// ── NEW YEAR MODAL ────────────────────────────────────────────────────────────
+function openNewYear() {
+  document.getElementById('modal-newyear').classList.add('open');
+  // suggest next year name
+  const years = getYearList();
+  const lastYear = years[years.length-1];
+  const parts = (lastYear.name||'2025–2026').split('–');
+  const nextStart = parseInt(parts[1]||2026);
+  document.getElementById('ny-name').value = `${nextStart}–${nextStart+1}`;
+  nyToggleSem();
+  setTimeout(()=>document.getElementById('ny-name').focus(),60);
+}
+
+function closeNewYear() {
+  document.getElementById('modal-newyear').classList.remove('open');
+}
+
+function nyToggleSem() {
+  const isFall = document.getElementById('ny-fall').checked;
+  const fl = document.getElementById('ny-fall-lbl');
+  const sl = document.getElementById('ny-spring-lbl');
+  fl.style.borderColor = isFall ? 'var(--teal)' : 'var(--border)';
+  sl.style.borderColor = !isFall ? 'var(--teal)' : 'var(--border)';
+}
+
+function createNewYear() {
+  const name = document.getElementById('ny-name').value.trim();
+  if(!name) { document.getElementById('ny-name').focus(); return; }
+  const sem  = document.getElementById('ny-fall').checked ? 'fall' : 'spring';
+  const semLabel = sem==='fall' ? `Fall ${name.split('–')[0]} · Aug–Dec` : `Spring ${name.split('–')[1]||name} · Jan–May`;
+  const id = 'y' + Date.now();
+
+  // Save blank year data
+  saveYearData(id, {
+    id, weeks: CURRICULUM.map(w=>({w:w.w, status:'todo', note:'', links:{}})),
+    notes:[], focus:'', weeklinks:{},
+  });
+
+  // Add to year list
+  const years = getYearList();
+  years.push({id, name, sem, label:semLabel});
+  SS('year_list', years);
+
+  closeNewYear();
+  switchYear(id);
+  renderYearSelector();
+
+  // Drop a welcome note into the new year
+  state.notes.push({
+    tag:'idea', week:'',
+    text:`New school year started: ${name} ${sem==='fall'?'Fall':'Spring'}. All progress reset. Your links, resources, and assets carried over from last year.`,
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+  });
+  save(); renderNotes(); renderStats();
+}
+
+document.addEventListener('click', e => {
+  if(e.target===document.getElementById('modal-newyear')) closeNewYear();
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────────────────────────────────────
+function switchTab(id) {
+  document.querySelectorAll('.ntab').forEach((b,i) => {
+    const ids = ['pacing','notes','assets','links'];
+    b.classList.toggle('active', ids[i]===id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='links') renderLibrary();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LINKS LIBRARY
+// ─────────────────────────────────────────────────────────────────────────────
+const CAT_COLORS = [
+  '#1d4ed8','#0a7e74','#b45309','#7c3aed','#be123c',
+  '#0369a1','#15803d','#a16207','#9333ea','#0f766e',
+];
+
+const DEFAULT_CATEGORIES = [
+  {id:'canva',   name:'Canva Games & Activities', color:'#1d4ed8'},
+  {id:'videos',  name:'Video Resources',          color:'#be123c'},
+  {id:'gdrive',  name:'Google Drive Files',       color:'#15803d'},
+  {id:'study',   name:'Study Guides & NHA',       color:'#b45309'},
+  {id:'tools',   name:'Tools & Simulations',      color:'#0a7e74'},
+  {id:'other',   name:'Other / Misc',             color:'#475569'},
+];
+
+const DEFAULT_LIB_LINKS = [
+  {id:'ll1', cat:'canva', icon:'🎮', title:"What's the Role? Game", url:'https://www.canva.com/design/DAG913hoeek/R75PtwEwCdwmzz1eBZYvw/view?utm_content=DAG913hoeek&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hfb367f9d02', desc:'Week 1 · Roles & Responsibilities review game'},
+  {id:'ll2', cat:'canva', icon:'📱', title:'Communication Interactive Hub', url:'https://nchssimhub.my.canva.site/medassistphone', desc:'Week 3 · Phone & communication scenarios'},
+  {id:'ll3', cat:'canva', icon:'💉', title:'Medications & Injectables', url:'https://www.canva.com/design/DAG3pc35xmg/3A-IS8-9oZexwvoUcBT6g/view?utm_content=DAG3pc35xmg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h010472cd7d', desc:'Week 8 · Medication administration visual'},
+  {id:'ll4', cat:'canva', icon:'🩸', title:'Order of Draw Reference', url:'https://www.canva.com/design/DAHAjL7x794/2JzQ5bnFuYLeqvmjV0vWdw/view?utm_content=DAHAjL7x794&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h0f65eeed63', desc:'Week 10 · Phlebotomy order of draw'},
+  {id:'ll5', cat:'canva', icon:'🩹', title:'Wound Care Visual', url:'https://www.canva.com/design/DAHAjrU6vTQ/BDmVfCQb5jLGB7h3Qg9rjA/view?utm_content=DAHAjrU6vTQ&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h24e4806a15', desc:'Week 9 · Sterile technique & wound care'},
+  {id:'ll6', cat:'canva', icon:'🏥', title:'Patient Check-In/Out Flow', url:'https://www.canva.com/design/DAG388PlT7A/FS3kqGU_Fw6q8SQh7vuOPA/view?utm_content=DAG388PlT7A&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h53103e269c', desc:'Week 14 · Admin front office simulation'},
+  {id:'ll7', cat:'canva', icon:'💳', title:'ICD/CPT Coding Activity', url:'https://www.canva.com/design/DAG495PMTuA/4c7N8NU_SXhjG7GmOIwRFQ/view?utm_content=DAG495PMTuA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd85c1b669c', desc:'Week 15 · Billing & coding practice'},
+  {id:'ll8', cat:'gdrive', icon:'📄', title:'Beyond the Medical Assistant', url:'https://docs.google.com/document/d/1XHbjpD7fvqzsZa40ybGti31pb0YtyjTwndfO_P93kzo/edit?usp=sharing', desc:'Week 1 · Roles supplement document'},
+  {id:'ll9', cat:'gdrive', icon:'📄', title:'Professionalism Resource', url:'https://docs.google.com/document/d/1-99Aii1vTFtbpfmeDk7DZas-XuA-rrozUf7k_Y0S4cM/edit?usp=sharing', desc:'Week 1 · Professionalism Hartman Ch. 1'},
+  {id:'ll10', cat:'study', icon:'🔒', title:'HIPAA Training Resource', url:'https://hipaatraining.us/', desc:'Week 2 · Medical law & privacy training'},
+  {id:'ll11', cat:'study', icon:'🎓', title:'NHA Learning Portal', url:'https://www.nhanow.com', desc:'NHA CCMA exam prep & module quizzes'},
+];
+
+// merge into state
+if(!GP('lib_cats'))  { state.lib_cats  = DEFAULT_CATEGORIES; SS('lib_cats',  state.lib_cats);  } else state.lib_cats  = GP('lib_cats');
+if(!GP('lib_links')) { state.lib_links = DEFAULT_LIB_LINKS;  SS('lib_links', state.lib_links); } else state.lib_links = GP('lib_links');
+
+let _libCat = 'all';
+
+function saveLib() {
+  SS('lib_cats',  state.lib_cats);
+  SS('lib_links', state.lib_links);
+}
+
+/* ── RENDER CATEGORIES ── */
+function renderCategories() {
+  const el = document.getElementById('lib-cats');
+  const allCount = state.lib_links.length;
+  let html = `<button class="lib-cat-btn${_libCat==='all'?' active':''}" onclick="filterLibCat('all')">
+    <span>🗂</span> All Links <span class="cat-count">${allCount}</span>
+  </button>`;
+  state.lib_cats.forEach(cat => {
+    const cnt = state.lib_links.filter(l=>l.cat===cat.id).length;
+    html += `<button class="lib-cat-btn${_libCat===cat.id?' active':''}" onclick="filterLibCat('${cat.id}')">
+      <span class="cat-dot" style="background:${cat.color}"></span>
+      ${cat.name} <span class="cat-count">${cnt}</span>
+    </button>`;
+  });
+  el.innerHTML = html;
+
+  // populate add-link modal dropdown
+  const sel = document.getElementById('al-cat');
+  if(sel) sel.innerHTML = state.lib_cats.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+}
+
+function filterLibCat(id) {
+  _libCat = id;
+  renderCategories();
+  renderLibrary();
+}
+
+function addCategory() {
+  const name = document.getElementById('new-cat-name').value.trim();
+  if(!name) return;
+  const id = 'cat-'+Date.now();
+  const color = CAT_COLORS[state.lib_cats.length % CAT_COLORS.length];
+  state.lib_cats.push({id, name, color});
+  document.getElementById('new-cat-name').value = '';
+  saveLib(); renderCategories(); renderLibrary();
+}
+
+/* ── RENDER LIBRARY CARDS ── */
+function renderLibrary() {
+  renderCategories();
+  const search = (document.getElementById('lib-search')||{}).value?.toLowerCase()||'';
+  const filtered = state.lib_links.filter(l => {
+    const matchCat = _libCat==='all' || l.cat===_libCat;
+    const matchSearch = !search ||
+      l.title.toLowerCase().includes(search) ||
+      (l.desc||'').toLowerCase().includes(search) ||
+      (l.url||'').toLowerCase().includes(search);
+    return matchCat && matchSearch;
+  });
+
+  const grid = document.getElementById('lib-grid');
+  if(!filtered.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;padding:2.5rem;text-align:center;color:var(--ink3);font-style:italic">
+      ${search ? `No links match "${search}"` : 'No links in this category yet. Click + Add Link to get started.'}
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(l => {
+    const cat = state.lib_cats.find(c=>c.id===l.cat) || {name:'Other',color:'#475569'};
+    const domain = l.url ? (() => { try { return new URL(l.url).hostname.replace('www.',''); } catch(e){ return l.url.substring(0,30); } })() : '';
+    return `<div class="lib-card">
+      <div class="lib-card-accent" style="background:${cat.color}"></div>
+      <div class="lib-card-body">
+        <div class="lib-card-cat">${l.icon||'🔗'}  ${cat.name}</div>
+        <div class="lib-card-title">${escHtml(l.title)}</div>
+        ${l.desc?`<div class="lib-card-desc">${escHtml(l.desc)}</div>`:''}
+      </div>
+      <div class="lib-card-foot">
+        <span class="lib-card-url" title="${escHtml(l.url||'')}">${domain||'no url'}</span>
+        <div class="lib-card-actions">
+          ${l.url?`<a class="lib-card-open" href="${l.url}" target="_blank">Open ↗</a>`:''}
+          <button class="lib-card-del" onclick="deleteLibLink('${l.id}')">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function deleteLibLink(id) {
+  if(!confirm('Remove this link?')) return;
+  state.lib_links = state.lib_links.filter(l=>l.id!==id);
+  saveLib(); renderLibrary();
+}
+
+/* ── ADD LINK MODAL ── */
+function openAddLink() {
+  renderCategories(); // ensure dropdown populated
+  document.getElementById('modal-addlink').classList.add('open');
+  setTimeout(()=>document.getElementById('al-title').focus(),60);
+}
+function closeAddLink() {
+  document.getElementById('modal-addlink').classList.remove('open');
+  ['al-title','al-url','al-desc','al-icon'].forEach(id=>document.getElementById(id).value='');
+}
+function saveAddLink() {
+  const title = document.getElementById('al-title').value.trim();
+  const url   = document.getElementById('al-url').value.trim();
+  if(!title) { document.getElementById('al-title').focus(); return; }
+  state.lib_links.push({
+    id:   'll-'+Date.now(),
+    cat:  document.getElementById('al-cat').value,
+    icon: document.getElementById('al-icon').value.trim() || '🔗',
+    title, url,
+    desc: document.getElementById('al-desc').value.trim(),
+  });
+  saveLib(); closeAddLink(); renderLibrary();
+}
+document.addEventListener('click', e => {
+  if(e.target===document.getElementById('modal-addlink')) closeAddLink();
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATS
+// ─────────────────────────────────────────────────────────────────────────────
+function renderStats() {
+  const done = state.weeks.filter(w=>w.status==='done').length;
+  const wip  = state.weeks.filter(w=>w.status==='wip').length;
+  const cur  = Math.min(done + wip + 1, 18);
+  document.getElementById('s-week').textContent  = `Wk ${cur}`;
+  document.getElementById('s-prog').style.width  = `${(cur/18)*100}%`;
+  document.getElementById('s-done').textContent  = done;
+  document.getElementById('s-wip').textContent   = wip;
+  document.getElementById('s-notes').textContent = state.notes.length;
+
+  // phase progress
+  [1,2,3].forEach(ph => {
+    const phWks = CURRICULUM.filter(c=>c.ph===ph);
+    const d = phWks.filter(c=>getWeekState(c.w).status==='done').length;
+    const t = phWks.length;
+    document.getElementById(`pp${ph}-lbl`).textContent = `${d} / ${t}`;
+    document.getElementById(`pp${ph}-fill`).style.width = `${(d/t)*100}%`;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PACING ACCORDION
+// ─────────────────────────────────────────────────────────────────────────────
+const STATUSES = ['todo','wip','done'];
+const SL = {todo:'To Build', wip:'In Progress', done:'Complete'};
+const SI = {todo:'○', wip:'◑', done:'●'};
+const SC = {todo:'sb-todo', wip:'sb-wip', done:'sb-done'};
+
+function renderPacing() {
+  const acc = document.getElementById('weeks-accordion');
+  acc.innerHTML = '';
+
+  CURRICULUM.forEach(cur => {
+    const ws = getWeekState(cur.w);
+    const phC = `ph${cur.ph}`;
+    const phL = ['','Phase 1','Phase 2','Phase 3'][cur.ph];
+
+    // Resource count for summary
+    const links = state.weeklinks[cur.w] || {};
+    const builtLinks = cur.resources.filter(r => links[r.label] || r.url).length;
+
+    const block = document.createElement('div');
+    block.className = 'week-block';
+    block.id = `wb-${cur.w}`;
+
+    block.innerHTML = `
+      <div class="week-hdr" onclick="toggleWeek(${cur.w})" id="wh-${cur.w}">
+        <div class="wnum">W${String(cur.w).padStart(2,'0')}</div>
+        <div class="wphase"><span class="phase-pill ${phC}">${phL}</span></div>
+        <div class="wunit">
+          <div class="wunit-name">${cur.unit}</div>
+          <div class="wunit-sub">${cur.nha}</div>
+        </div>
+        <div class="wbadge" style="font-size:.68rem;line-height:1.3">${cur.badge}</div>
+        <div class="wstatus">
+          <button class="sbadge ${SC[ws.status]}" onclick="cycleStatus(event,${cur.w})">${SI[ws.status]} ${SL[ws.status]}</button>
+        </div>
+        <div class="wexpand">
+          <span style="font-size:.65rem;color:var(--ink3)">${builtLinks}/${cur.resources.length} links</span>
+          <span class="expand-arrow">▼</span>
+        </div>
+      </div>
+      <div class="week-detail" id="wd-${cur.w}">
+        ${buildDetail(cur, ws, links)}
+      </div>
+    `;
+    acc.appendChild(block);
+  });
+}
+
+function buildDetail(cur, ws, links) {
+  // Topics
+  const topicHtml = cur.topics.map(t=>`<li>${t}</li>`).join('');
+
+  // Resources / links
+  const resHtml = cur.resources.map(r => {
+    const savedUrl = (links[r.label]) || r.url;
+    if(savedUrl) {
+      return `<a class="dlink" href="${savedUrl}" target="_blank">
+        <span class="dlink-icon">${r.icon}</span>${r.label}
+        <span class="dlink-edit">✏️</span>
+      </a>`;
+    } else {
+      return `<span class="dlink empty" onclick="openLinkModal(${cur.w},'${esc(r.label)}')">
+        <span class="dlink-icon">${r.icon}</span>${r.label}
+        <span style="margin-left:auto;font-size:.6rem;color:var(--ink3)">+ add url</span>
+      </span>`;
+    }
+  }).join('');
+
+  // EHR tasks
+  const ehrHtml = cur.ehr.map(e=>`<li>${e}</li>`).join('');
+
+  return `
+    <div class="detail-grid">
+      <div class="detail-section">
+        <div class="ds-title">📋 NHA Topics Covered</div>
+        <ul class="topic-list">${topicHtml}</ul>
+      </div>
+      <div class="detail-section">
+        <div class="ds-title">🔗 Resources & Links</div>
+        <div class="link-grid">${resHtml}</div>
+        <div class="ds-title" style="margin-top:.75rem">💻 EHR Simulations</div>
+        <ul class="topic-list">${ehrHtml}</ul>
+      </div>
+      <div class="detail-section">
+        <div class="ds-title">📝 Week Notes</div>
+        <textarea class="week-note-inp" rows="5"
+          placeholder="Notes for this unit — ideas, student feedback, things to fix…"
+          oninput="saveWeekNote(${cur.w}, this.value)"
+        >${ws.note||''}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+function esc(s){ return s.replace(/'/g,"\\'"); }
+
+function toggleWeek(w) {
+  const hdr = document.getElementById(`wh-${w}`);
+  const det = document.getElementById(`wd-${w}`);
+  const open = det.classList.contains('open');
+  det.classList.toggle('open', !open);
+  hdr.classList.toggle('expanded', !open);
+}
+
+function cycleStatus(e, w) {
+  e.stopPropagation();
+  const ws = getWeekState(w);
+  const cur = ws.status || 'todo';
+  const next = STATUSES[(STATUSES.indexOf(cur)+1) % STATUSES.length];
+  state.weeks = state.weeks.map(x => x.w===w ? {...x, status:next} : x);
+  if(!state.weeks.find(x=>x.w===w)) state.weeks.push({w, status:next, note:'', links:{}});
+  save();
+  renderPacing();
+  renderStats();
+}
+
+function saveWeekNote(w, val) {
+  const idx = state.weeks.findIndex(x=>x.w===w);
+  if(idx>=0) state.weeks[idx].note = val;
+  else state.weeks.push({w, status:'todo', note:val, links:{}});
+  save();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LINK MODAL
+// ─────────────────────────────────────────────────────────────────────────────
+let _modalCtx = null;
+
+function openLinkModal(week, label) {
+  _modalCtx = {week, label};
+  document.getElementById('modal-title').textContent = `Add Link · Week ${week}`;
+  document.getElementById('modal-sub').textContent = label;
+  document.getElementById('modal-url').value = (state.weeklinks[week]||{})[label] || '';
+  document.getElementById('modal-label-inp').value = label;
+  document.getElementById('modal').classList.add('open');
+  setTimeout(()=>document.getElementById('modal-url').focus(),60);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  _modalCtx = null;
+}
+
+function saveModal() {
+  if(!_modalCtx) return;
+  const {week, label} = _modalCtx;
+  const url = document.getElementById('modal-url').value.trim();
+  if(!state.weeklinks[week]) state.weeklinks[week] = {};
+  state.weeklinks[week][label] = url;
+  save();
+  closeModal();
+  renderPacing();
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') closeModal();
+  if(e.key==='Enter' && document.getElementById('modal').classList.contains('open')) saveModal();
+});
+document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeModal(); });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NOTES
+// ─────────────────────────────────────────────────────────────────────────────
+let _noteFilter = 'all';
+
+const TAG_LABELS = {idea:'💡 Idea', refine:'🔧 Refinement', todo:'☐ To-Do', 'done-note':'✓ Done'};
+
+function renderNotes() {
+  const grid = document.getElementById('notes-grid');
+  const filtered = _noteFilter==='all' ? state.notes : state.notes.filter(n=>n.tag===_noteFilter);
+  document.getElementById('s-notes').textContent = state.notes.length;
+
+  if(!filtered.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--ink3);font-style:italic;font-size:.85rem">
+      ${_noteFilter==='all' ? 'No notes yet. Add ideas, refinements, and to-dos below.' : 'No notes with this filter.'}
+    </div>`;
+  } else {
+    grid.innerHTML = filtered.slice().reverse().map((n,ri)=>{
+      const realIdx = state.notes.length-1-ri;
+      return `<div class="note-card n-${n.tag}">
+        <div class="ntag n-${n.tag}">${TAG_LABELS[n.tag]||n.tag}${n.week?` · <span style="font-family:'DM Mono',monospace">Week ${n.week.replace('w','')}</span>`:''}</div>
+        <div class="note-txt">${escHtml(n.text)}</div>
+        <div class="note-meta">${n.date}</div>
+        <button class="note-del" onclick="deleteNote(${realIdx})" title="Delete">✕</button>
+        ${n.tag!=='done-note'?`<button class="note-done-btn" onclick="markNoteDone(${realIdx})" title="Mark done">✓ done</button>`:''}
+      </div>`;
+    }).join('');
+  }
+
+  // summary
+  const sumEl = document.getElementById('note-summary');
+  const cnts = {idea:0,refine:0,todo:0,'done-note':0};
+  state.notes.forEach(n=>cnts[n.tag]=(cnts[n.tag]||0)+1);
+  sumEl.innerHTML = Object.entries(TAG_LABELS).map(([k,l])=>
+    `<div style="display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.82rem">
+      <span>${l}</span><span style="font-family:'DM Mono',monospace;color:var(--ink2)">${cnts[k]||0}</span>
+    </div>`).join('')+
+    `<div style="display:flex;justify-content:space-between;padding:.4rem 0;font-size:.82rem;font-weight:700">
+      <span>Total</span><span style="font-family:'DM Mono',monospace">${state.notes.length}</span>
+    </div>`;
+}
+
+function filterNotes(f) {
+  _noteFilter = f;
+  document.querySelectorAll('.filter-chip').forEach((c,i)=>{
+    const filters = ['all','idea','refine','todo','done-note'];
+    c.classList.toggle('active', filters[i]===f);
+  });
+  renderNotes();
+}
+
+function addNote() {
+  const text = document.getElementById('anf-text').value.trim();
+  if(!text) return;
+  state.notes.push({
+    tag:  document.getElementById('anf-tag').value,
+    week: document.getElementById('anf-week').value,
+    text,
+    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+  });
+  document.getElementById('anf-text').value = '';
+  save(); renderNotes(); renderStats();
+}
+
+function deleteNote(i) {
+  if(!confirm('Delete this note?')) return;
+  state.notes.splice(i,1);
+  save(); renderNotes(); renderStats();
+}
+
+function markNoteDone(i) {
+  state.notes[i].tag = 'done-note';
+  save(); renderNotes();
+}
+
+function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ASSETS
+// ─────────────────────────────────────────────────────────────────────────────
+function renderAssets() {
+  renderAssetSection('assets-built', state.assets_b);
+  renderAssetSection('assets-todo',  state.assets_t);
+
+  const total = state.assets_b.length + state.assets_t.length;
+  const done  = state.assets_b.filter(a=>a.done).length + state.assets_t.filter(a=>a.done).length;
+  const pct   = total ? Math.round((done/total)*100) : 0;
+
+  document.getElementById('build-prog-wrap').innerHTML = `
+    <div style="font-size:.82rem;margin-bottom:.75rem;color:var(--ink2)">${done} of ${total} assets complete</div>
+    <div class="pp-bar" style="height:12px;margin-bottom:1rem">
+      <div class="pp-fill pp-p2" style="width:${pct}%;height:100%"></div>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--teal);line-height:1">${pct}%</div>
+    <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)">Build Complete</div>
+  `;
+}
+
+function renderAssetSection(elId, items) {
+  const el = document.getElementById(elId);
+  el.innerHTML = items.map((a,i)=>{
+    const sKey = elId==='assets-built' ? 'b' : 't';
+    return `<div class="asset-row${a.done?' a-done':''}">
+      <div class="asset-check${a.done?' checked':''}" onclick="toggleAsset('${sKey}',${i})"></div>
+      <span class="asset-lbl">${a.label}</span>
+      ${a.url?`<a href="${a.url}" target="_blank" class="asset-link-btn" title="Open">↗</a>`:`<button class="asset-link-btn" onclick="promptAssetUrl('${sKey}',${i})" title="Add URL">🔗</button>`}
+    </div>`;
+  }).join('') || '<div style="font-size:.8rem;color:var(--ink3);padding:.5rem">None yet.</div>';
+}
+
+function toggleAsset(sec, i) {
+  const arr = sec==='b' ? state.assets_b : state.assets_t;
+  arr[i].done = !arr[i].done;
+  save(); renderAssets();
+}
+
+function promptAssetUrl(sec,i) {
+  const arr = sec==='b' ? state.assets_b : state.assets_t;
+  const url = prompt(`URL for "${arr[i].label}":`);
+  if(url===null) return;
+  arr[i].url = url.trim();
+  save(); renderAssets();
+}
+
+function addAsset() {
+  const label = document.getElementById('na-label').value.trim();
+  const url   = document.getElementById('na-url').value.trim();
+  const sec   = document.getElementById('na-section').value;
+  if(!label) return;
+  const obj = {id:'custom-'+Date.now(), label, done:false, url};
+  if(sec==='built') state.assets_b.push({...obj, done:true});
+  else state.assets_t.push(obj);
+  document.getElementById('na-label').value='';
+  document.getElementById('na-url').value='';
+  save(); renderAssets();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// QUICK LINKS
+// ─────────────────────────────────────────────────────────────────────────────
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function renderQL(){
+  const list=document.getElementById('ql-list');
+  if(!state.ql.length){list.innerHTML='<div style="font-size:.75rem;color:var(--ink3);text-align:center;padding:.5rem 0">No quick links yet — add one below</div>';return;}
+  list.innerHTML=state.ql.map((l,i)=>{
+    const tag=l.url?`a href="${l.url}" target="_blank"`:`span`;
+    const tagEnd=l.url?'a':'span';
+    return`<${tag} class="ql-item" ${!l.url?`onclick="promptQL(${i})"`:''}  style="text-decoration:none;color:inherit">
+      <span class="ql-icon">${l.icon||'🔗'}</span>
+      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(l.label)}</span>
+      ${l.url?`<span class="ql-arrow">↗</span>`:`<span style="font-size:.63rem;color:var(--ink3);font-style:italic;flex-shrink:0">add url</span>`}
+      <span class="ql-actions" onclick="event.stopPropagation()">
+        <button class="ql-act-btn edit" onclick="editQL(${i})">✏ Edit</button>
+        <button class="ql-act-btn del"  onclick="deleteQL(${i})">✕</button>
+      </span>
+    </${tagEnd}>
+    <div class="ql-edit-form" id="ql-edit-${i}" style="display:none">
+      <div class="ql-edit-row">
+        <input class="inp" id="ql-ei-icon-${i}"  value="${escH(l.icon||'🔗')}" placeholder="🔗" style="width:52px;flex-shrink:0;background:#fff">
+        <input class="inp" id="ql-ei-label-${i}" value="${escH(l.label)}"      placeholder="Link label" style="background:#fff">
+      </div>
+      <input class="inp" id="ql-ei-url-${i}" value="${escH(l.url||'')}" placeholder="https://..." style="background:#fff">
+      <div class="ql-edit-actions">
+        <button class="ql-edit-cancel" onclick="cancelEditQL(${i})">Cancel</button>
+        <button class="ql-edit-save"   onclick="saveEditQL(${i})">Save</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function editQL(i){
+  state.ql.forEach((_,j)=>{const f=document.getElementById(`ql-edit-${j}`);if(f)f.style.display='none';});
+  const form=document.getElementById(`ql-edit-${i}`);
+  if(form){form.style.display='flex';form.style.flexDirection='column';}
+  setTimeout(()=>{const el=document.getElementById(`ql-ei-label-${i}`);if(el)el.focus();},50);
+}
+
+function cancelEditQL(i){const form=document.getElementById(`ql-edit-${i}`);if(form)form.style.display='none';}
+
+function saveEditQL(i){
+  const icon =(document.getElementById(`ql-ei-icon-${i}`)?.value ||'🔗').trim();
+  const label=(document.getElementById(`ql-ei-label-${i}`)?.value||'').trim();
+  const url  =(document.getElementById(`ql-ei-url-${i}`)?.value  ||'').trim();
+  if(!label)return;
+  state.ql[i]={icon,label,url};
+  save();renderQL();
+}
+
+function deleteQL(i){
+  if(!confirm(`Remove "${state.ql[i].label}" from Quick Links?`))return;
+  state.ql.splice(i,1);
+  save();renderQL();
+}
+
+function promptQL(i){editQL(i);}
+
+function addQL(){
+  const label=document.getElementById('ql-label').value.trim();
+  const url  =document.getElementById('ql-url').value.trim();
+  const icon =document.getElementById('ql-icon').value.trim()||'🔗';
+  if(!label)return;
+  state.ql.push({icon,label,url});
+  ['ql-label','ql-url','ql-icon'].forEach(id=>document.getElementById(id).value='');
+  save();renderQL();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FOCUS
+// ─────────────────────────────────────────────────────────────────────────────
+function saveFocus() {
+  state.focus = document.getElementById('weekly-focus').value;
+  save();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOUD SYNC — JSONBin
+// Syncs: year data, ql, assets, lib_links, lib_cats
+// ─────────────────────────────────────────────────────────────────────────────
+const _JBIN_KEY = '$2a$10$5xQDxFjQY5hu/kF2adz5MeeYLJUYW7PcEIydLSEmrae3vRippfTFW';
+const _JBIN_BIN = '69aaeb14d0ea881f40f59eb5';
+const _JBIN_URL = 'https://api.jsonbin.io/v3/b/' + _JBIN_BIN;
+
+let _cloudTimer=null, _cloudBusy=false;
+
+function _syncBadge(state){
+  let el=document.getElementById('_hsh_sync_badge');
+  if(!el){
+    el=document.createElement('div');el.id='_hsh_sync_badge';
+    el.style.cssText='position:fixed;bottom:20px;right:20px;padding:6px 14px;border-radius:20px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;z-index:99999;box-shadow:0 2px 10px rgba(0,0,0,.2);transition:opacity .5s ease;pointer-events:none;opacity:0;';
+    document.body.appendChild(el);
+  }
+  const cfg={syncing:['#1d4ed8','☁ Syncing…'],saved:['#16a34a','✓ Cloud saved'],loaded:['#0e7490','☁ Loaded from cloud'],error:['#dc2626','⚠ Sync failed — check connection']}[state]||['#475569','…'];
+  el.style.background=cfg[0];el.style.color='#fff';el.textContent=cfg[1];el.style.opacity='1';
+  if(state!=='syncing')setTimeout(()=>{el.style.opacity='0';},3000);
+}
+
+function _cloudCollect(){
+  const yearKeys={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('hsh_year_')){try{yearKeys[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}}
+  return{yearKeys,year_list:GP('year_list'),active_year:localStorage.getItem('hsh_active_year'),ql:GP('ql'),assets_b:GP('assets_b'),assets_t:GP('assets_t'),lib_cats:GP('lib_cats'),lib_links:GP('lib_links')};
+}
+
+async function _cloudPush(){
+  if(_cloudBusy)return;_cloudBusy=true;_syncBadge('syncing');
+  try{
+    const res=await fetch(_JBIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':_JBIN_KEY,'X-Bin-Versioning':'false'},body:JSON.stringify(_cloudCollect())});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    _syncBadge('saved');
+  }catch(e){console.warn('[HSH Cloud]',e);_syncBadge('error');}
+  finally{_cloudBusy=false;}
+}
+
+async function _cloudPull(){
+  try{
+    const res=await fetch(_JBIN_URL+'/latest',{headers:{'X-Master-Key':_JBIN_KEY}});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const{record}=await res.json();if(!record)return;let restored=false;
+    if(record.yearKeys){Object.entries(record.yearKeys).forEach(([k,v])=>{const cur=localStorage.getItem(k);if(JSON.stringify(v)!==cur){localStorage.setItem(k,JSON.stringify(v));restored=true;}});}
+    const pairs=[['year_list',record.year_list],['ql',record.ql],['assets_b',record.assets_b],['assets_t',record.assets_t],['lib_cats',record.lib_cats],['lib_links',record.lib_links]];
+    pairs.forEach(([k,v])=>{if(v==null)return;const full='hsh_'+k;const cur=localStorage.getItem(full);if(JSON.stringify(v)!==cur){localStorage.setItem(full,JSON.stringify(v));restored=true;}});
+    if(record.active_year&&localStorage.getItem('hsh_active_year')!==record.active_year){localStorage.setItem('hsh_active_year',record.active_year);restored=true;}
+    if(restored){
+      _syncBadge('loaded');
+      const activeId=localStorage.getItem('hsh_active_year')||DEFAULT_YEAR_ID;
+      loadYear(activeId);renderYearSelector();renderPacing();renderStats();renderNotes();renderAssets();renderQL();renderCategories();
+      document.getElementById('weekly-focus').value=state.focus||'';
+    }
+  }catch(e){console.warn('[HSH Cloud] Pull failed:',e);}
+}
+
+function cloudSchedulePush(){clearTimeout(_cloudTimer);_cloudTimer=setTimeout(_cloudPush,1500);}
+
+function _addSyncButton(){
+  const printBtn=document.querySelector('.btn-gold');if(!printBtn)return;
+  const btn=document.createElement('button');btn.className='btn btn-ghost';btn.id='_hsh_sync_btn';
+  btn.title='Push all data to cloud now';btn.textContent='☁ Sync';
+  btn.onclick=async()=>{btn.disabled=true;await _cloudPush();btn.disabled=false;};
+  printBtn.insertAdjacentElement('afterend',btn);
+}
+
+(async function _cloudBoot(){await _cloudPull();_addSyncButton();console.log('[HSH Cloud] Sync active ✓');})();
+
+function init() {
+  renderYearSelector();
+  renderPacing();
+  renderStats();
+  renderNotes();
+  renderAssets();
+  renderQL();
+  renderCategories();
+  document.getElementById('weekly-focus').value = state.focus || '';
+
+  // Seed welcome note for first run
+  if(!state.notes.length) {
+    state.notes.push({
+      tag:'idea', week:'',
+      text:'Dashboard is ready! Click any week row to expand it, add your links, and cycle status badges as you build each unit. Use the Links Library tab to save all your Canva games and resources. When next school year starts, click "+ New Year" in the top right — progress resets but everything else carries over.',
+      date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+    });
+    save(); renderNotes(); renderStats();
+  }
+}
+
+init();
+</script>
+</body>
+</html>
