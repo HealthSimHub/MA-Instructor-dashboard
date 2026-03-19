@@ -400,6 +400,7 @@ body {
   padding: .5rem .75rem; border-radius: 9px; text-decoration: none;
   background: var(--bg); border: 1px solid var(--border); color: var(--ink);
   font-size: .82rem; font-weight: 500; transition: all .15s; cursor: pointer;
+  position: relative;
 }
 .ql-item:hover { background: #f0f8f7; border-color: var(--teal); }
 .ql-item .ql-icon { font-size: 1rem; width: 1.3rem; text-align: center; flex-shrink: 0; }
@@ -408,7 +409,7 @@ body {
   display: none; margin-left: auto; gap: .25rem; align-items: center; flex-shrink: 0;
 }
 .ql-item:hover .ql-actions { display: flex; }
-.ql-item:hover .ql-arrow { display: none; }
+.ql-item:hover .ql-arrow   { display: none; }
 .ql-act-btn {
   font-size: .65rem; font-weight: 700; padding: .18rem .45rem;
   border-radius: 5px; border: 1px solid var(--border);
@@ -423,11 +424,16 @@ body {
   display: flex; flex-direction: column; gap: .4rem;
 }
 .ql-edit-row { display: flex; gap: .35rem; }
-.ql-edit-form .inp-ico { width: 52px; }
 .ql-edit-actions { display: flex; gap: .35rem; justify-content: flex-end; margin-top: .1rem; }
-.ql-edit-save { background: var(--teal); color: #fff; border: none; border-radius: 6px; padding: .3rem .75rem; font-size: .75rem; font-weight: 700; cursor: pointer; }
+.ql-edit-save {
+  background: var(--teal); color: #fff; border: none; border-radius: 6px;
+  padding: .3rem .75rem; font-size: .75rem; font-weight: 700; cursor: pointer;
+}
 .ql-edit-save:hover { background: var(--teal2); }
-.ql-edit-cancel { background: transparent; color: var(--ink3); border: 1px solid var(--border); border-radius: 6px; padding: .3rem .65rem; font-size: .75rem; font-weight: 600; cursor: pointer; }
+.ql-edit-cancel {
+  background: transparent; color: var(--ink3); border: 1px solid var(--border);
+  border-radius: 6px; padding: .3rem .65rem; font-size: .75rem; font-weight: 600; cursor: pointer;
+}
 .ql-edit-cancel:hover { background: var(--border); }
 .ql-add { display: flex; flex-direction: column; gap: .4rem; margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--border); }
 .inp {
@@ -1461,7 +1467,6 @@ function save() {
   SS('ql',       state.ql);
   SS('assets_b', state.assets_b);
   SS('assets_t', state.assets_t);
-  cloudSchedulePush();
 }
 
 function getWeekState(w) {
@@ -1602,7 +1607,6 @@ let _libCat = 'all';
 function saveLib() {
   SS('lib_cats',  state.lib_cats);
   SS('lib_links', state.lib_links);
-  cloudSchedulePush();
 }
 
 /* ── RENDER CATEGORIES ── */
@@ -2042,22 +2046,18 @@ function addAsset() {
 // ─────────────────────────────────────────────────────────────────────────────
 // QUICK LINKS
 // ─────────────────────────────────────────────────────────────────────────────
-function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function renderQL() {
-  const list = document.getElementById('ql-list');
-  if(!state.ql.length){
-    list.innerHTML = '<div style="font-size:.75rem;color:var(--ink3);text-align:center;padding:.5rem 0">No quick links yet — add one below</div>';
-    return;
-  }
-  list.innerHTML = state.ql.map((l,i) => {
-    const tag    = l.url ? `a href="${l.url}" target="_blank"` : `span`;
-    const tagEnd = l.url ? 'a' : 'span';
-    return `<${tag} class="ql-item" ${!l.url?`onclick="promptQL(${i})"`:''}
-        style="text-decoration:none;color:inherit">
+function renderQL(){
+  const list=document.getElementById('ql-list');
+  if(!state.ql.length){list.innerHTML='<div style="font-size:.75rem;color:var(--ink3);text-align:center;padding:.5rem 0">No quick links yet — add one below</div>';return;}
+  list.innerHTML=state.ql.map((l,i)=>{
+    const tag=l.url?`a href="${l.url}" target="_blank"`:`span`;
+    const tagEnd=l.url?'a':'span';
+    return`<${tag} class="ql-item" ${!l.url?`onclick="promptQL(${i})"`:''}  style="text-decoration:none;color:inherit">
       <span class="ql-icon">${l.icon||'🔗'}</span>
-      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.label}</span>
-      ${l.url ? `<span class="ql-arrow">↗</span>` : `<span style="font-size:.63rem;color:var(--ink3);font-style:italic;flex-shrink:0">add url</span>`}
+      <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(l.label)}</span>
+      ${l.url?`<span class="ql-arrow">↗</span>`:`<span style="font-size:.63rem;color:var(--ink3);font-style:italic;flex-shrink:0">add url</span>`}
       <span class="ql-actions" onclick="event.stopPropagation()">
         <button class="ql-act-btn edit" onclick="editQL(${i})">✏ Edit</button>
         <button class="ql-act-btn del"  onclick="deleteQL(${i})">✕</button>
@@ -2065,8 +2065,8 @@ function renderQL() {
     </${tagEnd}>
     <div class="ql-edit-form" id="ql-edit-${i}" style="display:none">
       <div class="ql-edit-row">
-        <input class="inp inp-ico" id="ql-ei-icon-${i}"  value="${escH(l.icon||'🔗')}" placeholder="🔗" style="width:52px;background:#fff">
-        <input class="inp"         id="ql-ei-label-${i}" value="${escH(l.label)}"       placeholder="Link label" style="background:#fff">
+        <input class="inp" id="ql-ei-icon-${i}"  value="${escH(l.icon||'🔗')}" placeholder="🔗" style="width:52px;flex-shrink:0;background:#fff">
+        <input class="inp" id="ql-ei-label-${i}" value="${escH(l.label)}"      placeholder="Link label" style="background:#fff">
       </div>
       <input class="inp" id="ql-ei-url-${i}" value="${escH(l.url||'')}" placeholder="https://..." style="background:#fff">
       <div class="ql-edit-actions">
@@ -2077,43 +2077,40 @@ function renderQL() {
   }).join('');
 }
 
-function editQL(i) {
-  state.ql.forEach((_,j) => { const f=document.getElementById(`ql-edit-${j}`); if(f) f.style.display='none'; });
-  const form = document.getElementById(`ql-edit-${i}`);
-  if(form){ form.style.display='flex'; form.style.flexDirection='column'; }
-  setTimeout(()=>{ const el=document.getElementById(`ql-ei-label-${i}`); if(el) el.focus(); }, 50);
+function editQL(i){
+  state.ql.forEach((_,j)=>{const f=document.getElementById(`ql-edit-${j}`);if(f)f.style.display='none';});
+  const form=document.getElementById(`ql-edit-${i}`);
+  if(form){form.style.display='flex';form.style.flexDirection='column';}
+  setTimeout(()=>{const el=document.getElementById(`ql-ei-label-${i}`);if(el)el.focus();},50);
 }
 
-function cancelEditQL(i) {
-  const form = document.getElementById(`ql-edit-${i}`);
-  if(form) form.style.display='none';
+function cancelEditQL(i){const form=document.getElementById(`ql-edit-${i}`);if(form)form.style.display='none';}
+
+function saveEditQL(i){
+  const icon =(document.getElementById(`ql-ei-icon-${i}`)?.value ||'🔗').trim();
+  const label=(document.getElementById(`ql-ei-label-${i}`)?.value||'').trim();
+  const url  =(document.getElementById(`ql-ei-url-${i}`)?.value  ||'').trim();
+  if(!label)return;
+  state.ql[i]={icon,label,url};
+  save();renderQL();
 }
 
-function saveEditQL(i) {
-  const icon  = (document.getElementById(`ql-ei-icon-${i}`)?.value  || '🔗').trim();
-  const label = (document.getElementById(`ql-ei-label-${i}`)?.value || '').trim();
-  const url   = (document.getElementById(`ql-ei-url-${i}`)?.value   || '').trim();
-  if(!label) return;
-  state.ql[i] = {icon, label, url};
-  save(); renderQL();
+function deleteQL(i){
+  if(!confirm(`Remove "${state.ql[i].label}" from Quick Links?`))return;
+  state.ql.splice(i,1);
+  save();renderQL();
 }
 
-function deleteQL(i) {
-  if(!confirm(`Remove "${state.ql[i].label}" from Quick Links?`)) return;
-  state.ql.splice(i, 1);
-  save(); renderQL();
-}
+function promptQL(i){editQL(i);}
 
-function promptQL(i) { editQL(i); }
-
-function addQL() {
-  const label = document.getElementById('ql-label').value.trim();
-  const url   = document.getElementById('ql-url').value.trim();
-  const icon  = document.getElementById('ql-icon').value.trim() || '🔗';
-  if(!label) return;
-  state.ql.push({icon, label, url});
-  ['ql-label','ql-url','ql-icon'].forEach(id => document.getElementById(id).value = '');
-  save(); renderQL();
+function addQL(){
+  const label=document.getElementById('ql-label').value.trim();
+  const url  =document.getElementById('ql-url').value.trim();
+  const icon =document.getElementById('ql-icon').value.trim()||'🔗';
+  if(!label)return;
+  state.ql.push({icon,label,url});
+  ['ql-label','ql-url','ql-icon'].forEach(id=>document.getElementById(id).value='');
+  save();renderQL();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2127,6 +2124,75 @@ function saveFocus() {
 // ─────────────────────────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLOUD SYNC — JSONBin
+// Syncs: year data, ql, assets, lib_links, lib_cats
+// ─────────────────────────────────────────────────────────────────────────────
+const _JBIN_KEY = '$2a$10$5xQDxFjQY5hu/kF2adz5MeeYLJUYW7PcEIydLSEmrae3vRippfTFW';
+const _JBIN_BIN = '69aaeb14d0ea881f40f59eb5';
+const _JBIN_URL = 'https://api.jsonbin.io/v3/b/' + _JBIN_BIN;
+
+let _cloudTimer=null, _cloudBusy=false;
+
+function _syncBadge(state){
+  let el=document.getElementById('_hsh_sync_badge');
+  if(!el){
+    el=document.createElement('div');el.id='_hsh_sync_badge';
+    el.style.cssText='position:fixed;bottom:20px;right:20px;padding:6px 14px;border-radius:20px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;z-index:99999;box-shadow:0 2px 10px rgba(0,0,0,.2);transition:opacity .5s ease;pointer-events:none;opacity:0;';
+    document.body.appendChild(el);
+  }
+  const cfg={syncing:['#1d4ed8','☁ Syncing…'],saved:['#16a34a','✓ Cloud saved'],loaded:['#0e7490','☁ Loaded from cloud'],error:['#dc2626','⚠ Sync failed — check connection']}[state]||['#475569','…'];
+  el.style.background=cfg[0];el.style.color='#fff';el.textContent=cfg[1];el.style.opacity='1';
+  if(state!=='syncing')setTimeout(()=>{el.style.opacity='0';},3000);
+}
+
+function _cloudCollect(){
+  const yearKeys={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('hsh_year_')){try{yearKeys[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}}
+  return{yearKeys,year_list:GP('year_list'),active_year:localStorage.getItem('hsh_active_year'),ql:GP('ql'),assets_b:GP('assets_b'),assets_t:GP('assets_t'),lib_cats:GP('lib_cats'),lib_links:GP('lib_links')};
+}
+
+async function _cloudPush(){
+  if(_cloudBusy)return;_cloudBusy=true;_syncBadge('syncing');
+  try{
+    const res=await fetch(_JBIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':_JBIN_KEY,'X-Bin-Versioning':'false'},body:JSON.stringify(_cloudCollect())});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    _syncBadge('saved');
+  }catch(e){console.warn('[HSH Cloud]',e);_syncBadge('error');}
+  finally{_cloudBusy=false;}
+}
+
+async function _cloudPull(){
+  try{
+    const res=await fetch(_JBIN_URL+'/latest',{headers:{'X-Master-Key':_JBIN_KEY}});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const{record}=await res.json();if(!record)return;let restored=false;
+    if(record.yearKeys){Object.entries(record.yearKeys).forEach(([k,v])=>{const cur=localStorage.getItem(k);if(JSON.stringify(v)!==cur){localStorage.setItem(k,JSON.stringify(v));restored=true;}});}
+    const pairs=[['year_list',record.year_list],['ql',record.ql],['assets_b',record.assets_b],['assets_t',record.assets_t],['lib_cats',record.lib_cats],['lib_links',record.lib_links]];
+    pairs.forEach(([k,v])=>{if(v==null)return;const full='hsh_'+k;const cur=localStorage.getItem(full);if(JSON.stringify(v)!==cur){localStorage.setItem(full,JSON.stringify(v));restored=true;}});
+    if(record.active_year&&localStorage.getItem('hsh_active_year')!==record.active_year){localStorage.setItem('hsh_active_year',record.active_year);restored=true;}
+    if(restored){
+      _syncBadge('loaded');
+      const activeId=localStorage.getItem('hsh_active_year')||DEFAULT_YEAR_ID;
+      loadYear(activeId);renderYearSelector();renderPacing();renderStats();renderNotes();renderAssets();renderQL();renderCategories();
+      document.getElementById('weekly-focus').value=state.focus||'';
+    }
+  }catch(e){console.warn('[HSH Cloud] Pull failed:',e);}
+}
+
+function cloudSchedulePush(){clearTimeout(_cloudTimer);_cloudTimer=setTimeout(_cloudPush,1500);}
+
+function _addSyncButton(){
+  const printBtn=document.querySelector('.btn-gold');if(!printBtn)return;
+  const btn=document.createElement('button');btn.className='btn btn-ghost';btn.id='_hsh_sync_btn';
+  btn.title='Push all data to cloud now';btn.textContent='☁ Sync';
+  btn.onclick=async()=>{btn.disabled=true;await _cloudPush();btn.disabled=false;};
+  printBtn.insertAdjacentElement('afterend',btn);
+}
+
+(async function _cloudBoot(){await _cloudPull();_addSyncButton();console.log('[HSH Cloud] Sync active ✓');})();
+
 function init() {
   renderYearSelector();
   renderPacing();
@@ -2147,188 +2213,6 @@ function init() {
     save(); renderNotes(); renderStats();
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CLOUD SYNC — JSONBin
-// Syncs: year data (weeks, notes, weeklinks, focus), ql, assets, lib_links, lib_cats
-// ─────────────────────────────────────────────────────────────────────────────
-const _JBIN_KEY = '$2a$10$5xQDxFjQY5hu/kF2adz5MeeYLJUYW7PcEIydLSEmrae3vRippfTFW';
-const _JBIN_BIN = '69aaeb14d0ea881f40f59eb5';
-const _JBIN_URL = `https://api.jsonbin.io/v3/b/${_JBIN_BIN}`;
-
-let _cloudTimer   = null;
-let _cloudBusy    = false;
-
-/* ── Status badge ── */
-function _syncBadge(state) {
-  let el = document.getElementById('_hsh_sync_badge');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = '_hsh_sync_badge';
-    el.style.cssText = [
-      'position:fixed','bottom:20px','right:20px',
-      'padding:6px 14px','border-radius:20px',
-      'font-family:"DM Sans",sans-serif','font-size:12px','font-weight:700',
-      'z-index:99999','box-shadow:0 2px 10px rgba(0,0,0,.2)',
-      'transition:opacity .5s ease','pointer-events:none','opacity:0',
-    ].join(';');
-    document.body.appendChild(el);
-  }
-  const cfg = {
-    syncing: ['#1d4ed8','☁ Syncing…'],
-    saved:   ['#16a34a','✓ Cloud saved'],
-    loaded:  ['#0e7490','☁ Loaded from cloud'],
-    error:   ['#dc2626','⚠ Sync failed — check connection'],
-  }[state] || ['#475569','…'];
-  el.style.background = cfg[0];
-  el.style.color = '#fff';
-  el.textContent = cfg[1];
-  el.style.opacity = '1';
-  if (state !== 'syncing') setTimeout(() => { el.style.opacity = '0'; }, 3000);
-}
-
-/* ── Collect everything that needs to be synced ── */
-function _cloudCollect() {
-  // Collect all year keys dynamically
-  const yearKeys = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith('hsh_year_')) {
-      try { yearKeys[k] = JSON.parse(localStorage.getItem(k)); } catch(e) {}
-    }
-  }
-  return {
-    yearKeys,
-    year_list: GP('year_list'),
-    active_year: localStorage.getItem('hsh_active_year'),
-    ql:        GP('ql'),
-    assets_b:  GP('assets_b'),
-    assets_t:  GP('assets_t'),
-    lib_cats:  GP('lib_cats'),
-    lib_links: GP('lib_links'),
-  };
-}
-
-/* ── Push to JSONBin ── */
-async function _cloudPush() {
-  if (_cloudBusy) return;
-  _cloudBusy = true;
-  _syncBadge('syncing');
-  try {
-    const res = await fetch(_JBIN_URL, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': _JBIN_KEY,
-        'X-Bin-Versioning': 'false',
-      },
-      body: JSON.stringify(_cloudCollect()),
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    _syncBadge('saved');
-  } catch(e) {
-    console.warn('[HSH Cloud]', e);
-    _syncBadge('error');
-  } finally {
-    _cloudBusy = false;
-  }
-}
-
-/* ── Pull from JSONBin and restore to localStorage ── */
-async function _cloudPull() {
-  try {
-    const res = await fetch(_JBIN_URL + '/latest', {
-      headers: { 'X-Master-Key': _JBIN_KEY },
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const { record } = await res.json();
-    if (!record) return;
-
-    let restored = false;
-
-    // Restore all year keys
-    if (record.yearKeys) {
-      Object.entries(record.yearKeys).forEach(([k, v]) => {
-        const cur = localStorage.getItem(k);
-        if (JSON.stringify(v) !== cur) {
-          localStorage.setItem(k, JSON.stringify(v));
-          restored = true;
-        }
-      });
-    }
-    // Restore scalar keys
-    const pairs = [
-      ['year_list',   record.year_list],
-      ['ql',          record.ql],
-      ['assets_b',    record.assets_b],
-      ['assets_t',    record.assets_t],
-      ['lib_cats',    record.lib_cats],
-      ['lib_links',   record.lib_links],
-    ];
-    pairs.forEach(([k, v]) => {
-      if (v == null) return;
-      const full = 'hsh_' + k;
-      const cur  = localStorage.getItem(full);
-      if (JSON.stringify(v) !== cur) {
-        localStorage.setItem(full, JSON.stringify(v));
-        restored = true;
-      }
-    });
-    if (record.active_year && localStorage.getItem('hsh_active_year') !== record.active_year) {
-      localStorage.setItem('hsh_active_year', record.active_year);
-      restored = true;
-    }
-
-    if (restored) {
-      _syncBadge('loaded');
-      // Re-load the active year and re-render everything
-      const activeId = localStorage.getItem('hsh_active_year') || DEFAULT_YEAR_ID;
-      loadYear(activeId);
-      renderYearSelector();
-      renderPacing();
-      renderStats();
-      renderNotes();
-      renderAssets();
-      renderQL();
-      renderCategories();
-      document.getElementById('weekly-focus').value = state.focus || '';
-    }
-  } catch(e) {
-    console.warn('[HSH Cloud] Pull failed:', e);
-  }
-}
-
-/* ── Debounced trigger called by save() and saveLib() ── */
-function cloudSchedulePush() {
-  clearTimeout(_cloudTimer);
-  _cloudTimer = setTimeout(_cloudPush, 1500);
-}
-
-/* ── Manual sync button in header ── */
-function _addSyncButton() {
-  const printBtn = document.querySelector('button[onclick*="print"], .btn-ghost');
-  if (!printBtn) return;
-  const btn = document.createElement('button');
-  btn.className = 'btn btn-ghost';
-  btn.id = '_hsh_sync_btn';
-  btn.title = 'Push all data to cloud now';
-  btn.textContent = '☁ Sync';
-  btn.onclick = async () => {
-    btn.disabled = true;
-    await _cloudPush();
-    btn.disabled = false;
-  };
-  printBtn.insertAdjacentElement('afterend', btn);
-}
-
-/* ── Boot: pull first, then add button ── */
-(async function _cloudBoot() {
-  await _cloudPull();
-  _addSyncButton();
-  console.log('[HSH Cloud] Sync active ✓');
-})();
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 init();
 </script>
