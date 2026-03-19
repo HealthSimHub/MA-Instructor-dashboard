@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Week 14 — Instructor Answer Key</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --navy:   #0D1B2A;
+    --slate:  #1B2A3B;
+    --teal:   #0E8A7A;
+    --teallt: #14B8A6;
+    --gold:   #F5A623;
+    --white:  #F0F4F8;
+    --muted:  #94A3B8;
+    --green:  #22C55E;
+    --red:    #EF4444;
+    --indigo: #6366F1;
+    --steel:  #334155;
+    --purple: #7C3AED;
+    --orange: #B45309;
+    --answer: #0a4a3a;
+    --answer-bg: #e6f7f2;
+    --answer-border: #0E8A7A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f1f5f9;
+    color: var(--navy);
+    padding: 24px;
+    max-width: 1060px;
+    margin: 0 auto;
+  }
+
+  /* ── PRINT BAR ── */
+  .print-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; background: white; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 14px 20px; margin-bottom: 20px;
+  }
+  .print-bar-left { font-size: 13px; color: #64748b; }
+  .print-bar-left strong { color: var(--navy); }
+  .print-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--teal); color: white; border: none;
+    border-radius: 8px; padding: 9px 20px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    font-weight: 700; cursor: pointer; transition: background 0.15s;
+  }
+  .print-btn:hover { background: #0a6b5e; }
+
+  /* ── INSTRUCTOR BANNER ── */
+  .instructor-banner {
+    background: #7C3AED;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-size: 13px;
+  }
+  .instructor-banner strong { font-size: 14px; display: block; margin-bottom: 2px; }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: var(--navy);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .page-header h1 { font-size: 22px; font-weight: 700; color: white; }
+  .page-header p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header-badge {
+    background: #7C3AED; color: white;
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    padding: 5px 14px; border-radius: 20px; white-space: nowrap;
+  }
+
+  /* ── ACTIVITY CARDS ── */
+  .activity {
+    background: white; border-radius: 12px; margin-bottom: 22px;
+    overflow: hidden; border: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+  .activity-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 20px; color: white;
+  }
+  .act-num {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex-shrink: 0;
+  }
+  .act-info { flex: 1; }
+  .act-title { font-size: 15px; font-weight: 700; }
+  .act-sub   { font-size: 11.5px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+  .act-tags  { display: flex; gap: 6px; flex-wrap: wrap; }
+  .act-tag {
+    background: rgba(255,255,255,0.18); padding: 2px 8px;
+    border-radius: 4px; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.4px; white-space: nowrap;
+  }
+  .activity-body { padding: 20px 22px; }
+
+  /* ── ANSWER STYLES ── */
+  .answer {
+    background: var(--answer-bg);
+    border: 1.5px solid var(--answer-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--answer);
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .answer::before {
+    content: '✓ ANSWER';
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--teal);
+    margin-bottom: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+  .answer.tall { min-height: 80px; }
+  .answer ul { margin-left: 16px; margin-top: 4px; }
+  .answer ul li { margin-bottom: 3px; }
+
+  .answer-inline {
+    display: inline-block;
+    background: var(--answer-bg);
+    border: 1.5px solid var(--answer-border);
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--answer);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .note-box {
+    background: #fff7ed;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: #92400e;
+    margin: 10px 0;
+  }
+  .note-box strong { color: #b45309; }
+
+  /* ── SHARED COMPONENTS ── */
+  .instructions {
+    font-size: 13.5px; line-height: 1.7; color: #374151;
+    margin-bottom: 18px; background: #f8fafc;
+    padding: 12px 16px; border-radius: 8px;
+    border-left: 3px solid var(--teal);
+  }
+  .q-label {
+    font-size: 11px; font-weight: 700; color: var(--navy);
+    letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 14px;
+  }
+
+  /* ── SORT GRID ── */
+  .sort-items {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-bottom: 14px;
+  }
+  .sort-chip {
+    background: var(--slate); color: white; border-radius: 8px;
+    padding: 8px 10px; text-align: center; font-size: 11.5px; font-weight: 600;
+  }
+  .sort-answer-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  .sort-slot {
+    border: 2px solid var(--answer-border);
+    background: var(--answer-bg);
+    border-radius: 8px; padding: 10px;
+    text-align: center; min-height: 70px;
+  }
+  .slot-num {
+    font-size: 18px; font-weight: 700; color: var(--navy);
+    display: block; margin-bottom: 4px;
+  }
+  .slot-step { font-size: 11px; font-weight: 700; color: var(--answer); margin-bottom: 2px; }
+  .slot-who  { font-size: 10px; color: var(--teal); font-style: italic; }
+
+  /* ── MATCH GRID ── */
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .match-col-header {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .match-item {
+    background: #f8fafc; border: 1.5px solid #e2e8f0;
+    border-radius: 8px; padding: 9px 14px; font-size: 13px;
+    margin-bottom: 6px; display: flex; align-items: center; gap: 10px;
+  }
+  .match-answer {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--answer-bg); border: 2px solid var(--answer-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--answer);
+    flex-shrink: 0;
+  }
+  .match-letter {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--navy); color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  /* ── CODE TABLE ── */
+  .act-table {
+    width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px;
+  }
+  .act-table th {
+    background: var(--navy); color: white; padding: 8px 12px;
+    text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .act-table td {
+    padding: 10px 12px; border-bottom: 1px solid #f1f5f9;
+    vertical-align: top; line-height: 1.5;
+  }
+  .act-table tr:last-child td { border-bottom: none; }
+  .act-table tr:nth-child(even) td { background: #f8fafc; }
+  .answer-td {
+    background: var(--answer-bg) !important;
+    color: var(--answer);
+    font-weight: 600;
+    font-size: 12.5px;
+  }
+
+  /* ── ROLE PLAY ── */
+  .role-play-box {
+    background: var(--navy); border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 16px; color: white;
+  }
+  .rp-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--teallt); margin-bottom: 8px; }
+  .rp-text  { font-size: 13px; line-height: 1.6; font-style: italic; }
+  .rp-speaker { font-style: normal; font-weight: 700; color: var(--gold); margin-right: 6px; }
+
+  /* ── CHECK TABLE ── */
+  .check-row-answer {
+    background: var(--answer-bg);
+    border-left: 3px solid var(--teal);
+  }
+
+  /* ── MINI CASE ── */
+  .mini-case {
+    background: #f8fafc; border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0; padding: 14px 16px;
+    margin-bottom: 16px; font-size: 13px; line-height: 1.6;
+  }
+
+  .tip-box {
+    background: rgba(14,138,122,0.08);
+    border: 1px solid rgba(14,138,122,0.25);
+    border-radius: 8px; padding: 10px 14px;
+    font-size: 12px; color: #0f5f55; margin-top: 12px;
+  }
+
+  .theme-teal   { background: var(--teal);   }
+  .theme-indigo { background: var(--indigo); }
+  .theme-purple { background: var(--purple); }
+  .theme-gold   { background: var(--orange); }
+  .theme-steel  { background: var(--steel);  }
+  .theme-green  { background: #15803d;       }
+
+  @media print {
+    body { background: white; max-width: 100%; padding: 10px; }
+    .print-bar { display: none; }
+    .activity { box-shadow: none; border: 1px solid #ccc; }
+    @page { margin: 0.45in; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PRINT BAR -->
+<div class="print-bar">
+  <div class="print-bar-left"><strong>INSTRUCTOR COPY — DO NOT DISTRIBUTE TO STUDENTS</strong> · Week 14 Answer Key</div>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Print / Save as PDF
+  </button>
+</div>
+
+<!-- INSTRUCTOR BANNER -->
+<div class="instructor-banner">
+  <span style="font-size:22px;">🔐</span>
+  <div>
+    <strong>INSTRUCTOR ANSWER KEY — Week 14 Administrative Assisting</strong>
+    All 7 activities with model answers. Teal boxes = correct answers. Yellow boxes = grading notes.
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <h1>Week 14 — Administrative Assisting</h1>
+    <p>HealthSim Hub · Phase 3 · Instructor Answer Key · All 7 Activities</p>
+  </div>
+  <div class="header-badge">🔐 INSTRUCTOR ONLY</div>
+</div>
+
+
+<!-- ══ ACTIVITY 1: Revenue Cycle Sort ══ -->
+<div class="activity">
+  <div class="activity-header theme-teal">
+    <div class="act-num">1</div>
+    <div class="act-info">
+      <div class="act-title">Revenue Cycle Sort — Answer Key</div>
+      <div class="act-sub">Correct order + who is responsible</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 9</span><span class="act-tag">MOD 10</span><span class="act-tag">MOD 13</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="note-box"><strong>Grading note:</strong> Students must have all 8 steps in the correct order for full credit. Accept minor variation in wording for "Who" — the key point is the MA's role at each step.</div>
+
+    <div class="sort-answer-grid" style="margin-top:12px;">
+      <div class="sort-slot">
+        <span class="slot-num">1</span>
+        <div class="slot-step">Registration &amp; Scheduling</div>
+        <div class="slot-who">Who: MA</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">2</span>
+        <div class="slot-step">Patient Check-In</div>
+        <div class="slot-who">Who: MA</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">3</span>
+        <div class="slot-step">Eligibility &amp; Verification</div>
+        <div class="slot-who">Who: MA</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">4</span>
+        <div class="slot-step">Encounter &amp; Documentation</div>
+        <div class="slot-who">Who: Provider + MA</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">5</span>
+        <div class="slot-step">Charge Capture &amp; Coding</div>
+        <div class="slot-who">Who: MA / Coder</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">6</span>
+        <div class="slot-step">Claim Submission</div>
+        <div class="slot-who">Who: Billing / MA</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">7</span>
+        <div class="slot-step">Payer Adjudication</div>
+        <div class="slot-who">Who: Insurance Co.</div>
+      </div>
+      <div class="sort-slot">
+        <span class="slot-num">8</span>
+        <div class="slot-step">Payment &amp; AR Follow-Up</div>
+        <div class="slot-who">Who: Billing + MA</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 2: Insurance Matching ══ -->
+<div class="activity">
+  <div class="activity-header theme-indigo">
+    <div class="act-num">2</div>
+    <div class="act-info">
+      <div class="act-title">Insurance Plan Matching — Answer Key</div>
+      <div class="act-sub">Correct letter matches + bonus answer</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 9</span><span class="act-tag">MOD 13</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="match-grid">
+      <div>
+        <div class="match-col-header">COLUMN A — PATIENT SITUATION</div>
+        <div class="match-item"><div class="match-answer">A</div>Mr. Webb, 52 years old, T2 Diabetes follow-up</div>
+        <div class="match-item"><div class="match-answer">B</div>Destiny Flores, 17, covered under her mom's state health plan</div>
+        <div class="match-item"><div class="match-answer">C</div>Robert Nguyen, 68, retired Navy veteran</div>
+        <div class="match-item"><div class="match-answer">F</div>Sandra Hill, 72, covered under a federal program for elderly and disabled</div>
+        <div class="match-item"><div class="match-answer">D</div>James Park, 40, hurt his back lifting at work</div>
+        <div class="match-item"><div class="match-answer">E</div>Maria Lopez, 34, has her own employer health plan with a $30 copay</div>
+      </div>
+      <div>
+        <div class="match-col-header">COLUMN B — INSURANCE PLAN</div>
+        <div class="match-item"><div class="match-letter">A</div>Medicare Part B</div>
+        <div class="match-item"><div class="match-letter">B</div>Medicaid / CHIP</div>
+        <div class="match-item"><div class="match-letter">C</div>TRICARE</div>
+        <div class="match-item"><div class="match-letter">D</div>Workers' Compensation</div>
+        <div class="match-item"><div class="match-letter">E</div>Private / Commercial Insurance</div>
+        <div class="match-item"><div class="match-letter">F</div>Medicare (general)</div>
+      </div>
+    </div>
+
+    <div class="note-box" style="margin-top:14px;"><strong>Note on Sandra vs Marcus:</strong> Both are Medicare. Marcus is specifically Part B (outpatient/physician services). Sandra is listed as Medicare general — accept either Part A or general Medicare for Sandra. If a student says Part B for both, ask them to explain the difference.</div>
+
+    <p class="q-label">BONUS: Medicare Part A vs Part B</p>
+    <div class="answer">
+      <strong>Medicare Part A</strong> covers inpatient hospital stays, skilled nursing facility care, hospice, and some home health care. It is generally premium-free for most people who paid Medicare taxes.<br><br>
+      <strong>Medicare Part B</strong> covers outpatient services — physician visits, preventive care, lab tests, durable medical equipment, and outpatient procedures. Part B requires a monthly premium.<br><br>
+      <em>Simple anchor: Part A = Admitted to hospital. Part B = Beside the doctor in the office.</em>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 3: Coding 101 ══ -->
+<div class="activity">
+  <div class="activity-header theme-purple">
+    <div class="act-num">3</div>
+    <div class="act-info">
+      <div class="act-title">Coding 101 — Answer Key</div>
+      <div class="act-sub">ICD-10-CM · CPT · HCPCS + rationale</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 12</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="note-box"><strong>Grading note:</strong> Students must identify the correct code TYPE and provide a logical rationale. They do not need to provide the actual code number — code selection is a separate skill. Award partial credit if the type is correct but rationale is weak.</div>
+
+    <table class="act-table">
+      <thead>
+        <tr>
+          <th>#</th><th>SITUATION</th><th>CODE TYPE</th><th>WHY?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Provider diagnoses Marcus with Type 2 Diabetes, uncontrolled.</td>
+          <td class="answer-td">ICD-10-CM</td>
+          <td class="answer-td">This is a <strong>diagnosis</strong> — the reason for the visit. ICD-10-CM codes always describe what is wrong with the patient. (Approx. code: E11.65)</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Provider performs a comprehensive office visit for a new patient (Destiny's sports physical).</td>
+          <td class="answer-td">CPT</td>
+          <td class="answer-td">This is a <strong>procedure/service</strong> performed by the provider. CPT codes describe what was done during the visit. (Approx. code: 99205 — new patient, comprehensive)</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Robert is ordered a portable oxygen concentrator for home use.</td>
+          <td class="answer-td">HCPCS</td>
+          <td class="answer-td">Durable Medical Equipment (DME) is billed using <strong>HCPCS Level II</strong> codes. This is the classic HCPCS example — equipment not captured in CPT. (Approx. code: E1390)</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Marcus is also diagnosed with essential hypertension.</td>
+          <td class="answer-td">ICD-10-CM</td>
+          <td class="answer-td">Again a <strong>diagnosis</strong> — a second condition being documented. Multiple ICD-10-CM codes can be used in a single encounter. (Approx. code: I10)</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Provider orders a 12-lead EKG for Robert.</td>
+          <td class="answer-td">CPT</td>
+          <td class="answer-td">An EKG is a <strong>diagnostic procedure</strong> performed during the visit. CPT codes describe procedures and services rendered. (Approx. code: 93000)</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>The clinic administers a flu shot to Destiny at checkout.</td>
+          <td class="answer-td">HCPCS</td>
+          <td class="answer-td">Vaccine administration and the vaccine product itself use <strong>HCPCS codes</strong>. The flu vaccine is not in CPT — it requires both a HCPCS product code and a CPT administration code. This is the most commonly missed question — use it for class discussion.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">Medical necessity — model answer:</p>
+    <div class="answer">
+      Medical necessity means the service or procedure performed must be clinically justified by the patient's diagnosis. The ICD-10-CM diagnosis code must support the CPT procedure code — if the codes don't match logically, the insurance company will deny the claim for lack of medical necessity. Example: billing a cardiac stress test for a patient whose only diagnosis is a sprained ankle would be denied because there is no medical reason connecting the two.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 4: Phone Screening Role Play ══ -->
+<div class="activity">
+  <div class="activity-header theme-green">
+    <div class="act-num">4</div>
+    <div class="act-info">
+      <div class="act-title">Phone Screening Role Play — Model Answers</div>
+      <div class="act-sub">Sample scripts + what to listen for when evaluating</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 8</span><span class="act-tag">PARTNER ACTIVITY</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="role-play-box">
+      <div class="rp-label">📞 THE SCENARIO</div>
+      <p class="rp-text"><span class="rp-speaker">CALLER:</span> "Hi, I'm calling to make an appointment for my dad. He's been having some chest tightness and he's a little short of breath when he walks to the mailbox. It's been happening for about two days. He's 68, he's a veteran, and I want to get him in as soon as possible."</p>
+    </div>
+
+    <p class="q-label">MODEL OPENING:</p>
+    <div class="answer">
+      "Thank you for calling [Clinic Name], this is [Name] speaking. How can I help you today?" — OR — "Good morning, [Clinic Name], [Name] speaking. How may I assist you?"
+      <br><br>Key elements: clinic name, MA name, professional tone, open-ended invitation. Do NOT say "What do you want?"
+    </div>
+
+    <p class="q-label">REQUIRED SCREENING QUESTIONS (students should ask ALL of these):</p>
+    <div class="answer">
+      <ul>
+        <li>What is the patient's full name?</li>
+        <li>What is the patient's date of birth?</li>
+        <li>What is the reason for the visit / chief complaint? (already given, but confirm: "Can you describe the symptoms in more detail?")</li>
+        <li>How long have the symptoms been present? (already given — 2 days)</li>
+        <li>Is the patient currently experiencing symptoms? Is the pain/discomfort happening right now?</li>
+        <li>What is the patient's insurance? (caller mentioned veteran — confirm TRICARE)</li>
+        <li>Is the patient established with this practice or a new patient?</li>
+        <li>What is the best callback number?</li>
+      </ul>
+    </div>
+
+    <p class="q-label">TRIAGE DECISION — model answer:</p>
+    <div class="answer">
+      This is an <strong>urgent same-day appointment</strong>. Chest tightness + shortness of breath in a 68-year-old = cardiac red flags. The MA should not schedule this as a routine appointment. Rationale: symptoms are ongoing (2 days), patient is elderly, symptoms worsen with activity — all indicators of potential cardiac involvement requiring prompt evaluation.
+    </div>
+
+    <p class="q-label">THE PLOT TWIST — "He says the pain is getting worse and he feels dizzy now":</p>
+    <div class="answer">
+      <strong>Do NOT put the caller on hold.</strong> Stay on the line.<br><br>
+      Model response: "I hear you — I need you to stay on the line with me. Based on what you're describing, I want you to call 911 right now or have someone drive him to the emergency room immediately. Do not wait for an office appointment. Is there someone with him right now who can help?"<br><br>
+      <strong>What to look for in student responses:</strong>
+      <ul>
+        <li>✓ Did NOT put caller on hold</li>
+        <li>✓ Recognized escalation as emergency — not routine office visit</li>
+        <li>✓ Directed to 911 or ER — not "come in when you can"</li>
+        <li>✓ Stayed calm, did not panic</li>
+        <li>✓ Confirmed someone is with the patient</li>
+        <li>✗ Do not accept "I'll get you scheduled ASAP" as a sufficient response</li>
+      </ul>
+    </div>
+
+    <div class="note-box"><strong>Grading note for role play:</strong> This activity is performance-based — grade on the 4 criteria in the rubric (screening questions, triage decision, emergency response, professional tone). The written script is a planning tool; the actual role play is the assessment. Listen for the plot twist response especially — this is the CCMA exam question.</div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 5: Check-In Checklist ══ -->
+<div class="activity">
+  <div class="activity-header theme-teal">
+    <div class="act-num">5</div>
+    <div class="act-info">
+      <div class="act-title">Check-In Simulation Checklist — Answer Key</div>
+      <div class="act-sub">Marcus Webb · Medicare Part B · Expected findings per step</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 9</span><span class="act-tag">EMR TASK</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="mini-case"><strong>Patient:</strong> Marcus Webb · Age 52 · Medicare Part B · Follow-up for T2DM &amp; Hypertension</div>
+
+    <table class="act-table">
+      <thead>
+        <tr><th style="width:5%">✓</th><th style="width:5%">Step</th><th style="width:40%">WHAT TO DO IN EMR</th><th>EXPECTED FINDING / ANSWER</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>✅</td><td>1</td>
+          <td>Locate Marcus's appointment in the schedule</td>
+          <td class="answer-td">Student should locate appointment under correct date/time. Confirm provider name matches referral. Flag if appointment type is incorrect (should be established patient follow-up, not new patient).</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>2</td>
+          <td>Verify patient identity — ask 2 identifiers</td>
+          <td class="answer-td"><strong>Required identifiers: Full name + Date of Birth.</strong> DOB confirmed: 03/14/1973. Accept name + MRN as second identifier. Do NOT accept name alone — this is a patient safety standard.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>3</td>
+          <td>Perform insurance eligibility check for Medicare Part B</td>
+          <td class="answer-td">Eligibility: Active/Yes. Student should note: Medicare Part B covers outpatient physician visits. Copay applies ($20 for this visit). If system shows inactive — do NOT check patient in until resolved.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>4</td>
+          <td>Review and update demographic information</td>
+          <td class="answer-td">Confirm: address, phone number, emergency contact. Ask patient "Has anything changed since your last visit?" even if everything looks current. This is the standard protocol — not optional.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>5</td>
+          <td>Obtain signature on required forms</td>
+          <td class="answer-td"><strong>Required: HIPAA Notice of Privacy Practices</strong> (annually or if updated) + consent to treat. If patient has signed within the year, note it — do not require re-signing unless policy changed. Document signature obtained in EMR.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>6</td>
+          <td>Collect $20 Medicare copay — post in EMR</td>
+          <td class="answer-td">Post $20 payment to correct account. Select payment method (cash/card). Generate receipt. <strong>Common error: posting to wrong patient account</strong> — always confirm name before posting. Copay must be posted BEFORE patient is roomed.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>7</td>
+          <td>Change patient status to "Checked In"</td>
+          <td class="answer-td">Status should change from "Scheduled" → "Checked In" in the appointment view. Time stamp is recorded automatically. Clinical staff should see the status change on their end immediately.</td>
+        </tr>
+        <tr>
+          <td>✅</td><td>8</td>
+          <td>Notify clinical staff — route to correct room</td>
+          <td class="answer-td">Notify via EMR message, in-person, or clinic protocol method. Communicate any urgent notes (e.g., patient mentioned new symptom at check-in). Direct patient to waiting area or room as instructed.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">Why verify insurance at every visit — model answer:</p>
+    <div class="answer">
+      Insurance coverage can change at any time — employer changes, loss of job, birthday rule changes, Medicare enrollment periods, Medicaid redeterminations. If the clinic provides services and the patient's insurance has lapsed or changed, the clinic may not be reimbursed and the patient may owe the full amount unexpectedly. Verifying at every visit protects the patient AND the clinic. This is also a compliance requirement for Medicare and Medicaid providers.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 6: Denied Claim Decision Tree ══ -->
+<div class="activity">
+  <div class="activity-header theme-gold">
+    <div class="act-num">6</div>
+    <div class="act-info">
+      <div class="act-title">Denied Claim Decision Tree — Answer Key</div>
+      <div class="act-sub">Correct next step + rationale for all 5 denial scenarios</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 13</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="note-box"><strong>Grading note:</strong> Students must identify the correct ACTION and explain WHY. The rationale matters as much as the answer — this is how CCMA exam questions are written.</div>
+
+    <table class="act-table">
+      <thead>
+        <tr><th>#</th><th>DENIAL REASON</th><th>CORRECT NEXT STEP</th><th>RATIONALE</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>"Lack of medical necessity"</strong></td>
+          <td class="answer-td">Submit an appeal with supporting documentation</td>
+          <td class="answer-td">Verify diagnosis and procedure codes are correct and support each other. Attach clinical notes, lab results, or provider documentation that supports why the service was necessary. Submit a formal appeal — do NOT resubmit the original claim or bill the patient first.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>"Patient not eligible on date of service"</strong></td>
+          <td class="answer-td">Verify eligibility, correct if error, then resubmit or bill patient</td>
+          <td class="answer-td">First check: was eligibility verified before the visit? If the MA failed to verify, this is an internal error. If insurance lapsed, the patient may be responsible for the bill. If it was an insurance error (coverage was actually active), appeal with proof of eligibility on date of service.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>"Service requires prior authorization"</strong></td>
+          <td class="answer-td">Obtain retroactive prior authorization if possible, then resubmit</td>
+          <td class="answer-td">Contact the insurance company to request retroactive prior auth — some plans allow this, some do not. If denied retroactively, submit an appeal explaining the clinical urgency. Going forward: always check prior auth requirements before scheduling the service. This denial is largely preventable.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>"Duplicate claim submission"</strong></td>
+          <td class="answer-td">Do NOT resubmit — submit a claim adjustment instead</td>
+          <td class="answer-td">Resubmitting creates another duplicate denial. The correct action is to submit a claim adjustment or corrected claim with a note explaining the situation. <strong>This is the most common student error</strong> — "just resubmit it" is always wrong for a duplicate denial.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>"Invalid diagnosis code"</strong></td>
+          <td class="answer-td">Correct the ICD-10-CM code and resubmit as a corrected claim</td>
+          <td class="answer-td">Look up the correct, most specific ICD-10-CM code for the diagnosis. Verify with the provider if unsure. Resubmit as a corrected claim (not a new claim) with the updated code. Also check that the new code supports the procedure codes billed.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="q-label">Clearinghouse — model answer:</p>
+    <div class="answer">
+      A clearinghouse is a third-party company that acts as an intermediary between the healthcare provider and the insurance company. The provider submits claims to the clearinghouse, which checks them for errors (scrubbing), formats them correctly for each payer, and transmits them electronically. The clearinghouse also receives remittance advice back from the payer and routes it to the provider. Using a clearinghouse reduces claim errors and speeds up reimbursement.
+    </div>
+
+    <p class="q-label">Remittance Advice (RA) — model answer:</p>
+    <div class="answer">
+      Remittance Advice (RA) is the document sent by the insurance company to the provider after processing a claim. It explains what was paid, what was denied, and why. It includes the patient's name, date of service, billed amount, allowed amount, payment amount, and any adjustment codes explaining denials or reductions. The MA uses the RA to post payments to the patient's account and identify claims that need to be appealed or billed to the patient.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ ACTIVITY 7: Forms Knowledge Check ══ -->
+<div class="activity">
+  <div class="activity-header theme-steel">
+    <div class="act-num">7</div>
+    <div class="act-info">
+      <div class="act-title">Forms &amp; Documents Knowledge Check — Answer Key</div>
+      <div class="act-sub">Model answers for all 6 short-answer questions</div>
+    </div>
+    <div class="act-tags"><span class="act-tag">MOD 9</span><span class="act-tag">MOD 12</span><span class="act-tag">MOD 13</span></div>
+  </div>
+  <div class="activity-body">
+
+    <div class="note-box"><strong>Grading note:</strong> These are short answer — students do not need to match the model exactly. Award full credit for answers that capture the key concept accurately. Award partial credit for answers that are partially correct but missing a critical element.</div>
+
+    <p class="q-label">1. What is an ABN (Advance Beneficiary Notice of Noncoverage)?</p>
+    <div class="answer">
+      An ABN is a form given to Medicare beneficiaries when the provider believes a service may NOT be covered by Medicare because it might not meet medical necessity requirements. The patient signs the ABN to acknowledge they understand they may be responsible for paying for the service out of pocket if Medicare denies it. <strong>Key point:</strong> it must be given BEFORE the service is performed — not after. It only applies to fee-for-service Medicare, not Medicare Advantage plans.
+    </div>
+
+    <p class="q-label">2. What is a superbill / encounter form?</p>
+    <div class="answer">
+      A superbill (also called an encounter form) is a document generated for each patient visit that captures the services performed and diagnoses documented during that encounter. It includes: patient demographics, date of service, provider name, diagnosis codes (ICD-10-CM), procedure codes (CPT/HCPCS), fees, and insurance information. It serves as the source document for billing — the billing department uses it to submit the insurance claim.
+    </div>
+
+    <p class="q-label">3. What is the difference between an EOB and Remittance Advice?</p>
+    <div class="answer">
+      Both documents explain how a claim was processed, but they go to different recipients:<br><br>
+      <strong>EOB (Explanation of Benefits)</strong> — sent to the <em>patient</em> by their insurance company. It shows what was billed, what insurance paid, and what the patient owes. It is NOT a bill.<br><br>
+      <strong>Remittance Advice (RA)</strong> — sent to the <em>provider/clinic</em> by the insurance company. It contains the same information but is used by the billing department to post payments and identify denials.
+    </div>
+
+    <p class="q-label">4. What is an A/R Aging Report and why run it weekly?</p>
+    <div class="answer">
+      An Accounts Receivable (A/R) Aging Report shows all outstanding (unpaid) claims organized by how long they have been unpaid — typically in columns: 0–30 days, 31–60 days, 61–90 days, 90+ days. The older the debt, the harder it is to collect. Clinics run it weekly to prioritize follow-up on the oldest unpaid claims before they reach timely filing deadlines, and to identify patterns in which payers are consistently slow or denying claims.
+    </div>
+
+    <p class="q-label">5. What is precertification? Give an example.</p>
+    <div class="answer">
+      Precertification (also called prior authorization or preauthorization) is the process of getting approval from the insurance company BEFORE performing a service or procedure. The provider must submit clinical documentation justifying why the service is medically necessary, and the insurer reviews it before approving or denying.<br><br>
+      <strong>Example:</strong> Marcus Webb needs a referral to an endocrinologist. Before the referral is made, the MA contacts Medicare to obtain prior authorization, submitting documentation of his A1C of 9.2 and his diagnosis of uncontrolled T2DM as justification. Without it, the specialist visit may be denied.
+    </div>
+
+    <p class="q-label">6. What two identifiers are required at check-in and why?</p>
+    <div class="answer">
+      The two required patient identifiers are: <strong>(1) Full legal name</strong> and <strong>(2) Date of birth</strong>. MRN (medical record number) is also acceptable as a second identifier.<br><br>
+      Why: This is a patient safety requirement established by The Joint Commission and CMS to prevent wrong-patient errors — administering medications, ordering labs, or documenting in the wrong chart. Using two identifiers (not just name, which can be duplicated) ensures the MA is interacting with the correct patient before any clinical or administrative action is taken.
+    </div>
+
+    <div class="tip-box" style="margin-top:16px;">
+      <strong>💡 CCMA Exam Note:</strong> Questions 1, 3, 5, and 6 are high-frequency CCMA exam topics. If students struggled with any of these, flag them for additional review before the certification exam. The ABN question and the two-identifier rule appear on almost every practice test.
+    </div>
+
+  </div>
+</div>
+
+
+<div style="text-align:center; margin-top:24px; font-size:11px; color:#94A3B8; padding-top:16px; border-top:1px solid #e2e8f0;">
+  HealthSim Hub · Week 14 · Phase 3 — Administrative Assisting · <strong>INSTRUCTOR ANSWER KEY — DO NOT DISTRIBUTE</strong>
+</div>
+
+</body>
+</html>
