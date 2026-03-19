@@ -207,14 +207,99 @@
   .notes-lines { }
   .notes-lines hr { border: none; border-top: 1.5px solid #f1f5f9; margin: 18px 0 0; }
 
+  /* ── PRINT BUTTON ── */
+  .print-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; background: white; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 14px 20px; margin-bottom: 20px;
+  }
+  .print-bar-left {
+    display: flex; align-items: center; gap: 16px; flex: 1; flex-wrap: wrap;
+  }
+  .student-field {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #374151;
+  }
+  .student-field label {
+    font-weight: 600; white-space: nowrap; font-size: 12px; color: #64748b;
+  }
+  .student-field input {
+    border: none; border-bottom: 2px solid #cbd5e1;
+    padding: 3px 6px; font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--navy); background: transparent;
+    outline: none; min-width: 160px;
+  }
+  .student-field input:focus { border-bottom-color: var(--teal); }
+  .print-btn {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--teal); color: white; border: none;
+    border-radius: 8px; padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    font-weight: 700; cursor: pointer; transition: background 0.15s; flex-shrink: 0;
+  }
+  .print-btn:hover { background: #0a6b5e; }
+
   @media print {
     body { background: white; padding: 10px; }
+    .print-bar { display: none; }
     .rubric-section { box-shadow: none; }
+
+    /* Force all colored section headers to print clearly in BW */
+    .section-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    /* Score dots — print with border instead of color background */
+    .score-4, .score-3, .score-2, .score-1 {
+      background: white !important;
+      border: 2px solid black !important;
+      color: black !important;
+    }
+
+    /* Table headers — keep dark bg or switch to black */
+    .act-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    /* Grade chips — keep colors */
+    .grade-chip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+    /* Student info lines visible */
+    .info-field .line { border-bottom: 1.5px solid #333; }
+
+    /* Notes lines visible */
+    .notes-lines hr { border-top: 1.5px solid #333 !important; }
+
+    /* Page header readable */
+    .page-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
     @page { margin: 0.4in; }
   }
 </style>
 </head>
 <body>
+
+<!-- PRINT BAR -->
+<div class="print-bar">
+  <div class="print-bar-left">
+    <div class="student-field">
+      <label>STUDENT NAME</label>
+      <input type="text" placeholder="First Last" />
+    </div>
+    <div class="student-field">
+      <label>DATE</label>
+      <input type="text" placeholder="__ / __ / ____" style="min-width:110px;" />
+    </div>
+    <div class="student-field">
+      <label>PERIOD</label>
+      <input type="text" placeholder="____" style="min-width:60px;" />
+    </div>
+  </div>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 6 2 18 2 18 9"/>
+      <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+      <rect x="6" y="14" width="12" height="8"/>
+    </svg>
+    Print / Save as PDF
+  </button>
+</div>
 
 <!-- PAGE HEADER -->
 <div class="page-header">
