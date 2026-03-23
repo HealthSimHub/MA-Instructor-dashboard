@@ -486,6 +486,15 @@
     background: rgba(15,184,164,0.2);
     box-shadow: 0 0 8px rgba(15,184,164,0.15);
   }
+  .week-link.instructor {
+    color: #F5A623;
+    border-color: rgba(245,166,35,0.3);
+    background: rgba(245,166,35,0.08);
+  }
+  .week-link.instructor:hover {
+    background: rgba(245,166,35,0.18);
+    box-shadow: 0 0 8px rgba(245,166,35,0.15);
+  }
 
   /* ── EMPTY WEEK PLACEHOLDER ───────────────────────────── */
   .week-row.week-empty .week-title { color: var(--muted); font-style: italic; font-weight: 400; }
@@ -1020,16 +1029,16 @@
       <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
            HOW TO ADD A NEW WEEK:
            1. Duplicate one of the week-row blocks below
-           2. Update the week number (W15, W16, etc.)
+           2. Update the week number (W16, W17, etc.)
            3. Update the title, badge name, and modules
-           4. Upload your 5 files into a subfolder named:
-              weekXX/  (e.g. week15/, week16/)
-           5. Update the 5 href values to match, e.g.:
-              href="week15/Week15_Slides.pptx"
-              href="week15/Week15_ScenarioCards.html"
-              href="week15/Week15_Rubric.html"
-              href="week15/Week15_Exercises.html"
-              href="week15/Week15_InstructorGuide.html"
+           4. Upload your files into a subfolder named:
+              weekXX/  (e.g. week16/, week17/)
+           5. Update the href values to match, e.g.:
+              href="week16/Week16_ScenarioCards.html"
+              href="week16/Week16_Rubric.html"
+              href="week16/Week16_Exercises.html"
+              href="week16/Week16_InstructorGuide.html"
+              href="week16/Week16_AnswerKey_Instructor.html"
            6. Change data-status from "not-started" to "draft"
            7. Click the status pill on screen to match
       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
@@ -1049,31 +1058,31 @@
         </div>
         <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">In Progress</div>
         <div class="week-links">
-          <a href="week14/Week14_AdminAssisting_Slides.pptx" class="week-link primary">Slides</a>
           <a href="week14/Week14_ScenarioCards.html"         class="week-link primary">Scenarios</a>
           <a href="week14/Week14_Rubric.html"                class="week-link primary">Rubric</a>
           <a href="week14/Week14_Exercises.html"             class="week-link primary">Activities</a>
           <a href="week14/Week14_InstructorGuide.html"       class="week-link primary">Guide</a>
+          <a href="week14/Week14_AnswerKey_Instructor.html"  class="week-link instructor">Answer Key</a>
         </div>
       </div>
 
       <!-- Week 15 -->
-      <div class="week-row week-empty status-not-started" data-phase="3" data-status="not-started">
+      <div class="week-row status-draft" data-phase="3" data-status="draft">
         <div class="week-num">W15</div>
         <div class="week-info">
-          <div class="week-title">Coding Deep-Dive — ICD-10-CM, CPT & HCPCS</div>
+          <div class="week-title">Billing, Coding &amp; EMR Integration</div>
           <div class="week-meta">
-            <span class="week-badge-name">🏅 Coding Pro Badge</span>
-            <span class="week-modules">MOD 12</span>
+            <span class="week-badge-name">💰 Billing Specialist Badge</span>
+            <span class="week-modules">MOD 11</span>
           </div>
         </div>
-        <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">Not Started</div>
+        <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">In Progress</div>
         <div class="week-links">
-          <a href="" class="week-link disabled">Slides</a>
-          <a href="" class="week-link disabled">Scenarios</a>
-          <a href="" class="week-link disabled">Rubric</a>
-          <a href="" class="week-link disabled">Activities</a>
-          <a href="" class="week-link disabled">Guide</a>
+          <a href="week15/Week15_ScenarioCards.html"               class="week-link primary">Scenarios</a>
+          <a href="week15/Week15_Rubric.html"                      class="week-link primary">Rubric</a>
+          <a href="week15/Week15_Exercises.html"                   class="week-link primary">Activities</a>
+          <a href="week15/Week15_InstructorGuide.html"             class="week-link primary">Guide</a>
+          <a href="week15/Week15_AnswerKey_Instructor.html"        class="week-link instructor">Answer Key</a>
         </div>
       </div>
 
@@ -1081,19 +1090,19 @@
       <div class="week-row week-empty status-not-started" data-phase="3" data-status="not-started">
         <div class="week-num">W16</div>
         <div class="week-info">
-          <div class="week-title">Billing, Reimbursement & Denial Management</div>
+          <div class="week-title">Patient Care Coordination &amp; Education</div>
           <div class="week-meta">
-            <span class="week-badge-name">🏅 Billing Pro Badge</span>
-            <span class="week-modules">MOD 13</span>
+            <span class="week-badge-name">🤝 Care Coordinator Badge</span>
+            <span class="week-modules">MOD 10</span>
           </div>
         </div>
         <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">Not Started</div>
         <div class="week-links">
-          <a href="" class="week-link disabled">Slides</a>
           <a href="" class="week-link disabled">Scenarios</a>
           <a href="" class="week-link disabled">Rubric</a>
           <a href="" class="week-link disabled">Activities</a>
           <a href="" class="week-link disabled">Guide</a>
+          <a href="" class="week-link disabled">Answer Key</a>
         </div>
       </div>
 
@@ -1101,19 +1110,19 @@
       <div class="week-row week-empty status-not-started" data-phase="3" data-status="not-started">
         <div class="week-num">W17</div>
         <div class="week-info">
-          <div class="week-title">Full Clinic Simulation 1 — All Phase 2 Patients</div>
+          <div class="week-title">Full Clinic Simulation</div>
           <div class="week-meta">
-            <span class="week-badge-name">🏅 Clinical Sim Badge</span>
-            <span class="week-modules">ALL CLINICAL MODS</span>
+            <span class="week-badge-name">🏆 Clinic Shift Complete Badge</span>
+            <span class="week-modules">ALL MODS</span>
           </div>
         </div>
         <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">Not Started</div>
         <div class="week-links">
-          <a href="" class="week-link disabled">Slides</a>
           <a href="" class="week-link disabled">Scenarios</a>
           <a href="" class="week-link disabled">Rubric</a>
           <a href="" class="week-link disabled">Activities</a>
           <a href="" class="week-link disabled">Guide</a>
+          <a href="" class="week-link disabled">Answer Key</a>
         </div>
       </div>
 
@@ -1121,19 +1130,19 @@
       <div class="week-row week-empty status-not-started" data-phase="3" data-status="not-started">
         <div class="week-num">W18</div>
         <div class="week-info">
-          <div class="week-title">Full Clinic Simulation 2 + CCMA Capstone</div>
+          <div class="week-title">Exam Prep &amp; Certification</div>
           <div class="week-meta">
-            <span class="week-badge-name">🏅 Capstone Badge</span>
+            <span class="week-badge-name">🎓 CCMA Ready Badge</span>
             <span class="week-modules">ALL MODS</span>
           </div>
         </div>
         <div class="status-pill" onclick="cycleStatus(this.closest('.week-row'))">Not Started</div>
         <div class="week-links">
-          <a href="" class="week-link disabled">Slides</a>
           <a href="" class="week-link disabled">Scenarios</a>
           <a href="" class="week-link disabled">Rubric</a>
           <a href="" class="week-link disabled">Activities</a>
           <a href="" class="week-link disabled">Guide</a>
+          <a href="" class="week-link disabled">Answer Key</a>
         </div>
       </div>
 
